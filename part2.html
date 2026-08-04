@@ -4,211 +4,253 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TOEIC Part2 対策 | 応答問題の傾向と例文</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --navy:#1a2744;
-    --blue:#2f5fd6;
-    --blue-light:#eef2ff;
-    --accent:#e0562f;
-    --gray:#5a6472;
-    --border:#e3e7ee;
-    --bg:#f6f7fb;
-    --green:#3fae6a;
-    --amber:#d99a1f;
-    --red:#d9534f;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
-    background:var(--bg);
-    color:#222;
-    line-height:1.7;
-  }
-  header{
-    background:var(--navy);
-    color:#fff;
-    padding:36px 20px 30px;
-    text-align:center;
-  }
-  header h1{margin:0 0 8px;font-size:1.6rem;letter-spacing:.02em;}
-  header p{margin:0;color:#b9c2d8;font-size:.92rem;}
-  nav.crumb{
-    max-width:900px;margin:16px auto 0;padding:0 20px;font-size:.85rem;
-  }
-  nav.crumb a{color:var(--blue);text-decoration:none;}
-  main{max-width:900px;margin:0 auto;padding:28px 20px 60px;}
-
-  section{margin-bottom:44px;}
-  h2{
-    font-size:1.2rem;color:var(--navy);
-    border-left:5px solid var(--blue);
-    padding-left:10px;margin-bottom:16px;
-  }
-  .lead{color:var(--gray);font-size:.94rem;margin-bottom:20px;}
-
-  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
-  .type-card{
-    background:#fff;border:1px solid var(--border);border-radius:10px;
-    padding:18px 18px 16px;box-shadow:0 1px 3px rgba(20,30,60,.05);
-  }
-  .type-card .num{
-    display:inline-block;background:var(--blue);color:#fff;
-    font-size:.75rem;padding:2px 9px;border-radius:20px;margin-bottom:8px;
-  }
-  .type-card h3{margin:0 0 8px;font-size:1.02rem;color:var(--navy);}
-  .type-card ul{margin:8px 0 10px;padding-left:18px;font-size:.88rem;color:#333;}
-  .type-card .tip{
-    font-size:.82rem;background:var(--blue-light);color:#26407a;
-    padding:8px 10px;border-radius:6px;margin-top:8px;
-  }
-  .type-card .warn{
-    font-size:.82rem;background:#fdeee8;color:#a1401f;
-    padding:8px 10px;border-radius:6px;margin-top:6px;
+  :root {
+    --blueprint-navy: #16324a;
+    --blueprint-navy-deep: #0f2436;
+    --blueprint-line: #6f95ad;
+    --blueprint-line-faint: rgba(255,255,255,0.10);
+    --paper: #eef2ee;
+    --paper-dim: #c7d3d6;
+    --safety-orange: #e8631c;
+    --safety-orange-dim: #b74e16;
+    --ok-green: #6fae7c;
+    --warn-red: #c9564c;
+    --purple: #a887d6;
+    --font-body: 'Noto Sans JP', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
   }
 
-  table.summary{width:100%;border-collapse:collapse;margin-top:18px;font-size:.87rem;}
-  table.summary th,table.summary td{
-    border:1px solid var(--border);padding:8px 10px;text-align:left;
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--blueprint-navy);
+    background-image:
+      linear-gradient(var(--blueprint-line-faint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line-faint) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--paper);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    min-height: 100vh;
   }
-  table.summary th{background:var(--navy);color:#fff;}
-  table.summary tr:nth-child(even){background:#fbfbfd;}
+
+  header {
+    padding: 56px 24px 30px;
+    border-bottom: 1px dashed var(--blueprint-line);
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--safety-orange);
+    text-transform: uppercase;
+  }
+  header h1 { font-size: 30px; margin: 10px 0 8px; font-weight: 700; letter-spacing: 0.02em; }
+  header .sub { color: var(--paper-dim); font-size: 14px; font-family: var(--font-mono); max-width: 640px; }
+
+  nav.crumb {
+    max-width: 920px; margin: 14px auto 0; padding: 0 24px 20px;
+    font-family: var(--font-mono); font-size: 12px;
+  }
+  nav.crumb a { color: var(--blueprint-line); text-decoration: none; }
+  nav.crumb a:hover { color: var(--safety-orange); }
+
+  main { max-width: 920px; margin: 0 auto; padding: 36px 24px 80px; }
+
+  section { margin-bottom: 48px; }
+
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--blueprint-line);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--blueprint-line) 0 4px, transparent 4px 8px);
+  }
+  .lead { color: var(--paper-dim); font-size: .92rem; margin-bottom: 20px; }
+
+  .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+  .type-card {
+    position: relative;
+    border: 1px solid var(--blueprint-line);
+    border-radius: 2px;
+    padding: 20px 18px 18px 20px;
+    background: rgba(255,255,255,0.02);
+  }
+  .type-card .num {
+    display: inline-block; font-family: var(--font-mono);
+    background: var(--safety-orange); color: #1a1206;
+    font-size: .72rem; padding: 2px 9px; border-radius: 2px; margin-bottom: 10px;
+    letter-spacing: .05em;
+  }
+  .type-card h3 { margin: 0 0 10px; font-size: 1rem; color: var(--paper); }
+  .type-card ul { margin: 8px 0 12px; padding-left: 18px; font-size: .86rem; color: var(--paper-dim); }
+  .type-card .tip {
+    font-size: .8rem; background: rgba(111,149,173,0.15); color: var(--paper);
+    padding: 8px 10px; border-radius: 2px; margin-top: 8px; border-left: 2px solid var(--blueprint-line);
+  }
+  .type-card .warn {
+    font-size: .8rem; background: rgba(232,99,28,0.12); color: var(--paper);
+    padding: 8px 10px; border-radius: 2px; margin-top: 6px; border-left: 2px solid var(--safety-orange);
+  }
+
+  table.summary { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: .85rem; font-family: var(--font-mono); }
+  table.summary th, table.summary td { border: 1px solid var(--blueprint-line); padding: 8px 10px; text-align: left; }
+  table.summary th { background: var(--blueprint-navy-deep); color: var(--paper); }
+  table.summary td { color: var(--paper-dim); }
 
   /* stats bar */
-  .stats-bar{
-    display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;
+  .stats-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .stat-pill {
+    border: 1px solid var(--blueprint-line); border-radius: 2px;
+    padding: 10px 16px; font-size: .82rem; color: var(--paper-dim); flex: 1; min-width: 120px;
+    text-align: center; background: rgba(255,255,255,0.02); font-family: var(--font-mono);
   }
-  .stat-pill{
-    background:#fff;border:1px solid var(--border);border-radius:8px;
-    padding:10px 16px;font-size:.85rem;color:var(--gray);flex:1;min-width:120px;
-    text-align:center;
-  }
-  .stat-pill b{display:block;font-size:1.3rem;color:var(--navy);margin-bottom:2px;}
+  .stat-pill b { display: block; font-size: 1.25rem; color: var(--paper); margin-bottom: 2px; }
 
-  .qcard{
-    background:#fff;border:1px solid var(--border);border-radius:10px;
-    padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(20,30,60,.05);
-  }
-  .qcard .qmeta{
-    display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;
-    flex-wrap:wrap;gap:6px;
-  }
-  .qcard .qmeta-left{display:flex;align-items:center;gap:8px;}
-  .qcard .qnum{font-weight:bold;color:var(--navy);}
-  .qcard .badge{
-    font-size:.72rem;padding:2px 8px;border-radius:20px;color:#fff;
-  }
-  .badge.wh{background:var(--blue);}
-  .badge.yn{background:var(--green);}
-  .badge.other{background:var(--accent);}
-  .badge.custom{background:#7b5cd6;}
-
-  .added-date{font-size:.72rem;color:var(--gray);}
-
-  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px;}
-  .tag-pill{
-    font-size:.72rem;background:#f0eefa;color:#5c3fb0;
-    padding:2px 9px;border-radius:20px;border:1px solid #ddd4f5;
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; font-family: var(--font-mono); }
+  .filter-row label { font-size: .78rem; color: var(--paper-dim); }
+  .filter-row select {
+    padding: 6px 10px; border: 1px solid var(--blueprint-line); border-radius: 2px;
+    font-size: .82rem; background: var(--blueprint-navy-deep); color: var(--paper); font-family: var(--font-mono);
   }
 
-  .filter-row{
-    display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;
+  .qcard {
+    position: relative;
+    border: 1px solid var(--blueprint-line); border-radius: 2px;
+    padding: 18px 20px 18px 56px; margin-bottom: 14px;
+    background: rgba(255,255,255,0.02);
   }
-  .filter-row label{font-size:.82rem;color:var(--gray);}
-  .filter-row select{
-    padding:6px 10px;border:1px solid var(--border);border-radius:6px;
-    font-size:.85rem;background:#fff;
+  .qcard::before {
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0; width: 40px;
+    border-right: 1px dashed var(--blueprint-line);
   }
-
-  .mastery{
-    font-size:.72rem;padding:2px 9px;border-radius:20px;font-weight:bold;
+  .qcard .qmeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+  .qcard .qmeta-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .qcard .qnum {
+    position: absolute; left: 0; top: 18px; width: 40px; text-align: center;
+    font-family: var(--font-mono); font-size: .78rem; color: var(--safety-orange-dim); font-weight: bold;
   }
-  .mastery.new{background:#ececf1;color:#666;}
-  .mastery.learning{background:#fdf2dd;color:var(--amber);}
-  .mastery.mastered{background:#e6f7ec;color:var(--green);}
+  .badge { font-family: var(--font-mono); font-size: .68rem; padding: 2px 8px; border-radius: 2px; letter-spacing: .03em; }
+  .badge.wh { background: var(--blueprint-line); color: #0f2436; }
+  .badge.yn { background: var(--ok-green); color: #0f2436; }
+  .badge.other { background: var(--safety-orange); color: #1a1206; }
+  .badge.custom { background: var(--purple); color: #1a1030; }
 
-  .review-count{font-size:.75rem;color:var(--gray);}
+  .added-date { font-family: var(--font-mono); font-size: .7rem; color: var(--paper-dim); margin-bottom: 6px; }
 
-  .speak-btn{
-    border:none;background:var(--blue-light);color:var(--blue);
-    width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.95rem;
-    display:inline-flex;align-items:center;justify-content:center;
-    flex-shrink:0;
-  }
-  .speak-btn:hover{background:#dde5fb;}
-  .speak-btn.playing{background:var(--blue);color:#fff;}
-
-  .qtext-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
-  .qtext{font-size:1rem;}
-
-  .choices{list-style:none;margin:0;padding:0;font-size:.92rem;}
-  .choices li{
-    display:flex;align-items:center;gap:8px;
-    padding:6px 10px;border:1px solid var(--border);border-radius:6px;
-    margin-bottom:6px;cursor:pointer;transition:.15s;
-  }
-  .choices li:hover{background:#f2f4fa;}
-  .choices li.correct{background:#e6f7ec;border-color:var(--green);font-weight:bold;}
-  .choices li.selected-wrong{background:#fdeaea;border-color:var(--red);}
-  .choices li .ctext{flex:1;}
-  .choices li .speak-btn{width:24px;height:24px;font-size:.8rem;}
-
-  .answer-note{
-    display:none;margin-top:10px;font-size:.85rem;color:var(--gray);
-    background:var(--blue-light);padding:8px 10px;border-radius:6px;
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 10px; }
+  .tag-pill {
+    font-family: var(--font-mono); font-size: .7rem; color: var(--paper);
+    padding: 2px 9px; border-radius: 2px; border: 1px solid var(--blueprint-line); background: rgba(255,255,255,0.03);
   }
 
-  .btn-row{text-align:center;margin-top:8px;}
-  .btn{
-    background:var(--blue);color:#fff;border:none;padding:9px 20px;
-    border-radius:6px;font-size:.88rem;cursor:pointer;
+  .mastery { font-family: var(--font-mono); font-size: .68rem; padding: 2px 9px; border-radius: 2px; font-weight: bold; letter-spacing: .03em; }
+  .mastery.new { background: rgba(255,255,255,0.08); color: var(--paper-dim); }
+  .mastery.learning { background: rgba(232,99,28,0.18); color: var(--safety-orange); }
+  .mastery.mastered { background: rgba(111,174,124,0.2); color: var(--ok-green); }
+
+  .review-count { font-family: var(--font-mono); font-size: .72rem; color: var(--paper-dim); }
+
+  .speak-btn {
+    border: 1px solid var(--blueprint-line); background: rgba(255,255,255,0.03); color: var(--paper);
+    width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: .9rem;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .btn:hover{background:#254db3;}
-  .btn.secondary{background:#fff;color:var(--blue);border:1px solid var(--blue);}
-  .btn.secondary:hover{background:var(--blue-light);}
-  .btn.danger{background:#fff;color:var(--red);border:1px solid var(--red);}
-  .btn.danger:hover{background:#fdeaea;}
-  .btn.secondary.playing{background:var(--blue);color:#fff;}
+  .speak-btn:hover { border-color: var(--safety-orange); }
+  .speak-btn.playing { background: var(--safety-orange); border-color: var(--safety-orange); color: #1a1206; }
+
+  .qtext-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+  .qtext { font-size: .98rem; color: var(--paper); padding-top: 5px; }
+
+  .choices { list-style: none; margin: 0; padding: 0; font-size: .9rem; }
+  .choices li {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; border: 1px solid var(--blueprint-line); border-radius: 2px;
+    margin-bottom: 6px; cursor: pointer; transition: .15s; color: var(--paper-dim);
+  }
+  .choices li:hover { border-color: var(--safety-orange); background: rgba(255,255,255,0.03); }
+  .choices li.correct { background: rgba(111,174,124,0.15); border-color: var(--ok-green); color: var(--paper); font-weight: bold; }
+  .choices li.selected-wrong { background: rgba(201,86,76,0.15); border-color: var(--warn-red); color: var(--paper); }
+  .choices li .ctext { flex: 1; }
+  .choices li .speak-btn { width: 24px; height: 24px; font-size: .76rem; }
+
+  .answer-note {
+    display: none; margin-top: 10px; font-size: .84rem; color: var(--paper-dim);
+    background: rgba(111,149,173,0.12); padding: 8px 10px; border-radius: 2px; border-left: 2px solid var(--blueprint-line);
+  }
+
+  .btn-row { text-align: center; margin-top: 8px; }
+  .btn {
+    font-family: var(--font-mono);
+    background: var(--safety-orange); color: #1a1206; border: none; padding: 9px 20px;
+    border-radius: 2px; font-size: .82rem; cursor: pointer; letter-spacing: .02em;
+  }
+  .btn:hover { background: var(--safety-orange-dim); }
+  .btn.secondary { background: transparent; color: var(--paper); border: 1px solid var(--blueprint-line); }
+  .btn.secondary:hover { border-color: var(--safety-orange); color: var(--safety-orange); }
+  .btn.secondary.playing { background: var(--safety-orange); color: #1a1206; border-color: var(--safety-orange); }
+  .btn.danger { background: transparent; color: var(--warn-red); border: 1px solid var(--warn-red); }
+  .btn.danger:hover { background: rgba(201,86,76,0.15); }
 
   /* add-question form */
-  .add-form{
-    background:#fff;border:1px solid var(--border);border-radius:10px;
-    padding:20px;
+  .add-form {
+    border: 1px solid var(--blueprint-line); border-radius: 2px;
+    padding: 22px; background: rgba(255,255,255,0.02);
   }
-  .add-form .row{margin-bottom:12px;}
-  .add-form label{display:block;font-size:.82rem;color:var(--gray);margin-bottom:4px;}
-  .add-form input[type=text], .add-form select, .add-form textarea{
-    width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;
-    font-size:.9rem;font-family:inherit;
+  .add-form .row { margin-bottom: 14px; }
+  .add-form label { display: block; font-family: var(--font-mono); font-size: .78rem; color: var(--blueprint-line); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em; }
+  .add-form input[type=text], .add-form select, .add-form textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--blueprint-line); border-radius: 2px;
+    font-size: .88rem; font-family: var(--font-body); background: var(--blueprint-navy-deep); color: var(--paper);
   }
-  .add-form .choice-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
-  .add-form .choice-row input[type=text]{flex:1;}
-  .add-form .choice-row input[type=radio]{flex-shrink:0;}
-  .add-form .hint{font-size:.78rem;color:var(--gray);margin-top:-6px;margin-bottom:10px;}
-  .toast{
-    display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-    background:var(--navy);color:#fff;padding:10px 20px;border-radius:24px;
-    font-size:.85rem;z-index:50;box-shadow:0 4px 14px rgba(0,0,0,.2);
+  .add-form .choice-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .add-form .choice-row input[type=text] { flex: 1; }
+  .add-form .choice-row input[type=radio] { flex-shrink: 0; accent-color: var(--safety-orange); }
+  .add-form .hint { font-size: .76rem; color: var(--paper-dim); margin-top: -8px; margin-bottom: 10px; }
+
+  .toast {
+    display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--safety-orange); color: #1a1206; padding: 10px 20px; border-radius: 2px;
+    font-family: var(--font-mono); font-size: .82rem; z-index: 50; box-shadow: 0 4px 14px rgba(0,0,0,.3);
   }
 
-  footer{
-    text-align:center;color:var(--gray);font-size:.8rem;padding:20px;
+  footer {
+    max-width: 920px; margin: 0 auto; padding: 0 24px 60px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--paper-dim);
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>TOEIC Part2 対策 — 応答問題の傾向と例文</h1>
-  <p>出題パターンを3タイプに整理 + 例文で反復練習</p>
+  <div class="eyebrow">TOEIC STUDY LOG &mdash; PART2 RESPONSE DRILL</div>
+  <h1>Part2 対策 — 応答問題の傾向と例文</h1>
+  <div class="sub">出題パターンを3タイプに整理し、音声再生・問題追加・定着度トラッキングで反復練習するページ</div>
 </header>
 
-<nav class="crumb"><a href="index.html">← トップに戻る</a> ｜ <a href="part5.html">Part5 でる文法ログ →</a></nav>
+<nav class="crumb"><a href="index.html">&larr; トップに戻る</a> ｜ <a href="part5.html">Part5 診断ログ &rarr;</a></nav>
 
 <main>
 
   <section>
-    <h2>1. Part2 出題傾向 3タイプ</h2>
+    <div class="section-title">01 &nbsp;OUTPUT PATTERNS</div>
     <p class="lead">Part2(応答問題)は放送される質問・発言に対して最も適切な応答を3択から選ぶ形式。出題は大きく以下の3タイプに分類できる。</p>
 
     <div class="type-grid">
@@ -258,7 +300,7 @@
   </section>
 
   <section>
-    <h2>2. 例文で反復練習</h2>
+    <div class="section-title">02 &nbsp;DRILL LOG</div>
     <p class="lead">🔊ボタンで音声再生、選択肢をタップすると正誤と解説を表示。解答するたびに定着度と復習回数が記録されます(このブラウザに保存)。</p>
 
     <div class="stats-bar" id="statsBar"></div>
@@ -277,7 +319,7 @@
   </section>
 
   <section>
-    <h2>3. 問題を追加する</h2>
+    <div class="section-title">03 &nbsp;ADD NEW QUESTION</div>
     <p class="lead">自分でつまずいた問題を追加して、このページで復習できます。</p>
 
     <div class="add-form">
@@ -318,7 +360,9 @@
 
 </main>
 
-<footer>TOEIC学習サイト &middot; Part2対策ページ</footer>
+<footer>
+  TOEIC学習サイト &middot; Part2対策ページ &nbsp;/&nbsp; HOSTED ON GITHUB PAGES
+</footer>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -528,12 +572,16 @@ function render(){
     const card = document.createElement("div");
     card.className = "qcard";
 
+    const qnumEl = document.createElement("div");
+    qnumEl.className = "qnum";
+    qnumEl.textContent = String(qi+1).padStart(2,"0");
+    card.appendChild(qnumEl);
+
     const meta = document.createElement("div");
     meta.className = "qmeta";
     const isCustom = item.source === "custom";
     meta.innerHTML = `
       <div class="qmeta-left">
-        <span class="qnum">Q${qi+1}</span>
         <span class="badge ${item.type}">${typeLabel[item.type]}</span>
         ${isCustom ? '<span class="badge custom">追加問題</span>' : ''}
         <span class="mastery ${mastery.cls}">${mastery.label}</span>
@@ -576,7 +624,7 @@ function render(){
     allRow.style.marginBottom = "10px";
     const allBtn = document.createElement("button");
     allBtn.className = "btn secondary";
-    allBtn.style.fontSize = ".8rem";
+    allBtn.style.fontSize = ".76rem";
     allBtn.style.padding = "5px 14px";
     allBtn.textContent = "🔊 設問+選択肢をまとめて再生";
     allBtn.onclick = ()=> speakAll(item, allBtn);
