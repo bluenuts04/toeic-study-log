@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOEIC Part2 対策 | 応答問題の傾向と例文</title>
+<style>
+  :root{
+    --navy:#1a2744;
+    --blue:#2f5fd6;
+    --blue-light:#eef2ff;
+    --accent:#e0562f;
+    --gray:#5a6472;
+    --border:#e3e7ee;
+    --bg:#f6f7fb;
+    --green:#3fae6a;
+    --amber:#d99a1f;
+    --red:#d9534f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    background:var(--bg);
+    color:#222;
+    line-height:1.7;
+  }
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:36px 20px 30px;
+    text-align:center;
+  }
+  header h1{margin:0 0 8px;font-size:1.6rem;letter-spacing:.02em;}
+  header p{margin:0;color:#b9c2d8;font-size:.92rem;}
+  nav.crumb{
+    max-width:900px;margin:16px auto 0;padding:0 20px;font-size:.85rem;
+  }
+  nav.crumb a{color:var(--blue);text-decoration:none;}
+  main{max-width:900px;margin:0 auto;padding:28px 20px 60px;}
+
+  section{margin-bottom:44px;}
+  h2{
+    font-size:1.2rem;color:var(--navy);
+    border-left:5px solid var(--blue);
+    padding-left:10px;margin-bottom:16px;
+  }
+  .lead{color:var(--gray);font-size:.94rem;margin-bottom:20px;}
+
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+  .type-card{
+    background:#fff;border:1px solid var(--border);border-radius:10px;
+    padding:18px 18px 16px;box-shadow:0 1px 3px rgba(20,30,60,.05);
+  }
+  .type-card .num{
+    display:inline-block;background:var(--blue);color:#fff;
+    font-size:.75rem;padding:2px 9px;border-radius:20px;margin-bottom:8px;
+  }
+  .type-card h3{margin:0 0 8px;font-size:1.02rem;color:var(--navy);}
+  .type-card ul{margin:8px 0 10px;padding-left:18px;font-size:.88rem;color:#333;}
+  .type-card .tip{
+    font-size:.82rem;background:var(--blue-light);color:#26407a;
+    padding:8px 10px;border-radius:6px;margin-top:8px;
+  }
+  .type-card .warn{
+    font-size:.82rem;background:#fdeee8;color:#a1401f;
+    padding:8px 10px;border-radius:6px;margin-top:6px;
+  }
+
+  table.summary{width:100%;border-collapse:collapse;margin-top:18px;font-size:.87rem;}
+  table.summary th,table.summary td{
+    border:1px solid var(--border);padding:8px 10px;text-align:left;
+  }
+  table.summary th{background:var(--navy);color:#fff;}
+  table.summary tr:nth-child(even){background:#fbfbfd;}
+
+  /* stats bar */
+  .stats-bar{
+    display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;
+  }
+  .stat-pill{
+    background:#fff;border:1px solid var(--border);border-radius:8px;
+    padding:10px 16px;font-size:.85rem;color:var(--gray);flex:1;min-width:120px;
+    text-align:center;
+  }
+  .stat-pill b{display:block;font-size:1.3rem;color:var(--navy);margin-bottom:2px;}
+
+  .qcard{
+    background:#fff;border:1px solid var(--border);border-radius:10px;
+    padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(20,30,60,.05);
+  }
+  .qcard .qmeta{
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;
+    flex-wrap:wrap;gap:6px;
+  }
+  .qcard .qmeta-left{display:flex;align-items:center;gap:8px;}
+  .qcard .qnum{font-weight:bold;color:var(--navy);}
+  .qcard .badge{
+    font-size:.72rem;padding:2px 8px;border-radius:20px;color:#fff;
+  }
+  .badge.wh{background:var(--blue);}
+  .badge.yn{background:var(--green);}
+  .badge.other{background:var(--accent);}
+  .badge.custom{background:#7b5cd6;}
+
+  .added-date{font-size:.72rem;color:var(--gray);}
+
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px;}
+  .tag-pill{
+    font-size:.72rem;background:#f0eefa;color:#5c3fb0;
+    padding:2px 9px;border-radius:20px;border:1px solid #ddd4f5;
+  }
+
+  .filter-row{
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;
+  }
+  .filter-row label{font-size:.82rem;color:var(--gray);}
+  .filter-row select{
+    padding:6px 10px;border:1px solid var(--border);border-radius:6px;
+    font-size:.85rem;background:#fff;
+  }
+
+  .mastery{
+    font-size:.72rem;padding:2px 9px;border-radius:20px;font-weight:bold;
+  }
+  .mastery.new{background:#ececf1;color:#666;}
+  .mastery.learning{background:#fdf2dd;color:var(--amber);}
+  .mastery.mastered{background:#e6f7ec;color:var(--green);}
+
+  .review-count{font-size:.75rem;color:var(--gray);}
+
+  .speak-btn{
+    border:none;background:var(--blue-light);color:var(--blue);
+    width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.95rem;
+    display:inline-flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .speak-btn:hover{background:#dde5fb;}
+  .speak-btn.playing{background:var(--blue);color:#fff;}
+
+  .qtext-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+  .qtext{font-size:1rem;}
+
+  .choices{list-style:none;margin:0;padding:0;font-size:.92rem;}
+  .choices li{
+    display:flex;align-items:center;gap:8px;
+    padding:6px 10px;border:1px solid var(--border);border-radius:6px;
+    margin-bottom:6px;cursor:pointer;transition:.15s;
+  }
+  .choices li:hover{background:#f2f4fa;}
+  .choices li.correct{background:#e6f7ec;border-color:var(--green);font-weight:bold;}
+  .choices li.selected-wrong{background:#fdeaea;border-color:var(--red);}
+  .choices li .ctext{flex:1;}
+  .choices li .speak-btn{width:24px;height:24px;font-size:.8rem;}
+
+  .answer-note{
+    display:none;margin-top:10px;font-size:.85rem;color:var(--gray);
+    background:var(--blue-light);padding:8px 10px;border-radius:6px;
+  }
+
+  .btn-row{text-align:center;margin-top:8px;}
+  .btn{
+    background:var(--blue);color:#fff;border:none;padding:9px 20px;
+    border-radius:6px;font-size:.88rem;cursor:pointer;
+  }
+  .btn:hover{background:#254db3;}
+  .btn.secondary{background:#fff;color:var(--blue);border:1px solid var(--blue);}
+  .btn.secondary:hover{background:var(--blue-light);}
+  .btn.danger{background:#fff;color:var(--red);border:1px solid var(--red);}
+  .btn.danger:hover{background:#fdeaea;}
+  .btn.secondary.playing{background:var(--blue);color:#fff;}
+
+  /* add-question form */
+  .add-form{
+    background:#fff;border:1px solid var(--border);border-radius:10px;
+    padding:20px;
+  }
+  .add-form .row{margin-bottom:12px;}
+  .add-form label{display:block;font-size:.82rem;color:var(--gray);margin-bottom:4px;}
+  .add-form input[type=text], .add-form select, .add-form textarea{
+    width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;
+    font-size:.9rem;font-family:inherit;
+  }
+  .add-form .choice-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .add-form .choice-row input[type=text]{flex:1;}
+  .add-form .choice-row input[type=radio]{flex-shrink:0;}
+  .add-form .hint{font-size:.78rem;color:var(--gray);margin-top:-6px;margin-bottom:10px;}
+  .toast{
+    display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:var(--navy);color:#fff;padding:10px 20px;border-radius:24px;
+    font-size:.85rem;z-index:50;box-shadow:0 4px 14px rgba(0,0,0,.2);
+  }
+
+  footer{
+    text-align:center;color:var(--gray);font-size:.8rem;padding:20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>TOEIC Part2 対策 — 応答問題の傾向と例文</h1>
+  <p>出題パターンを3タイプに整理 + 例文で反復練習</p>
+</header>
+
+<nav class="crumb"><a href="index.html">← トップに戻る</a> ｜ <a href="part5.html">Part5 でる文法ログ →</a></nav>
+
+<main>
+
+  <section>
+    <h2>1. Part2 出題傾向 3タイプ</h2>
+    <p class="lead">Part2(応答問題)は放送される質問・発言に対して最も適切な応答を3択から選ぶ形式。出題は大きく以下の3タイプに分類できる。</p>
+
+    <div class="type-grid">
+      <div class="type-card">
+        <span class="num">TYPE 1</span>
+        <h3>WH疑問文型</h3>
+        <ul>
+          <li>What / Where / When / Who / Why / How で始まる</li>
+          <li>Yes/Noでは答えない具体的情報を聞く</li>
+          <li>出題数が最も多い(全25問中12〜14問程度)</li>
+        </ul>
+        <div class="tip">対策: 疑問詞を聞き逃さない。冒頭1語に全集中する。</div>
+        <div class="warn">誤答パターン: Yes/Noで答える選択肢は基本的に不正解</div>
+      </div>
+
+      <div class="type-card">
+        <span class="num">TYPE 2</span>
+        <h3>Yes/No疑問文型</h3>
+        <ul>
+          <li>Do/Does/Did, Are/Is, Have/Has, Can/Could, Will/Would等で始まる</li>
+          <li>付加疑問文(..., isn't it?)もここに含む</li>
+          <li>Yes/Noを言わず状況で答える応答も正解になりうる</li>
+        </ul>
+        <div class="tip">対策: Yes/Noの省略・言い換え応答に慣れる(例:Sure / I'm afraid not)</div>
+        <div class="warn">誤答パターン: 質問文中の単語を使った音の連想ひっかけに注意</div>
+      </div>
+
+      <div class="type-card">
+        <span class="num">TYPE 3</span>
+        <h3>依頼・提案・平叙文型</h3>
+        <ul>
+          <li>Why don't we... / Would you mind... / Let's... など依頼・提案・勧誘</li>
+          <li>疑問文の形を取らない平叙文(状況説明+反応を求める)</li>
+          <li>応答の自由度が高く難易度がやや高い</li>
+        </ul>
+        <div class="tip">対策: 定型応答(Sure, I'd be happy to / Sorry, I can't)を先に覚える</div>
+        <div class="warn">誤答パターン: 一見自然だが話の流れに合わない選択肢が紛れる</div>
+      </div>
+    </div>
+
+    <table class="summary">
+      <tr><th>タイプ</th><th>出題比率目安</th><th>難易度</th><th>キーポイント</th></tr>
+      <tr><td>① WH疑問文</td><td>約50%</td><td>★★☆</td><td>疑問詞の聞き取り</td></tr>
+      <tr><td>② Yes/No疑問文</td><td>約30%</td><td>★★☆</td><td>省略応答・ひっかけ音</td></tr>
+      <tr><td>③ 依頼・提案・平叙文</td><td>約20%</td><td>★★★</td><td>定型表現・文脈把握</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>2. 例文で反復練習</h2>
+    <p class="lead">🔊ボタンで音声再生、選択肢をタップすると正誤と解説を表示。解答するたびに定着度と復習回数が記録されます(このブラウザに保存)。</p>
+
+    <div class="stats-bar" id="statsBar"></div>
+
+    <div class="filter-row">
+      <label for="tagFilter">問題元タグで絞り込み:</label>
+      <select id="tagFilter" onchange="render()"><option value="">すべて表示</option></select>
+    </div>
+
+    <div id="quiz"></div>
+
+    <div class="btn-row">
+      <button class="btn secondary" onclick="resetAnswers()">表示をリセット</button>
+      <button class="btn danger" onclick="resetStats()">記録を全て消去</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. 問題を追加する</h2>
+    <p class="lead">自分でつまずいた問題を追加して、このページで復習できます。</p>
+
+    <div class="add-form">
+      <div class="row">
+        <label>タイプ</label>
+        <select id="fType">
+          <option value="wh">WH疑問文</option>
+          <option value="yn">Yes/No疑問文</option>
+          <option value="other">依頼・提案・平叙文</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>質問文(英語)</label>
+        <input type="text" id="fQ" placeholder="例: When does the store open?">
+      </div>
+      <div class="row">
+        <label>選択肢(正解を左のラジオボタンで選択)</label>
+        <div class="choice-row"><input type="radio" name="fCorrect" value="0" checked><input type="text" id="fC0" placeholder="選択肢A"></div>
+        <div class="choice-row"><input type="radio" name="fCorrect" value="1"><input type="text" id="fC1" placeholder="選択肢B"></div>
+        <div class="choice-row"><input type="radio" name="fCorrect" value="2"><input type="text" id="fC2" placeholder="選択肢C"></div>
+        <div class="hint">正解の選択肢の左のラジオボタンをオンにしてください</div>
+      </div>
+      <div class="row">
+        <label>解説(任意)</label>
+        <textarea id="fNote" rows="2" placeholder="例: When(時間)には具体的な時間・時期で答える。"></textarea>
+      </div>
+      <div class="row">
+        <label>問題元タグ(任意・カンマ区切りで複数可)</label>
+        <input type="text" id="fTags" list="tagSuggestions" placeholder="例: 公式問題集1, 模試2026, 自分の間違い">
+        <datalist id="tagSuggestions"></datalist>
+        <div class="hint">既存のタグ名を入力すると同じグループとして絞り込めます。新しいタグ名も自由に追加できます。</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="addQuestion()">この問題を追加</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>TOEIC学習サイト &middot; Part2対策ページ</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- データ定義 ---------- */
+const builtinQuestions = [
+  {id:"b1", type:"wh", q:"Where did you put the meeting agenda?", choices:[
+    {t:"I left it on your desk.", correct:true},
+    {t:"Yes, it starts at 3 PM.", correct:false},
+    {t:"About twenty minutes.", correct:false}
+  ], note:"Where(場所)の質問には場所を答える。Yesで返す①は不適切、時間を答える③も論点がずれる。"},
+
+  {id:"b2", type:"wh", q:"Who's going to present the sales report?", choices:[
+    {t:"Sometime next week.", correct:false},
+    {t:"I think Sarah is.", correct:false},
+    {t:"I think Sarah is going to.", correct:true}
+  ], note:"Who(人物)には人物名で応答する。①は時期の応答でずれている。"},
+
+  {id:"b3", type:"wh", q:"Why was the delivery delayed?", choices:[
+    {t:"Because of a traffic accident.", correct:true},
+    {t:"It's on the third floor.", correct:false},
+    {t:"No, it wasn't.", correct:false}
+  ], note:"Why(理由)にはBecause等で理由を答える。③はYes/No応答で不適切。"},
+
+  {id:"b4", type:"wh", q:"How long have you worked here?", choices:[
+    {t:"Down the hall, on the left.", correct:false},
+    {t:"About five years.", correct:true},
+    {t:"Yes, I really enjoy it.", correct:false}
+  ], note:"How long(期間)には期間の長さで答える。"},
+
+  {id:"b5", type:"yn", q:"Have you finished the quarterly report?", choices:[
+    {t:"Not yet, I'll have it done by noon.", correct:true},
+    {t:"It's a monthly report.", correct:false},
+    {t:"I bought it yesterday.", correct:false}
+  ], note:"Yes/No疑問文だが、Not yet(まだです)のような自然な省略応答が正解になりやすい。"},
+
+  {id:"b6", type:"yn", q:"Is the conference room available at 2 PM?", choices:[
+    {t:"It's a large room.", correct:false},
+    {t:"Let me check the schedule.", correct:true},
+    {t:"I conferred with the manager.", correct:false}
+  ], note:"即答できない場合の「確認します」という回答も定番の正解パターン。③はconference/conferredの音の連想ひっかけ。"},
+
+  {id:"b7", type:"yn", q:"Didn't you receive my email yesterday?", choices:[
+    {t:"Actually, I did, thanks.", correct:true},
+    {t:"I'll email you the file.", correct:false},
+    {t:"No, the printer is broken.", correct:false}
+  ], note:"否定疑問文でもYes/Noの実質的な意味に注目する。「受け取った」という内容が一致する①が正解。"},
+
+  {id:"b8", type:"other", q:"Why don't we take a short break?", choices:[
+    {t:"Sure, that sounds good.", correct:true},
+    {t:"It's about two miles away.", correct:false},
+    {t:"I broke my phone yesterday.", correct:false}
+  ], note:"提案(Why don't we...)には賛成・拒否の応答で返す。③はbreakの音の連想ひっかけ。"},
+
+  {id:"b9", type:"other", q:"Would you mind closing the window?", choices:[
+    {t:"Not at all.", correct:true},
+    {t:"It's quite cold outside.", correct:false},
+    {t:"I opened it an hour ago.", correct:false}
+  ], note:"Would you mind...(依頼)には「構いません=やります」を意味するNot at allが正解になりやすい定型応答。"},
+
+  {id:"b10", type:"other", q:"The printer on the third floor isn't working again.", choices:[
+    {t:"I'll call IT support right away.", correct:true},
+    {t:"It costs about 300 dollars.", correct:false},
+    {t:"Yes, I printed it twice.", correct:false}
+  ], note:"平叙文(状況説明)には状況への対応・反応で答える。疑問文ではないのでYes/Noで返す③は不自然。"}
+];
+
+// サンプル問題には共通で「サンプル問題」タグ・source:builtin を付与
+builtinQuestions.forEach(q=>{
+  q.source = "builtin";
+  q.tags = ["サンプル問題"];
+});
+
+const typeLabel = {wh:"WH疑問文", yn:"Yes/No疑問文", other:"依頼・提案・平叙文"};
+const STORAGE_KEY = "toeic_part2_v1";
+
+/* ---------- localStorage ヘルパー ---------- */
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {customQuestions:[], stats:{}};
+}
+function saveStore(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
+
+let store = loadStore();
+
+function allQuestions(){ return builtinQuestions.concat(store.customQuestions); }
+
+function allTags(){
+  const set = new Set();
+  allQuestions().forEach(q=> (q.tags||[]).forEach(t=> set.add(t)));
+  return [...set].sort();
+}
+
+function formatDate(ts){
+  if(!ts) return "";
+  const d = new Date(ts);
+  return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function getStat(id){
+  if(!store.stats[id]) store.stats[id] = {attempts:0, correct:0, streak:0};
+  return store.stats[id];
+}
+
+function masteryOf(stat){
+  if(stat.attempts === 0) return {label:"未学習", cls:"new"};
+  if(stat.streak >= 2) return {label:"定着", cls:"mastered"};
+  return {label:"学習中", cls:"learning"};
+}
+
+/* ---------- 音声再生 ---------- */
+function speak(text, btn){
+  if(!('speechSynthesis' in window)){
+    showToast("この端末は音声読み上げに対応していません");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.95;
+  if(btn){
+    btn.classList.add("playing");
+    u.onend = ()=> btn.classList.remove("playing");
+    u.onerror = ()=> btn.classList.remove("playing");
+  }
+  window.speechSynthesis.speak(u);
+}
+
+// 設問(質問文)+選択肢A/B/Cを順番にまとめて再生
+function speakAll(item, btn){
+  if(!('speechSynthesis' in window)){
+    showToast("この端末は音声読み上げに対応していません");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const texts = [item.q, ...item.choices.map((c,i)=> String.fromCharCode(65+i) + ". " + c.t)];
+  if(btn) btn.classList.add("playing");
+
+  let i = 0;
+  function playNext(){
+    if(i >= texts.length){
+      if(btn) btn.classList.remove("playing");
+      return;
+    }
+    const u = new SpeechSynthesisUtterance(texts[i]);
+    u.lang = "en-US";
+    u.rate = 0.95;
+    u.onend = ()=>{ i++; playNext(); };
+    u.onerror = ()=>{ if(btn) btn.classList.remove("playing"); };
+    window.speechSynthesis.speak(u);
+  }
+  playNext();
+}
+
+/* ---------- 描画 ---------- */
+const quizEl = document.getElementById("quiz");
+const statsBarEl = document.getElementById("statsBar");
+
+function renderStatsBar(){
+  const qs = allQuestions();
+  let mastered=0, learning=0, unlearned=0, totalReviews=0;
+  qs.forEach(q=>{
+    const st = getStat(q.id);
+    totalReviews += st.attempts;
+    const m = masteryOf(st);
+    if(m.cls==="mastered") mastered++;
+    else if(m.cls==="learning") learning++;
+    else unlearned++;
+  });
+  statsBarEl.innerHTML = `
+    <div class="stat-pill"><b>${qs.length}</b>総問題数</div>
+    <div class="stat-pill"><b>${mastered}</b>定着</div>
+    <div class="stat-pill"><b>${learning}</b>学習中</div>
+    <div class="stat-pill"><b>${unlearned}</b>未学習</div>
+    <div class="stat-pill"><b>${totalReviews}</b>累計復習回数</div>
+  `;
+}
+
+function renderTagOptions(){
+  const filterEl = document.getElementById("tagFilter");
+  const current = filterEl.value;
+  const tags = allTags();
+  filterEl.innerHTML = '<option value="">すべて表示</option>' +
+    tags.map(t=>`<option value="${t}">${t}</option>`).join("");
+  if(tags.includes(current)) filterEl.value = current;
+
+  const datalist = document.getElementById("tagSuggestions");
+  datalist.innerHTML = tags.map(t=>`<option value="${t}">`).join("");
+}
+
+function render(){
+  renderTagOptions();
+  const activeTag = document.getElementById("tagFilter").value;
+  quizEl.innerHTML = "";
+  const qs = allQuestions().filter(item=> !activeTag || (item.tags||[]).includes(activeTag));
+  if(qs.length === 0){
+    quizEl.innerHTML = '<p class="lead">このタグの問題はまだありません。</p>';
+    renderStatsBar();
+    return;
+  }
+  qs.forEach((item, qi)=>{
+    const stat = getStat(item.id);
+    const mastery = masteryOf(stat);
+
+    const card = document.createElement("div");
+    card.className = "qcard";
+
+    const meta = document.createElement("div");
+    meta.className = "qmeta";
+    const isCustom = item.source === "custom";
+    meta.innerHTML = `
+      <div class="qmeta-left">
+        <span class="qnum">Q${qi+1}</span>
+        <span class="badge ${item.type}">${typeLabel[item.type]}</span>
+        ${isCustom ? '<span class="badge custom">追加問題</span>' : ''}
+        <span class="mastery ${mastery.cls}">${mastery.label}</span>
+      </div>
+      <span class="review-count">復習 ${stat.attempts}回 / 正解 ${stat.correct}回</span>
+    `;
+    card.appendChild(meta);
+
+    if(isCustom && item.createdAt){
+      const addedDate = document.createElement("div");
+      addedDate.className = "added-date";
+      addedDate.textContent = "追加日: " + formatDate(item.createdAt);
+      card.appendChild(addedDate);
+    }
+
+    if(item.tags && item.tags.length){
+      const tagRow = document.createElement("div");
+      tagRow.className = "tag-row";
+      tagRow.innerHTML = item.tags.map(t=>`<span class="tag-pill">${t}</span>`).join("");
+      card.appendChild(tagRow);
+    }
+
+    const qrow = document.createElement("div");
+    qrow.className = "qtext-row";
+    const speakBtn = document.createElement("button");
+    speakBtn.className = "speak-btn";
+    speakBtn.title = "問題文だけ再生";
+    speakBtn.textContent = "🔊";
+    speakBtn.onclick = ()=> speak(item.q, speakBtn);
+    const qtext = document.createElement("div");
+    qtext.className = "qtext";
+    qtext.textContent = item.q;
+    qrow.appendChild(speakBtn);
+    qrow.appendChild(qtext);
+    card.appendChild(qrow);
+
+    const allRow = document.createElement("div");
+    allRow.className = "btn-row";
+    allRow.style.textAlign = "left";
+    allRow.style.marginBottom = "10px";
+    const allBtn = document.createElement("button");
+    allBtn.className = "btn secondary";
+    allBtn.style.fontSize = ".8rem";
+    allBtn.style.padding = "5px 14px";
+    allBtn.textContent = "🔊 設問+選択肢をまとめて再生";
+    allBtn.onclick = ()=> speakAll(item, allBtn);
+    allRow.appendChild(allBtn);
+    card.appendChild(allRow);
+
+    const ul = document.createElement("ul");
+    ul.className = "choices";
+    item.choices.forEach((c, ci)=>{
+      const li = document.createElement("li");
+
+      const csBtn = document.createElement("button");
+      csBtn.className = "speak-btn";
+      csBtn.textContent = "🔊";
+      csBtn.title = "選択肢を再生";
+      csBtn.onclick = (e)=>{ e.stopPropagation(); speak(c.t, csBtn); };
+
+      const ctext = document.createElement("span");
+      ctext.className = "ctext";
+      ctext.textContent = String.fromCharCode(65+ci) + ") " + c.t;
+
+      li.appendChild(csBtn);
+      li.appendChild(ctext);
+
+      li.onclick = ()=>{
+        if(li.dataset.answered) return; // 1問1回のみ記録
+        const note = card.querySelector(".answer-note");
+        [...ul.children].forEach(x=>{x.classList.remove("selected-wrong"); x.dataset.answered="1";});
+
+        stat.attempts += 1;
+        if(c.correct){
+          li.classList.add("correct");
+          stat.correct += 1;
+          stat.streak += 1;
+        } else {
+          li.classList.add("selected-wrong");
+          stat.streak = 0;
+          [...ul.children].forEach((x,xi)=>{
+            if(item.choices[xi].correct) x.classList.add("correct");
+          });
+        }
+        saveStore();
+        note.style.display = "block";
+        renderStatsBar();
+
+        // このカードの見出し部分だけ更新
+        const newMastery = masteryOf(stat);
+        const mSpan = meta.querySelector(".mastery");
+        mSpan.className = "mastery " + newMastery.cls;
+        mSpan.textContent = newMastery.label;
+        meta.querySelector(".review-count").textContent = `復習 ${stat.attempts}回 / 正解 ${stat.correct}回`;
+      };
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+
+    const note = document.createElement("div");
+    note.className = "answer-note";
+    note.textContent = "解説: " + (item.note || "(解説なし)");
+    card.appendChild(note);
+
+    quizEl.appendChild(card);
+  });
+  renderStatsBar();
+}
+
+/* ---------- 問題追加 ---------- */
+function addQuestion(){
+  const type = document.getElementById("fType").value;
+  const q = document.getElementById("fQ").value.trim();
+  const c0 = document.getElementById("fC0").value.trim();
+  const c1 = document.getElementById("fC1").value.trim();
+  const c2 = document.getElementById("fC2").value.trim();
+  const note = document.getElementById("fNote").value.trim();
+  const tagsRaw = document.getElementById("fTags").value.trim();
+  const correctIdx = parseInt(document.querySelector('input[name=fCorrect]:checked').value, 10);
+
+  if(!q || !c0 || !c1 || !c2){
+    showToast("質問文と選択肢A/B/Cをすべて入力してください");
+    return;
+  }
+
+  const tags = tagsRaw
+    ? tagsRaw.split(",").map(t=>t.trim()).filter(t=>t.length>0)
+    : [];
+
+  const newQ = {
+    id: "c" + Date.now(),
+    type: type,
+    q: q,
+    choices: [
+      {t:c0, correct: correctIdx===0},
+      {t:c1, correct: correctIdx===1},
+      {t:c2, correct: correctIdx===2}
+    ],
+    note: note,
+    source: "custom",
+    createdAt: Date.now(),
+    tags: tags.length ? tags : ["未分類"]
+  };
+  store.customQuestions.push(newQ);
+  saveStore();
+
+  document.getElementById("fQ").value = "";
+  document.getElementById("fC0").value = "";
+  document.getElementById("fC1").value = "";
+  document.getElementById("fC2").value = "";
+  document.getElementById("fNote").value = "";
+  document.getElementById("fTags").value = "";
+  document.querySelector('input[name=fCorrect][value="0"]').checked = true;
+
+  render();
+  showToast("問題を追加しました");
+}
+
+/* ---------- リセット系 ---------- */
+function resetAnswers(){
+  render(); // 選択済みマークをクリア(統計は保持)
+}
+function resetStats(){
+  if(!confirm("すべての定着度・復習回数の記録を消去します。よろしいですか?")) return;
+  store.stats = {};
+  saveStore();
+  render();
+  showToast("記録を消去しました");
+}
+
+/* ---------- トースト ---------- */
+let toastTimer;
+function showToast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ el.style.display = "none"; }, 2200);
+}
+
+render();
+</script>
+
+</body>
+</html>
