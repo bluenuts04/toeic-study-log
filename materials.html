@@ -66,7 +66,9 @@ main {
     color: white;
     transition: 0.2s;
 }
-
+.card {
+    position: relative;
+}
 
 .card:hover {
     transform: translateY(-3px);
@@ -105,7 +107,49 @@ main {
 .paper .status {
     color: #fbbf24;
 }
+/* 使用中教材 */
+.card.active {
+    border: 2px solid #e8631c;
+    background: rgba(232,99,28,0.08);
+}
 
+
+/* ACTIVE表示 */
+.card.active::after {
+    content: "★ ACTIVE";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 11px;
+    color: #e8631c;
+    font-family: "JetBrains Mono", monospace;
+}
+
+
+/* 未使用教材 */
+.card.inactive {
+    opacity: 0.55;
+}
+
+
+/* コード凡例 */
+.code-list {
+    border: 1px dashed #6f95ad;
+    background: rgba(255,255,255,0.03);
+    padding: 15px;
+    margin-bottom: 35px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: #c7d3d6;
+    line-height: 1.8;
+}
+
+
+.code-title {
+    color: #e8631c;
+    margin-bottom: 8px;
+    font-weight:bold;
+}
 </style>
 
 </head>
@@ -123,7 +167,31 @@ main {
 <div class="page-title">
 📚 教材一覧
 </div>
+<div class="code-list">
 
+<div class="code-title">
+CODE LEGEND
+</div>
+
+📱 APP<br>
+NTC : Native Camp<br>
+BIZ : ビジネス英会話<br>
+TRN : トレーニング TOEIC®test<br>
+DMM : DMM英会話<br>
+WHL : Word Holic<br><br>
+
+
+📖 BOOK<br>
+730 : 730点奪取の方法<br>
+DIA : ダイアローグ1800<br>
+D10 : でる1000問<br>
+SEN : 炎の千本ノック<br>
+NEX : ネクステージ<br>
+SPD : 速解！トレーニング読解<br>
+MOS : 本番模試<br>
+OFF : 公式問題集
+
+</div>
 
 <div class="section-title">
 APPLICATION
