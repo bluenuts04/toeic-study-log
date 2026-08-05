@@ -526,7 +526,7 @@
   <div class="panel" id="statsPanel">
     <div class="panel-title">SHEET SYNC 正答率の自動連携</div>
     <div class="sync-row">
-      <input type="text" id="sheetUrl" placeholder="https://script.google.com/macros/s/AKfycbxOa0G0AeOBEzRpmTC8anyEy8-PfVojH14BlIbkRwV9EOJYs2q86tF12A_-YKvXgZh7/exec">
+      <input type="text" id="sheetUrl" placeholder="GoogleスプレッドシートのApps Script Web App URLを貼り付け">
       <button type="button" class="ghost-btn" id="saveSheetUrl">保存</button>
       <button type="button" class="ghost-btn" id="showSyncHelp">連携手順を見る</button>
     </div>
@@ -728,8 +728,14 @@
   }
 
   // ---- スプレッドシート自動同期(Apps Script Web App) ----
+  // デフォルトURL:入力欄で保存しなくても最初からこのURLへ自動送信される。
+  // 別のシートに切り替えたい場合のみ、下の入力欄で上書きして「保存」してください。
+  const DEFAULT_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxOa0G0AeOBEzRpmTC8anyEy8-PfVojH14BlIbkRwV9EOJYs2q86tF12A_-YKvXgZh7/exec';
   const SHEET_URL_KEY = 'toeicPart5SheetUrl';
-  function getSheetUrl() { return localStorage.getItem(SHEET_URL_KEY) || ''; }
+  function getSheetUrl() {
+    const saved = localStorage.getItem(SHEET_URL_KEY);
+    return (saved && saved.trim()) ? saved.trim() : DEFAULT_SHEET_URL;
+  }
   function setSheetUrl(url) { localStorage.setItem(SHEET_URL_KEY, url); }
 
   function syncRowToSheet(e, stat) {
@@ -1127,3 +1133,4 @@
 
 </body>
 </html>
+
