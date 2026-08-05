@@ -52,6 +52,20 @@
     text-transform: uppercase;
   }
 
+  .home-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--paper);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--blueprint-line);
+    padding: 6px 12px;
+    border-radius: 2px;
+    text-decoration: none;
+    margin-bottom: 16px;
+  }
+  .home-link:hover { border-color: var(--paper); background: rgba(255,255,255,0.12); }
+
   h1 {
     font-size: 30px;
     margin: 10px 0 6px;
@@ -123,7 +137,18 @@
     font-size: 12px;
     color: var(--paper-dim);
   }
-  .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  .random-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--paper);
+    cursor: pointer;
+  }
+  .random-toggle input { accent-color: var(--safety-orange); width: 15px; height: 15px; cursor: pointer; }
 
   button.ghost-btn {
     font-family: var(--font-mono);
@@ -215,12 +240,14 @@
   .badge {
     font-family: var(--font-mono);
     font-size: 11px;
-    padding: 3px 8px;
+    font-weight: 700;
+    padding: 4px 9px;
     border-radius: 2px;
+    letter-spacing: 0.02em;
   }
-  .badge.material { color: var(--blueprint-navy-deep); background: var(--paper-dim); }
-  .badge.field { color: var(--safety-orange); border: 1px solid var(--safety-orange-dim); background: rgba(232,99,28,0.08); }
-  .badge.qno { color: var(--paper-dim); border: 1px dashed var(--blueprint-line); }
+  .badge.material { color: var(--blueprint-navy-deep); background: var(--paper); }
+  .badge.field { color: var(--blueprint-navy-deep); background: var(--safety-orange); }
+  .badge.qno { color: var(--paper); background: rgba(255,255,255,0.14); border: 1px solid var(--blueprint-line); }
 
   .stat-row {
     display: flex;
@@ -334,7 +361,7 @@
     border-radius: 2px;
   }
 
-  /* ---------- quiz mode ---------- */
+  /* ---------- quiz mode (batch) ---------- */
   #quizView { display: none; }
   #quizView.show { display: block; }
   #listView.hide { display: none; }
@@ -343,28 +370,46 @@
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--paper-dim);
-    margin-bottom: 14px;
+    margin-bottom: 18px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
   }
+  .quiz-progress .live-score { color: var(--safety-orange); }
+
   .quiz-card {
-    border: 1px solid var(--safety-orange-dim);
+    position: relative;
+    border: 1px solid var(--blueprint-line);
     border-radius: 2px;
-    padding: 26px 26px 22px;
+    padding: 22px 24px 20px 64px;
     background: rgba(255,255,255,0.02);
+    margin-bottom: 20px;
   }
-  .quiz-meta { margin-bottom: 14px; }
-  .quiz-question { font-size: 17px; margin-bottom: 18px; }
+  .quiz-card.answered-correct { border-color: var(--ok-green); }
+  .quiz-card.answered-wrong { border-color: var(--ng-red); }
+  .quiz-card .entry-no {
+    position: absolute;
+    left: 0; top: 0; bottom: 0; width: 48px;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 22px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--safety-orange-dim);
+    border-right: 1px dashed var(--blueprint-line);
+  }
+  .quiz-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .quiz-question { font-size: 16px; margin-bottom: 14px; }
   .quiz-choices {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 10px;
-    margin-bottom: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
   }
   .quiz-choice {
     font-family: var(--font-mono);
-    font-size: 14px;
-    padding: 12px 14px;
+    font-size: 13px;
+    padding: 10px 12px;
     border: 1px solid var(--blueprint-line);
     border-radius: 2px;
     background: transparent;
@@ -380,9 +425,9 @@
 
   .quiz-feedback {
     font-family: var(--font-mono);
-    font-size: 13px;
-    margin-bottom: 14px;
-    min-height: 18px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    min-height: 16px;
   }
   .quiz-feedback.ok { color: var(--ok-green); }
   .quiz-feedback.ng { color: var(--ng-red); }
@@ -393,7 +438,14 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 10px;
+    margin: 10px 0 24px;
+  }
+  .quiz-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
   }
 
   .quiz-summary { text-align: center; padding: 30px 10px; }
@@ -492,6 +544,7 @@
 <body>
 
 <header>
+  <a href="index.html" class="home-link">&larr; ホームに戻る</a>
   <div class="eyebrow">TOEIC / PART 5 &mdash; GRAMMAR ERROR LOG</div>
   <h1>診断ログ</h1>
   <div class="sub">教材・分野・設問Noでフィルタし、まとめて解いて正答率をスプレッドシートに自動蓄積する</div>
@@ -517,6 +570,7 @@
     <div class="filter-actions">
       <div class="filter-count" id="filterCount"></div>
       <div class="filter-buttons">
+        <label class="random-toggle"><input type="checkbox" id="randomOrder"> ランダムに出題</label>
         <button type="button" class="ghost-btn" id="clearFilters">フィルタをクリア</button>
         <button type="button" class="primary-btn" id="startQuiz">この条件でまとめて解く &rarr;</button>
       </div>
@@ -623,9 +677,13 @@
   <div id="quizView">
     <div class="quiz-progress">
       <span id="quizProgress"></span>
-      <span id="quizScoreLive"></span>
+      <span class="live-score" id="quizScoreLive"></span>
     </div>
-    <div class="quiz-card" id="quizCard"></div>
+    <div id="quizCards"></div>
+    <div class="quiz-footer">
+      <button type="button" class="ghost-btn" id="quizExit">中断してリストに戻る</button>
+      <div class="quiz-pagination" id="quizPagination"></div>
+    </div>
   </div>
 
 </main>
@@ -912,98 +970,140 @@
   });
 
   // =========================================================
-  // クイズモード
+  // クイズモード(10問ずつ一覧表示、その場で解答選択)
   // =========================================================
+  const PAGE_SIZE = 10;
   let quizQueue = [];
-  let quizIndex = 0;
+  let quizPage = 0;
   let quizCorrectCount = 0;
-  let quizAnswered = false;
+  let quizAnsweredCount = 0;
+  let quizAnsweredIds = new Set(); // page内で回答済みのカードindexを記録
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 
   document.getElementById('startQuiz').addEventListener('click', () => {
-    quizQueue = filteredEntries();
-    if (quizQueue.length === 0) return;
-    quizIndex = 0;
+    let list = filteredEntries();
+    if (list.length === 0) return;
+    if (document.getElementById('randomOrder').checked) list = shuffle(list);
+    quizQueue = list;
+    quizPage = 0;
     quizCorrectCount = 0;
+    quizAnsweredCount = 0;
     listView.classList.add('hide');
     quizView.classList.add('show');
-    renderQuizQuestion();
+    renderQuizPage();
   });
 
-  function renderQuizQuestion() {
-    quizAnswered = false;
-    const e = quizQueue[quizIndex];
-    document.getElementById('quizProgress').textContent = `第 ${quizIndex + 1} / ${quizQueue.length} 問`;
-    document.getElementById('quizScoreLive').textContent = `現在の正解数: ${quizCorrectCount}`;
+  function renderQuizPage() {
+    quizAnsweredIds = new Set();
+    const totalPages = Math.ceil(quizQueue.length / PAGE_SIZE);
+    const pageItems = quizQueue.slice(quizPage * PAGE_SIZE, quizPage * PAGE_SIZE + PAGE_SIZE);
 
-    document.getElementById('quizCard').innerHTML = `
-      <div class="quiz-meta">
-        <span class="badge material">${materialLabel(e.material)}</span>
-        <span class="badge field">${fieldLabel(e.field)}</span>
-        <span class="badge qno">No.${e.qno}</span>
-      </div>
-      <div class="quiz-question">${e.question.replace('___', '<span class="blank">___</span>')}</div>
-      <div class="quiz-choices" id="quizChoices">
-        ${e.choices.map(c => `<button type="button" class="quiz-choice" data-choice="${c}">${c}</button>`).join('')}
-      </div>
-      <div class="quiz-feedback" id="quizFeedback"></div>
-      <button type="button" class="jp-toggle" id="quizJpToggle">日本語訳を確認</button>
-      <div class="jp-box" id="quizJpBox">${e.translation || '(和訳未登録)'}</div>
-      <div class="answer-box" id="quizAnswerBox">
-        <div class="dim-line">EXPLANATION</div>
-        <div class="explanation"><span class="explanation-label">解説</span>${e.explanation}</div>
-      </div>
-      <div class="quiz-footer">
-        <button type="button" class="ghost-btn" id="quizExit">中断してリストに戻る</button>
-        <button type="button" class="primary-btn" id="quizNext" disabled>次の問題へ &rarr;</button>
-      </div>
-    `;
+    document.getElementById('quizProgress').textContent =
+      `${quizQueue.length}問中 ${quizPage * PAGE_SIZE + 1}〜${quizPage * PAGE_SIZE + pageItems.length}問目を表示(ページ ${quizPage + 1}/${totalPages})`;
+    updateLiveScore();
 
-    document.getElementById('quizJpToggle').addEventListener('click', () => {
-      document.getElementById('quizJpBox').classList.toggle('show');
-    });
+    document.getElementById('quizCards').innerHTML = pageItems.map((e, i) => `
+      <div class="quiz-card" id="quizcard-${i}">
+        <div class="entry-no">${String(quizPage * PAGE_SIZE + i + 1).padStart(3, '0')}</div>
+        <div class="quiz-meta">
+          <span class="badge material">${materialLabel(e.material)}</span>
+          <span class="badge field">${fieldLabel(e.field)}</span>
+          <span class="badge qno">No.${e.qno}</span>
+        </div>
+        <div class="quiz-question">${e.question.replace('___', '<span class="blank">___</span>')}</div>
+        <div class="quiz-choices" id="quizchoices-${i}">
+          ${e.choices.map(c => `<button type="button" class="quiz-choice" data-choice="${c}" data-idx="${i}">${c}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="quizfeedback-${i}"></div>
+        <button type="button" class="jp-toggle" data-idx="${i}" data-role="jp">日本語訳を確認</button>
+        <div class="jp-box" id="quizjp-${i}">${e.translation || '(和訳未登録)'}</div>
+        <div class="answer-box" id="quizans-${i}">
+          <div class="dim-line">EXPLANATION</div>
+          <div class="explanation"><span class="explanation-label">解説</span>${e.explanation}</div>
+        </div>
+      </div>
+    `).join('');
 
     document.querySelectorAll('.quiz-choice').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (quizAnswered) return;
-        quizAnswered = true;
+        const idx = Number(btn.dataset.idx);
+        if (quizAnsweredIds.has(idx)) return;
+        quizAnsweredIds.add(idx);
+
+        const e = pageItems[idx];
         const picked = btn.dataset.choice;
         const isCorrect = picked === e.answer;
         if (isCorrect) quizCorrectCount++;
+        quizAnsweredCount++;
         const stat = recordAnswer(e.id, isCorrect);
         syncRowToSheet(e, stat);
 
-        document.querySelectorAll('.quiz-choice').forEach(b => {
+        document.getElementById(`quizchoices-${idx}`).querySelectorAll('.quiz-choice').forEach(b => {
           b.disabled = true;
           if (b.dataset.choice === e.answer) b.classList.add('reveal-correct');
           if (b === btn && isCorrect) b.classList.add('picked-correct');
           if (b === btn && !isCorrect) b.classList.add('picked-wrong');
         });
 
-        const fb = document.getElementById('quizFeedback');
+        const fb = document.getElementById(`quizfeedback-${idx}`);
         fb.textContent = isCorrect ? '正解!' : `不正解 -- 正解は「${e.answer}」`;
         fb.className = 'quiz-feedback ' + (isCorrect ? 'ok' : 'ng');
-        document.getElementById('quizAnswerBox').classList.add('show');
+        document.getElementById(`quizans-${idx}`).classList.add('show');
 
-        document.getElementById('quizScoreLive').textContent = `現在の正解数: ${quizCorrectCount}`;
-        document.getElementById('quizNext').disabled = false;
+        const card = document.getElementById(`quizcard-${idx}`);
+        card.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+
+        updateLiveScore();
       });
     });
 
-    document.getElementById('quizExit').addEventListener('click', exitQuiz);
-    document.getElementById('quizNext').addEventListener('click', () => {
-      quizIndex++;
-      if (quizIndex >= quizQueue.length) showQuizSummary();
-      else renderQuizQuestion();
+    document.querySelectorAll('.jp-toggle[data-role="jp"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById(`quizjp-${btn.dataset.idx}`).classList.toggle('show');
+      });
     });
+
+    renderQuizPagination(totalPages);
+  }
+
+  function updateLiveScore() {
+    document.getElementById('quizScoreLive').textContent = `現在の正解数: ${quizCorrectCount} / ${quizAnsweredCount}問回答済み`;
+  }
+
+  function renderQuizPagination(totalPages) {
+    const pag = document.getElementById('quizPagination');
+    if (totalPages <= 1) { pag.innerHTML = ''; return; }
+    let html = '';
+    if (quizPage > 0) html += `<button type="button" class="ghost-btn" id="quizPrevPage">&larr; 前の${PAGE_SIZE}問</button>`;
+    html += `<span class="hint" style="margin:0 4px;">${quizPage + 1} / ${totalPages}</span>`;
+    if (quizPage < totalPages - 1) html += `<button type="button" class="primary-btn" id="quizNextPage">次の${PAGE_SIZE}問へ &rarr;</button>`;
+    else html += `<button type="button" class="primary-btn" id="quizFinish">終了して結果を見る</button>`;
+    pag.innerHTML = html;
+
+    const prevBtn = document.getElementById('quizPrevPage');
+    if (prevBtn) prevBtn.addEventListener('click', () => { quizPage--; renderQuizPage(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    const nextBtn = document.getElementById('quizNextPage');
+    if (nextBtn) nextBtn.addEventListener('click', () => { quizPage++; renderQuizPage(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    const finishBtn = document.getElementById('quizFinish');
+    if (finishBtn) finishBtn.addEventListener('click', showQuizSummary);
   }
 
   function showQuizSummary() {
-    const pct = Math.round((quizCorrectCount / quizQueue.length) * 100);
     document.getElementById('quizProgress').textContent = '結果';
     document.getElementById('quizScoreLive').textContent = '';
-    document.getElementById('quizCard').innerHTML = `
+    document.getElementById('quizPagination').innerHTML = '';
+    const pct = quizAnsweredCount ? Math.round((quizCorrectCount / quizAnsweredCount) * 100) : 0;
+    document.getElementById('quizCards').innerHTML = `
       <div class="quiz-summary">
-        <div class="score">${quizCorrectCount} / ${quizQueue.length} 問正解(${pct}%)</div>
+        <div class="score">${quizCorrectCount} / ${quizAnsweredCount} 問正解(${pct}%)</div>
         <div class="hint">結果は各問題の正答率・最終回答日として蓄積され、設定済みならスプレッドシートにも送信されました</div>
         <div class="quiz-footer" style="justify-content:center; margin-top:20px;">
           <button type="button" class="primary-btn" id="quizBackToList">リストに戻る</button>
@@ -1018,6 +1118,8 @@
     listView.classList.remove('hide');
     renderList();
   }
+
+  document.getElementById('quizExit').addEventListener('click', exitQuiz);
 
   // =========================================================
   // シート連携設定パネル
@@ -1133,4 +1235,3 @@
 
 </body>
 </html>
-
