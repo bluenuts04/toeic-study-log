@@ -735,223 +735,218 @@
   /* =========================================================
      entries: 1問=1オブジェクト。id は 教材コード+設問No から自動生成。
   ========================================================= */
-  const entries = [
-    
-    {
-      material: "D10",
-      field: "2",
-      qno: "045",
-      question: "By the time the inspector arrived, the crew ___ the safety check.",
-      choices: ["complete", "completes", "had completed", "completing"],
-      answer: "had completed",
-      translation: "検査官が到着するまでに、作業員は安全点検を完了していた。",
-      explanation: "過去のある時点(inspector arrived)よりさらに前に完了していた動作 → 過去完了形。現場の点検記録と同じ「基準時点より前」の考え方。"
-    },
-    {
-      material: "D10",
-      field: "5",
-      qno: "0443",
-      question: "___ Dr.Martin expected his patients to take advantage of the extended office hours , but they actually preferred earlier appointments.",
-      choices: ["Although", "In light of", "Despite", "At first"],
-      answer: "At first",
-      translation: "Martin医師は延長した診療時間を患者が活用すると期待していたが、実際は彼らは早い時間帯の診療を望んでいた。",
-      explanation: "B/～を考慮すると、C/前置詞の為、名詞がつづく。Dは副詞"
-    },
-    
-    
-    
-    {
-      material: "D10",
-      field: "5",
-      qno: "112",
-      question: "The new sensor was installed ___ the manufacturer's specifications.",
-      choices: ["in accordance with", "according", "depend on", "based"],
-      answer: "in accordance with",
-      translation: "新しいセンサーはメーカーの仕様に従って設置された。",
-      explanation: "「〜に従って」の定型表現。according toと混同しやすいが、according単体では使えない。"
-    }
-    {
-  material: "D10",
-  field: "6",
-  qno: "450",
-  question: "With the exception of a few pavilions, all are slated for removal or demolition ___ the trade show closes on October 31.",
-  choices: ["after", "either", "due to", "during"],
-  answer: "after",
-  translation: "展示会が10月31日に終了した後、いくつかを除くすべてのパビリオンは撤去または取り壊しが予定されている。",
-  explanation: "空所前後が節なので接続詞が必要。afterのみ接続詞として使える。due to・duringは前置詞、eitherは単独では使えない。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "452",
-  question: "Payroll procedure changed ___ the company merged with Olsson Corporation in July.",
-  choices: ["when", "soon", "without", "between"],
-  answer: "when",
-  translation: "その会社が7月にOlsson社と合併したとき、給与支払い手続きが変更された。",
-  explanation: "空所前後は節なので接続詞が必要。whenのみ接続詞。soonは副詞、without・betweenは前置詞。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "455",
-  question: "It is a good idea to limit your cover letter to a single page ___ that is not specifically indicated in the job advertisement.",
-  choices: ["even if", "as though", "rather than", "so that"],
-  answer: "even if",
-  translation: "たとえ求人広告に具体的な記載がなくても、カバーレターは1ページに収めるのがよい。",
-  explanation: "文意から『たとえ〜でも』を表すeven ifが適切。rather thanは前置詞句で節をつなげない。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "464",
-  question: "In the first quarter, the company managed to expand its market share slightly ___ its closest competitor suffered a major drop in sales.",
-  choices: ["throughout", "whereas", "that", "despite"],
-  answer: "whereas",
-  translation: "第1四半期、その会社は市場シェアを拡大した一方、競合他社は売上が大幅に落ち込んだ。",
-  explanation: "対比を表す接続詞whereasが正解。throughout・despiteは前置詞、thatは名詞節を導く接続詞。"
-},
-{
-  material: "D10",
-  field: "5",
-  qno: "466",
-  question: "Highland Road has been closed for a week ___ repairs being made to the bridge over Douglas Creek.",
-  choices: ["since", "even though", "while", "because of"],
-  answer: "because of",
-  translation: "Douglas Creekに架かる橋の補修工事のため、Highland Roadは1週間閉鎖されている。",
-  explanation: "後ろは名詞句なので前置詞が必要。理由を表すbecause ofが適切。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "474",
-  question: "Workers can leave the factory early ___ they have received permission to do so from a supervisor.",
-  choices: ["otherwise", "except for", "in spite of", "provided that"],
-  answer: "provided that",
-  translation: "作業員は上司の許可を受けた場合のみ早退できる。",
-  explanation: "条件を表す接続詞provided thatが正解。except for・in spite ofは前置詞。"
-},
-{
-  material: "D10",
-  field: "5",
-  qno: "476",
-  question: "Tanton City passed legislation requiring all drivers age 75 and older to pass a vision test ___ renewing their driver's license.",
-  choices: ["although", "before", "and", "from"],
-  answer: "before",
-  translation: "Tanton市は75歳以上の運転者に免許更新前の視力検査を義務付けた。",
-  explanation: "renewingは動名詞なので前置詞beforeが適切。before doingは頻出表現。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "477",
-  question: "___ the book may be understood by non-specialists, the first two chapters provide a detailed introduction.",
-  choices: ["In regard to", "Because of", "However", "In order that"],
-  answer: "In order that",
-  translation: "専門家でない人にも理解できるように、その本の最初の2章は詳しい導入となっている。",
-  explanation: "目的を表す接続詞In order thatが正解。"
-},
-{
-  material: "D10",
-  field: "5",
-  qno: "478",
-  question: "___ her extensive experience and past successes, Ms. Isohi is expected to be an invaluable asset to our company.",
-  choices: ["So", "That", "Given", "Since"],
-  answer: "Given",
-  translation: "豊富な経験と過去の成功を考えると、Isohi氏は会社にとって貴重な人材になるだろう。",
-  explanation: "Givenは『〜を考慮すると』という前置詞。"
-},
-{
-  material: "D10",
-  field: "5",
-  qno: "480",
-  question: "Due to excessive requests for support, GeoMax Technologies has decided to remove a map application from its mobile phones, ___ the product's popularity.",
-  choices: ["although", "notwithstanding", "however", "even"],
-  answer: "notwithstanding",
-  translation: "サポート依頼が多すぎるため、人気があるにもかかわらず地図アプリを削除することにした。",
-  explanation: "notwithstandingは『〜にもかかわらず』の前置詞。"
-},
-{
-  material: "D10",
-  field: "5",
-  qno: "481",
-  question: "All city residents must obtain a construction permit from the city ___ building a driveway.",
-  choices: ["prior to", "because", "soon", "so that"],
-  answer: "prior to",
-  translation: "私有車道を建設する前に建設許可証を取得しなければならない。",
-  explanation: "prior toは『〜の前に』を表す前置詞。toの後ろには動名詞が続く。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "486",
-  question: "___ Mr. Bruno contributed significantly to the success of the advertising campaign, his promotion to the manager position is well deserved.",
-  choices: ["If so", "Rather than", "Owing to", "Given that"],
-  answer: "Given that",
-  translation: "Bruno氏が広告キャンペーン成功に大きく貢献したことを考えれば、昇進は当然だ。",
-  explanation: "Given thatは『〜であることを考えると』という接続詞。"
-},
-{
-  material: "D10",
-  field: "5",
-  qno: "488",
-  question: "Mr. Murphy has requested that the second seminar be held tomorrow ___ having him return next week.",
-  choices: ["even though", "rather than", "as soon as", "so that"],
-  answer: "rather than",
-  translation: "Murphy氏は翌週戻るのではなく、明日セミナーを開催するよう求めた。",
-  explanation: "having以下は動名詞句なので前置詞rather thanが適切。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "493",
-  question: "___ periodic maintenance is carried out according to the manufacturer's specifications, the TD24 paper folder will continue to function for many years.",
-  choices: ["For", "Therefore", "Providing", "Over"],
-  answer: "Providing",
-  translation: "メーカー仕様どおりに定期メンテナンスが行われれば、長期間使用できる。",
-  explanation: "Providingは『〜である場合に限り』を表す接続詞。"
-},
-{
-  material: "D10",
-  field: "10",
-  qno: "499",
-  question: "Producers of the children's animation series Team Power shortened the program by two minutes, ___ meeting requirements of broadcasters.",
-  choices: ["thereby", "because", "whenever", "during"],
-  answer: "thereby",
-  translation: "番組を2分短縮し、それによって放送局の要求を満たした。",
-  explanation: "現在分詞meetingを修飾する副詞thereby『それによって』が適切。"
-},
-{
-  material: "D10",
-  field: "6",
-  qno: "500",
-  question: "Employees are required to book in advance ___ intending to use a company vehicle.",
-  choices: ["whereas", "from", "if", "even"],
-  answer: "if",
-  translation: "社用車を利用する場合は事前予約が必要である。",
-  explanation: "if (they are) intending... の省略。条件を表す接続詞。"
-},
-{
-  material: "D10",
-  field: "5",
-  qno: "502",
-  question: "___ recent changes made to the schedule, employees are to be given an additional day off next Friday.",
-  choices: ["Because", "As far as", "In light of", "Except for"],
-  answer: "In light of",
-  translation: "最近のスケジュール変更を踏まえ、来週金曜日は追加の休日となる。",
-  explanation: "後ろは名詞句なので前置詞が必要。In light of『〜を考慮して』が適切。"
-},
-{
-  material: "D10",
-  field: "10",
-  qno: "503",
-  question: "Members of the purchasing department should follow the current procedures for the issuing of purchase orders to vendors, unless ___ instructed by the manager.",
-  choices: ["otherwise", "furthermore", "however", "if"],
-  answer: "otherwise",
-  translation: "マネージャーから別段の指示がない限り、現行の手順に従うべきである。",
-  explanation: "unless otherwise instructedで『特別な指示がない限り』という頻出表現。otherwiseは副詞。"
-},
-    
-  ];
+const entries = [
+  {
+    material: "D10",
+    field: "2",
+    qno: "045",
+    question: "By the time the inspector arrived, the crew ___ the safety check.",
+    choices: ["complete", "completes", "had completed", "completing"],
+    answer: "had completed",
+    translation: "検査官が到着するまでに、作業員は安全点検を完了していた。",
+    explanation: "過去のある時点(inspector arrived)よりさらに前に完了していた動作 → 過去完了形。現場の点検記録と同じ「基準時点より前」の考え方。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "112",
+    question: "The new sensor was installed ___ the manufacturer's specifications.",
+    choices: ["in accordance with", "according", "depend on", "based"],
+    answer: "in accordance with",
+    translation: "新しいセンサーはメーカーの仕様に従って設置された。",
+    explanation: "「〜に従って」の定型表現。according toと混同しやすいが、according単体では使えない。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "443",
+    question: "___ Dr.Martin expected his patients to take advantage of the extended office hours , but they actually preferred earlier appointments.",
+    choices: ["Although", "In light of", "Despite", "At first"],
+    answer: "At first",
+    translation: "Martin医師は延長した診療時間を患者が活用すると期待していたが、実際は彼らは早い時間帯の診療を望んでいた。",
+    explanation: "B/～を考慮すると、C/前置詞の為、名詞がつづく。Dは副詞"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "450",
+    question: "With the exception of a few pavilions, all are slated for removal or demolition ___ the trade show closes on October 31.",
+    choices: ["after", "either", "due to", "during"],
+    answer: "after",
+    translation: "展示会が10月31日に終了した後、いくつかを除くすべてのパビリオンは撤去または取り壊しが予定されている。",
+    explanation: "空所前後が節なので接続詞が必要。afterのみ接続詞として使える。due to・duringは前置詞、eitherは単独では使えない。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "452",
+    question: "Payroll procedure changed ___ the company merged with Olsson Corporation in July.",
+    choices: ["when", "soon", "without", "between"],
+    answer: "when",
+    translation: "その会社が7月にOlsson社と合併したとき、給与支払い手続きが変更された。",
+    explanation: "空所前後は節なので接続詞が必要。whenのみ接続詞。soonは副詞、without・betweenは前置詞。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "455",
+    question: "It is a good idea to limit your cover letter to a single page ___ that is not specifically indicated in the job advertisement.",
+    choices: ["even if", "as though", "rather than", "so that"],
+    answer: "even if",
+    translation: "たとえ求人広告に具体的な記載がなくても、カバーレターは1ページに収めるのがよい。",
+    explanation: "文意から『たとえ〜でも』を表すeven ifが適切。rather thanは前置詞句で節をつなげない。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "464",
+    question: "In the first quarter, the company managed to expand its market share slightly ___ its closest competitor suffered a major drop in sales.",
+    choices: ["throughout", "whereas", "that", "despite"],
+    answer: "whereas",
+    translation: "第1四半期、その会社は市場シェアを拡大した一方、競合他社は売上が大幅に落ち込んだ。",
+    explanation: "対比を表す接続詞whereasが正解。throughout・despiteは前置詞、thatは名詞節を導く接続詞。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "466",
+    question: "Highland Road has been closed for a week ___ repairs being made to the bridge over Douglas Creek.",
+    choices: ["since", "even though", "while", "because of"],
+    answer: "because of",
+    translation: "Douglas Creekに架かる橋の補修工事のため、Highland Roadは1週間閉鎖されている。",
+    explanation: "後ろは名詞句なので前置詞が必要。理由を表すbecause ofが適切。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "474",
+    question: "Workers can leave the factory early ___ they have received permission to do so from a supervisor.",
+    choices: ["otherwise", "except for", "in spite of", "provided that"],
+    answer: "provided that",
+    translation: "作業員は上司の許可を受けた場合のみ早退できる。",
+    explanation: "条件を表す接続詞provided thatが正解。except for・in spite ofは前置詞。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "476",
+    question: "Tanton City passed legislation requiring all drivers age 75 and older to pass a vision test ___ renewing their driver's license.",
+    choices: ["although", "before", "and", "from"],
+    answer: "before",
+    translation: "Tanton市は75歳以上の運転者に免許更新前の視力検査を義務付けた。",
+    explanation: "renewingは動名詞なので前置詞beforeが適切。before doingは頻出表現。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "477",
+    question: "___ the book may be understood by non-specialists, the first two chapters provide a detailed introduction.",
+    choices: ["In regard to", "Because of", "However", "In order that"],
+    answer: "In order that",
+    translation: "専門家でない人にも理解できるように、その本の最初の2章は詳しい導入となっている。",
+    explanation: "目的を表す接続詞In order thatが正解。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "478",
+    question: "___ her extensive experience and past successes, Ms. Isohi is expected to be an invaluable asset to our company.",
+    choices: ["So", "That", "Given", "Since"],
+    answer: "Given",
+    translation: "豊富な経験と過去の成功を考えると、Isohi氏は会社にとって貴重な人材になるだろう。",
+    explanation: "Givenは『〜を考慮すると』という前置詞。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "480",
+    question: "Due to excessive requests for support, GeoMax Technologies has decided to remove a map application from its mobile phones, ___ the product's popularity.",
+    choices: ["although", "notwithstanding", "however", "even"],
+    answer: "notwithstanding",
+    translation: "サポート依頼が多すぎるため、人気があるにもかかわらず地図アプリを削除することにした。",
+    explanation: "notwithstandingは『〜にもかかわらず』の前置詞。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "481",
+    question: "All city residents must obtain a construction permit from the city ___ building a driveway.",
+    choices: ["prior to", "because", "soon", "so that"],
+    answer: "prior to",
+    translation: "私有車道を建設する前に建設許可証を取得しなければならない。",
+    explanation: "prior toは『〜の前に』を表す前置詞。toの後ろには動名詞が続く。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "486",
+    question: "___ Mr. Bruno contributed significantly to the success of the advertising campaign, his promotion to the manager position is well deserved.",
+    choices: ["If so", "Rather than", "Owing to", "Given that"],
+    answer: "Given that",
+    translation: "Bruno氏が広告キャンペーン成功に大きく貢献したことを考えれば、昇進は当然だ。",
+    explanation: "Given thatは『〜であることを考えると』という接続詞。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "488",
+    question: "Mr. Murphy has requested that the second seminar be held tomorrow ___ having him return next week.",
+    choices: ["even though", "rather than", "as soon as", "so that"],
+    answer: "rather than",
+    translation: "Murphy氏は翌週戻るのではなく、明日セミナーを開催するよう求めた。",
+    explanation: "having以下は動名詞句なので前置詞rather thanが適切。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "493",
+    question: "___ periodic maintenance is carried out according to the manufacturer's specifications, the TD24 paper folder will continue to function for many years.",
+    choices: ["For", "Therefore", "Providing", "Over"],
+    answer: "Providing",
+    translation: "メーカー仕様どおりに定期メンテナンスが行われれば、長期間使用できる。",
+    explanation: "Providingは『〜である場合に限り』を表す接続詞。"
+  },
+  {
+    material: "D10",
+    field: "10",
+    qno: "499",
+    question: "Producers of the children's animation series Team Power shortened the program by two minutes, ___ meeting requirements of broadcasters.",
+    choices: ["thereby", "because", "whenever", "during"],
+    answer: "thereby",
+    translation: "番組を2分短縮し、それによって放送局の要求を満たした。",
+    explanation: "現在分詞meetingを修飾する副詞thereby『それによって』が適切。"
+  },
+  {
+    material: "D10",
+    field: "6",
+    qno: "500",
+    question: "Employees are required to book in advance ___ intending to use a company vehicle.",
+    choices: ["whereas", "from", "if", "even"],
+    answer: "if",
+    translation: "社用車を利用する場合は事前予約が必要である。",
+    explanation: "if (they are) intending... の省略。条件を表す接続詞。"
+  },
+  {
+    material: "D10",
+    field: "5",
+    qno: "502",
+    question: "___ recent changes made to the schedule, employees are to be given an additional day off next Friday.",
+    choices: ["Because", "As far as", "In light of", "Except for"],
+    answer: "In light of",
+    translation: "最近のスケジュール変更を踏まえ、来週金曜日は追加の休日となる。",
+    explanation: "後ろは名詞句なので前置詞が必要。In light of『〜を考慮して』が適切。"
+  },
+  {
+    material: "D10",
+    field: "10",
+    qno: "503",
+    question: "Members of the purchasing department should follow the current procedures for the issuing of purchase orders to vendors, unless ___ instructed by the manager.",
+    choices: ["otherwise", "furthermore", "however", "if"],
+    answer: "otherwise",
+    translation: "マネージャーから別段の指示がない限り、現行の手順に従うべきである。",
+    explanation: "unless otherwise instructedで『特別な指示がない限り』という頻出表現。otherwiseは副詞。"
+  }
+];
 
   function makeId(e) { return `${e.material}-${e.qno}`.trim(); }
   entries.forEach(e => { e.id = makeId(e); });
