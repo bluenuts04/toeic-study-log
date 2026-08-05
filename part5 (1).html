@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 5 診断ログ | TOEIC文法トラッカー</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blueprint-navy: #16324a;
+    --blueprint-navy-deep: #0f2436;
+    --blueprint-line: #6f95ad;
+    --blueprint-line-faint: rgba(255,255,255,0.10);
+    --paper: #eef2ee;
+    --paper-dim: #c7d3d6;
+    --safety-orange: #e8631c;
+    --safety-orange-dim: #b74e16;
+    --ok-green: #6fae7c;
+    --ng-red: #d16a5f;
+    --font-body: 'Noto Sans JP', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--blueprint-navy);
+    background-image:
+      linear-gradient(var(--blueprint-line-faint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line-faint) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--paper);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 48px 24px 32px;
+    border-bottom: 1px dashed var(--blueprint-line);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--safety-orange);
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: 30px;
+    margin: 10px 0 6px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .sub {
+    color: var(--paper-dim);
+    font-size: 14px;
+    font-family: var(--font-mono);
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* ---------- panels ---------- */
+  .panel {
+    border: 1px solid var(--blueprint-line);
+    border-radius: 2px;
+    padding: 20px 22px;
+    margin-bottom: 28px;
+    background: rgba(255,255,255,0.02);
+  }
+  .panel-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--safety-orange);
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .filter-field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--paper-dim);
+    margin-bottom: 5px;
+    letter-spacing: 0.05em;
+  }
+  .filter-field select, .filter-field input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--blueprint-line);
+    color: var(--paper);
+    padding: 8px 10px;
+    border-radius: 2px;
+    font-family: var(--font-body);
+    font-size: 14px;
+  }
+  .filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .filter-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--paper-dim);
+  }
+  .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  button.ghost-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--paper-dim);
+    background: transparent;
+    border: 1px solid var(--blueprint-line);
+    padding: 8px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  button.ghost-btn:hover { border-color: var(--paper); color: var(--paper); }
+
+  button.primary-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blueprint-navy-deep);
+    background: var(--safety-orange);
+    border: none;
+    padding: 9px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+  }
+  button.primary-btn:hover { background: #ff7a33; }
+  button.primary-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .sync-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .sync-row input[type="text"] {
+    flex: 1;
+    min-width: 240px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--blueprint-line);
+    color: var(--paper);
+    padding: 8px 10px;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .sync-status {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--paper-dim);
+    margin-top: 8px;
+  }
+  .sync-status.ok { color: var(--ok-green); }
+  .sync-status.ng { color: var(--ng-red); }
+
+  /* ---------- entry cards ---------- */
+  .entry {
+    position: relative;
+    border: 1px solid var(--blueprint-line);
+    border-radius: 2px;
+    margin-bottom: 22px;
+    padding: 22px 24px 20px 64px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .entry-no {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 48px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 22px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--safety-orange-dim);
+    border-right: 1px dashed var(--blueprint-line);
+  }
+
+  .entry-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .badge.material { color: var(--blueprint-navy-deep); background: var(--paper-dim); }
+  .badge.field { color: var(--safety-orange); border: 1px solid var(--safety-orange-dim); background: rgba(232,99,28,0.08); }
+  .badge.qno { color: var(--paper-dim); border: 1px dashed var(--blueprint-line); }
+
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--paper-dim);
+  }
+  .stat-row .rate-ok { color: var(--ok-green); }
+  .stat-row .rate-bad { color: var(--ng-red); }
+  .stat-row .rate-none { color: var(--paper-dim); }
+
+  .question {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+  .blank {
+    display: inline-block;
+    min-width: 60px;
+    border-bottom: 2px solid var(--safety-orange);
+    text-align: center;
+  }
+
+  .choices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .choice {
+    padding: 6px 10px;
+    border: 1px solid var(--blueprint-line);
+    border-radius: 2px;
+    color: var(--paper-dim);
+  }
+  .choice.correct {
+    border-color: var(--ok-green);
+    color: var(--ok-green);
+  }
+
+  .toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .jp-toggle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--safety-orange);
+    background: transparent;
+    border: 1px dashed var(--safety-orange-dim);
+    padding: 5px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+  .jp-box {
+    display: none;
+    font-size: 14px;
+    color: var(--paper);
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid var(--safety-orange);
+    padding: 10px 14px;
+    margin-bottom: 14px;
+  }
+  .jp-box.show { display: block; }
+
+  .answer-box { display: none; }
+  .answer-box.show { display: block; }
+
+  .dim-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0;
+    color: var(--blueprint-line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .dim-line::before, .dim-line::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--blueprint-line) 0 4px, transparent 4px 8px);
+  }
+
+  .explanation {
+    font-size: 14px;
+    color: var(--paper);
+  }
+  .explanation-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--safety-orange);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .empty-state {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--paper-dim);
+    border: 1px dashed var(--blueprint-line);
+    padding: 20px;
+    text-align: center;
+    border-radius: 2px;
+  }
+
+  /* ---------- quiz mode ---------- */
+  #quizView { display: none; }
+  #quizView.show { display: block; }
+  #listView.hide { display: none; }
+
+  .quiz-progress {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .quiz-card {
+    border: 1px solid var(--safety-orange-dim);
+    border-radius: 2px;
+    padding: 26px 26px 22px;
+    background: rgba(255,255,255,0.02);
+  }
+  .quiz-meta { margin-bottom: 14px; }
+  .quiz-question { font-size: 17px; margin-bottom: 18px; }
+  .quiz-choices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .quiz-choice {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--blueprint-line);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--paper);
+    cursor: pointer;
+    text-align: left;
+  }
+  .quiz-choice:hover:not(:disabled) { border-color: var(--paper); }
+  .quiz-choice.picked-correct { border-color: var(--ok-green); background: rgba(111,174,124,0.15); color: var(--ok-green); }
+  .quiz-choice.picked-wrong { border-color: var(--ng-red); background: rgba(209,106,95,0.15); color: var(--ng-red); }
+  .quiz-choice.reveal-correct { border-color: var(--ok-green); color: var(--ok-green); }
+  .quiz-choice:disabled { cursor: default; }
+
+  .quiz-feedback {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: 14px;
+    min-height: 18px;
+  }
+  .quiz-feedback.ok { color: var(--ok-green); }
+  .quiz-feedback.ng { color: var(--ng-red); }
+
+  .quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .quiz-summary { text-align: center; padding: 30px 10px; }
+  .quiz-summary .score {
+    font-family: var(--font-mono);
+    font-size: 34px;
+    color: var(--safety-orange);
+    margin-bottom: 8px;
+  }
+
+  /* ---------- add form ---------- */
+  form.add-entry {
+    border: 1px dashed var(--blueprint-line);
+    border-radius: 2px;
+    padding: 22px 24px;
+    margin-top: 40px;
+  }
+  form.add-entry h2 {
+    font-size: 15px;
+    font-family: var(--font-mono);
+    color: var(--safety-orange);
+    margin: 0 0 16px;
+    letter-spacing: 0.05em;
+  }
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--paper-dim);
+    margin-bottom: 4px;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--blueprint-line);
+    color: var(--paper);
+    padding: 8px 10px;
+    border-radius: 2px;
+    font-family: var(--font-body);
+    font-size: 14px;
+  }
+  .field textarea { resize: vertical; min-height: 60px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 1.3fr 1.3fr 0.7fr; gap: 12px; }
+  .hint {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--paper-dim);
+    margin-top: 3px;
+  }
+
+  button.submit {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--safety-orange);
+    color: var(--blueprint-navy-deep);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  button.submit:hover { background: #ff7a33; }
+
+  .note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .code-box {
+    display: none;
+    margin-top: 18px;
+  }
+  .code-box.show { display: block; }
+  .code-box textarea {
+    width: 100%;
+    min-height: 150px;
+    background: var(--blueprint-navy-deep);
+    color: var(--ok-green);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    border: 1px solid var(--blueprint-line);
+    border-radius: 2px;
+    padding: 12px;
+    white-space: pre;
+  }
+  .code-actions { display: flex; gap: 10px; margin-top: 8px; align-items: center; }
+  .copy-msg { font-family: var(--font-mono); font-size: 11px; color: var(--ok-green); display: none; }
+  .copy-msg.show { display: inline; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">TOEIC / PART 5 &mdash; GRAMMAR ERROR LOG</div>
+  <h1>診断ログ</h1>
+  <div class="sub">教材・分野・設問Noでフィルタし、まとめて解いて正答率をスプレッドシートに自動蓄積する</div>
+</header>
+
+<main>
+
+  <div class="panel">
+    <div class="filter-grid">
+      <div class="filter-field">
+        <label>教材コード</label>
+        <select id="f-material"></select>
+      </div>
+      <div class="filter-field">
+        <label>分野コード</label>
+        <select id="f-field"></select>
+      </div>
+      <div class="filter-field">
+        <label>設問No(部分一致)</label>
+        <input type="text" id="f-qno" placeholder="例: 045 または 04">
+      </div>
+    </div>
+    <div class="filter-actions">
+      <div class="filter-count" id="filterCount"></div>
+      <div class="filter-buttons">
+        <button type="button" class="ghost-btn" id="clearFilters">フィルタをクリア</button>
+        <button type="button" class="primary-btn" id="startQuiz">この条件でまとめて解く &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="statsPanel">
+    <div class="panel-title">SHEET SYNC 正答率の自動連携</div>
+    <div class="sync-row">
+      <input type="text" id="sheetUrl" placeholder="GoogleスプレッドシートのApps Script Web App URLを貼り付け">
+      <button type="button" class="ghost-btn" id="saveSheetUrl">保存</button>
+      <button type="button" class="ghost-btn" id="showSyncHelp">連携手順を見る</button>
+    </div>
+    <div class="sync-status" id="syncStatus"></div>
+
+    <div class="code-box" id="syncHelpBox">
+      <div class="hint" style="margin-bottom:8px;">
+        1. Googleスプレッドシートを新規作成し、1行目に見出し(id, 教材, 分野, 設問No, 試行回数, 正解数, 正答率, 最終回答日)を入力<br>
+        2. メニューの「拡張機能 > Apps Script」を開き、下記コードを貼り付けて保存<br>
+        3. 右上「デプロイ > 新しいデプロイ」→種類「ウェブアプリ」→実行ユーザー「自分」、アクセスできるユーザー「全員」で公開<br>
+        4. 発行されたURLを上の入力欄に貼り付けて「保存」<br>
+        5. これ以降、まとめて解くクイズで回答するたびに、そのシートの行が自動追加/更新されます
+      </div>
+      <textarea id="appsScriptCode" readonly></textarea>
+      <div class="code-actions">
+        <button type="button" class="ghost-btn" id="copyAppsScript">コードをコピー</button>
+        <span class="copy-msg" id="copyAppsScriptMsg">コピーしました</span>
+      </div>
+    </div>
+
+    <div class="code-box" id="statsCodeOutput" style="margin-top:14px;">
+      <label class="hint">↓ 手動バックアップ用(タブ区切り。コピーしてスプレッドシートに貼り付け可能)</label>
+      <textarea id="statsCsvText" readonly></textarea>
+      <div class="code-actions">
+        <button type="button" class="ghost-btn" id="copyStatsCsv">コピー</button>
+        <span class="copy-msg" id="copyStatsMsg">コピーしました</span>
+      </div>
+    </div>
+    <div class="filter-actions" style="margin-top: 12px;">
+      <div></div>
+      <div class="filter-buttons">
+        <button type="button" class="ghost-btn" id="exportStats">手動バックアップ用に書き出す</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="listView">
+    <div id="entries"></div>
+
+    <form class="add-entry" id="addForm">
+      <h2>+ NEW ENTRY 追加</h2>
+      <div class="field row3">
+        <div>
+          <label>教材コード</label>
+          <select id="f-add-material"></select>
+        </div>
+        <div>
+          <label>分野コード</label>
+          <select id="f-add-field"></select>
+        </div>
+        <div>
+          <label>設問No</label>
+          <input id="f-add-qno" placeholder="045">
+        </div>
+      </div>
+      <div class="field">
+        <label>問題文(空欄は ___ で表記)</label>
+        <textarea id="f-question" placeholder="The manager ___ the report before the meeting."></textarea>
+      </div>
+      <div class="field row2">
+        <div>
+          <label>選択肢(カンマ区切り)</label>
+          <input id="f-choices" placeholder="review, reviews, reviewed, reviewing">
+        </div>
+        <div>
+          <label>正解</label>
+          <input id="f-answer" placeholder="reviewed">
+        </div>
+      </div>
+      <div class="field">
+        <label>日本語訳</label>
+        <textarea id="f-translation" placeholder="マネージャーは会議の前に報告書を確認した。"></textarea>
+      </div>
+      <div class="field">
+        <label>解説メモ</label>
+        <textarea id="f-explanation" placeholder="過去完了の文脈。beforeの後ろは基準時点より前の動作。"></textarea>
+      </div>
+      <button type="submit" class="submit">記録する(このセッションに追加 + コード出力)</button>
+      <div class="note">
+        ※ 追加した問題はこの画面上のセッションには反映されますが、ページを再読み込みすると消えます。<br>
+        永続化するには、下に出力されるコードをコピーして <code>entries</code> 配列に貼り付け、GitHubにpushしてください。
+      </div>
+      <div class="code-box" id="codeOutput">
+        <label class="hint">↓ このコードを entries 配列の中にそのまま貼り付けてください</label>
+        <textarea id="codeText" readonly></textarea>
+        <div class="code-actions">
+          <button type="button" class="ghost-btn" id="copyCode">コードをコピー</button>
+          <span class="copy-msg" id="copyMsg">コピーしました</span>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="quizView">
+    <div class="quiz-progress">
+      <span id="quizProgress"></span>
+      <span id="quizScoreLive"></span>
+    </div>
+    <div class="quiz-card" id="quizCard"></div>
+  </div>
+
+</main>
+
+<script>
+  /* =========================================================
+     コード表:教材・分野は下記コードで管理する。
+     選択肢はここから自動生成されるので、コードを増やしたい場合は
+     この2つのオブジェクトに追記するだけでよい。
+  ========================================================= */
+  const MATERIAL_CODES = {
+    "NTC": { group: "APP",  label: "Native Camp" },
+    "BIZ": { group: "APP",  label: "ビジネス英会話" },
+    "TRN": { group: "APP",  label: "トレーニング TOEIC®test" },
+    "DMM": { group: "APP",  label: "DMM英会話" },
+    "WHL": { group: "APP",  label: "Word Holic" },
+    "730": { group: "BOOK", label: "730点奪取の方法" },
+    "DIA": { group: "BOOK", label: "ダイアローグ1800" },
+    "D10": { group: "BOOK", label: "でる1000問" },
+    "SEN": { group: "BOOK", label: "炎の千本ノック" },
+    "NEX": { group: "BOOK", label: "ネクステージ" },
+    "SPD": { group: "BOOK", label: "速解！トレーニング読解" },
+    "MOS": { group: "BOOK", label: "本番模試" },
+    "OFF": { group: "BOOK", label: "公式問題集" }
+  };
+
+  const FIELD_CODES = {
+    "1":  "品詞選択",
+    "2":  "動詞の時制",
+    "3":  "態(受動/能動)",
+    "4":  "主語と動詞の一致",
+    "5":  "前置詞",
+    "6":  "接続詞",
+    "7":  "代名詞",
+    "8":  "比較級・最上級",
+    "9":  "関係詞",
+    "10": "語彙・コロケーション"
+  };
+
+  function materialLabel(code) {
+    const m = MATERIAL_CODES[code];
+    return m ? `${code} ${m.label}` : code;
+  }
+  function fieldLabel(code) {
+    const f = FIELD_CODES[code];
+    return f ? `${code}. ${f}` : code;
+  }
+
+  /* =========================================================
+     entries: 1問=1オブジェクト。id は 教材コード+設問No から自動生成。
+  ========================================================= */
+  const entries = [
+    {
+      material: "D10",
+      field: "2",
+      qno: "045",
+      question: "By the time the inspector arrived, the crew ___ the safety check.",
+      choices: ["complete", "completes", "had completed", "completing"],
+      answer: "had completed",
+      translation: "検査官が到着するまでに、作業員は安全点検を完了していた。",
+      explanation: "過去のある時点(inspector arrived)よりさらに前に完了していた動作 → 過去完了形。現場の点検記録と同じ「基準時点より前」の考え方。"
+    },
+    {
+      material: "D10",
+      field: "5",
+      qno: "112",
+      question: "The new sensor was installed ___ the manufacturer's specifications.",
+      choices: ["in accordance with", "according", "depend on", "based"],
+      answer: "in accordance with",
+      translation: "新しいセンサーはメーカーの仕様に従って設置された。",
+      explanation: "「〜に従って」の定型表現。according toと混同しやすいが、according単体では使えない。"
+    }
+  ];
+
+  function makeId(e) { return `${e.material}-${e.qno}`.trim(); }
+  entries.forEach(e => { e.id = makeId(e); });
+
+  // ---- localStorage 統計(正答率・最終回答日) ----
+  const STATS_KEY = 'toeicPart5Stats';
+  function loadStats() {
+    try { return JSON.parse(localStorage.getItem(STATS_KEY)) || {}; }
+    catch { return {}; }
+  }
+  function saveStats(stats) {
+    try { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); } catch {}
+  }
+  function recordAnswer(id, isCorrect) {
+    const stats = loadStats();
+    const s = stats[id] || { attempts: 0, correct: 0, lastDate: null };
+    s.attempts += 1;
+    if (isCorrect) s.correct += 1;
+    s.lastDate = new Date().toISOString().slice(0, 10);
+    stats[id] = s;
+    saveStats(stats);
+    return s;
+  }
+  function getStat(id) {
+    const stats = loadStats();
+    return stats[id] || null;
+  }
+
+  // ---- スプレッドシート自動同期(Apps Script Web App) ----
+  const SHEET_URL_KEY = 'toeicPart5SheetUrl';
+  function getSheetUrl() { return localStorage.getItem(SHEET_URL_KEY) || ''; }
+  function setSheetUrl(url) { localStorage.setItem(SHEET_URL_KEY, url); }
+
+  function syncRowToSheet(e, stat) {
+    const url = getSheetUrl();
+    if (!url) return;
+    const pct = Math.round((stat.correct / stat.attempts) * 100);
+    const body = new URLSearchParams({
+      id: e.id,
+      material: materialLabel(e.material),
+      field: fieldLabel(e.field),
+      qno: e.qno,
+      attempts: stat.attempts,
+      correct: stat.correct,
+      rate: pct,
+      lastDate: stat.lastDate
+    });
+    const statusEl = document.getElementById('syncStatus');
+    fetch(url, { method: 'POST', mode: 'no-cors', body })
+      .then(() => {
+        statusEl.textContent = `${e.id} の記録をスプレッドシートに送信しました(${stat.lastDate})`;
+        statusEl.className = 'sync-status ok';
+      })
+      .catch(() => {
+        statusEl.textContent = 'スプレッドシートへの送信に失敗しました。URLを確認してください。';
+        statusEl.className = 'sync-status ng';
+      });
+  }
+
+  const APPS_SCRIPT_CODE = `function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  var d = e.parameter;
+  var data = sheet.getDataRange().getValues();
+  var rowIndex = -1;
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] === d.id) { rowIndex = i + 1; break; }
+  }
+  var row = [d.id, d.material, d.field, d.qno, d.attempts, d.correct, d.rate, d.lastDate];
+  if (rowIndex > 0) {
+    sheet.getRange(rowIndex, 1, 1, row.length).setValues([row]);
+  } else {
+    sheet.appendRow(row);
+  }
+  return ContentService.createTextOutput(JSON.stringify({ status: 'ok' }))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+
+  // ---- DOM refs ----
+  const entriesEl = document.getElementById('entries');
+  const materialSel = document.getElementById('f-material');
+  const fieldSel = document.getElementById('f-field');
+  const qnoInput = document.getElementById('f-qno');
+  const filterCountEl = document.getElementById('filterCount');
+  const listView = document.getElementById('listView');
+  const quizView = document.getElementById('quizView');
+
+  function buildMaterialOptions(selectEl, includeAll) {
+    let html = includeAll ? `<option>すべて</option>` : '';
+    ['APP', 'BOOK'].forEach(group => {
+      html += `<optgroup label="${group === 'APP' ? '📱 APP' : '📖 BOOK'}">`;
+      Object.entries(MATERIAL_CODES).filter(([, v]) => v.group === group).forEach(([code, v]) => {
+        html += `<option value="${code}">${code} : ${v.label}</option>`;
+      });
+      html += `</optgroup>`;
+    });
+    selectEl.innerHTML = html;
+  }
+  function buildFieldOptions(selectEl, includeAll) {
+    let html = includeAll ? `<option>すべて</option>` : '';
+    Object.entries(FIELD_CODES).forEach(([code, label]) => {
+      html += `<option value="${code}">${code}. ${label}</option>`;
+    });
+    selectEl.innerHTML = html;
+  }
+
+  buildMaterialOptions(materialSel, true);
+  buildFieldOptions(fieldSel, true);
+  buildMaterialOptions(document.getElementById('f-add-material'), false);
+  buildFieldOptions(document.getElementById('f-add-field'), false);
+
+  function currentFilters() {
+    return {
+      material: materialSel.value,
+      field: fieldSel.value,
+      qno: qnoInput.value.trim()
+    };
+  }
+
+  function filteredEntries() {
+    const f = currentFilters();
+    return entries.filter(e => {
+      if (f.material !== 'すべて' && e.material !== f.material) return false;
+      if (f.field !== 'すべて' && e.field !== f.field) return false;
+      if (f.qno && !String(e.qno).includes(f.qno)) return false;
+      return true;
+    });
+  }
+
+  function rateLabel(stat) {
+    if (!stat || stat.attempts === 0) {
+      return `<span class="rate-none">正答率: -</span> / <span class="rate-none">最終回答日: 未回答</span>`;
+    }
+    const pct = Math.round((stat.correct / stat.attempts) * 100);
+    const cls = pct >= 70 ? 'rate-ok' : 'rate-bad';
+    return `<span class="${cls}">正答率: ${pct}% (${stat.correct}/${stat.attempts})</span> / <span>最終回答日: ${stat.lastDate}</span>`;
+  }
+
+  function cssId(id) { return id.replace(/[^a-zA-Z0-9]/g, '_'); }
+
+  function renderList() {
+    const filtered = filteredEntries();
+    filterCountEl.textContent = `${filtered.length} / ${entries.length} 問を表示中`;
+
+    entriesEl.innerHTML = filtered.length ? filtered.map((e) => {
+      const globalIndex = entries.indexOf(e) + 1;
+      const stat = getStat(e.id);
+      return `
+      <div class="entry">
+        <div class="entry-no">${String(globalIndex).padStart(3, '0')}</div>
+        <div class="entry-meta">
+          <span class="badge material">${materialLabel(e.material)}</span>
+          <span class="badge field">${fieldLabel(e.field)}</span>
+          <span class="badge qno">No.${e.qno}</span>
+        </div>
+        <div class="stat-row">${rateLabel(stat)}</div>
+        <div class="question">${e.question.replace('___', '<span class="blank">___</span>')}</div>
+        <div class="choices" id="choices-${cssId(e.id)}">
+          ${e.choices.map(c => `<span class="choice" data-correct="${c === e.answer ? '1' : '0'}">${c}</span>`).join('')}
+        </div>
+        <div class="toggle-row">
+          <button type="button" class="jp-toggle answer-toggle" data-id="${e.id}">答え・解説を確認</button>
+          <button type="button" class="jp-toggle jp-only" data-id="${e.id}">日本語訳を確認</button>
+        </div>
+        <div class="answer-box" id="ans-${cssId(e.id)}">
+          <div class="dim-line">EXPLANATION</div>
+          <div class="explanation">
+            <span class="explanation-label">解説</span>
+            ${e.explanation}
+          </div>
+        </div>
+        <div class="jp-box" id="jp-${cssId(e.id)}">${e.translation || '(和訳未登録)'}</div>
+      </div>
+    `;
+    }).join('') : `<div class="empty-state">条件に一致する問題がありません</div>`;
+
+    entriesEl.querySelectorAll('.answer-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idc = cssId(btn.dataset.id);
+        const box = document.getElementById(`ans-${idc}`);
+        const nowShown = !box.classList.contains('show');
+        box.classList.toggle('show', nowShown);
+        btn.textContent = nowShown ? '答え・解説を隠す' : '答え・解説を確認';
+        document.getElementById(`choices-${idc}`).querySelectorAll('.choice').forEach(c => {
+          c.classList.toggle('correct', nowShown && c.dataset.correct === '1');
+        });
+      });
+    });
+
+    entriesEl.querySelectorAll('.jp-only').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const box = document.getElementById(`jp-${cssId(btn.dataset.id)}`);
+        box.classList.toggle('show');
+        btn.textContent = box.classList.contains('show') ? '日本語訳を隠す' : '日本語訳を確認';
+      });
+    });
+  }
+
+  [materialSel, fieldSel].forEach(el => el.addEventListener('change', renderList));
+  qnoInput.addEventListener('input', renderList);
+  document.getElementById('clearFilters').addEventListener('click', () => {
+    materialSel.value = 'すべて';
+    fieldSel.value = 'すべて';
+    qnoInput.value = '';
+    renderList();
+  });
+
+  // =========================================================
+  // クイズモード
+  // =========================================================
+  let quizQueue = [];
+  let quizIndex = 0;
+  let quizCorrectCount = 0;
+  let quizAnswered = false;
+
+  document.getElementById('startQuiz').addEventListener('click', () => {
+    quizQueue = filteredEntries();
+    if (quizQueue.length === 0) return;
+    quizIndex = 0;
+    quizCorrectCount = 0;
+    listView.classList.add('hide');
+    quizView.classList.add('show');
+    renderQuizQuestion();
+  });
+
+  function renderQuizQuestion() {
+    quizAnswered = false;
+    const e = quizQueue[quizIndex];
+    document.getElementById('quizProgress').textContent = `第 ${quizIndex + 1} / ${quizQueue.length} 問`;
+    document.getElementById('quizScoreLive').textContent = `現在の正解数: ${quizCorrectCount}`;
+
+    document.getElementById('quizCard').innerHTML = `
+      <div class="quiz-meta">
+        <span class="badge material">${materialLabel(e.material)}</span>
+        <span class="badge field">${fieldLabel(e.field)}</span>
+        <span class="badge qno">No.${e.qno}</span>
+      </div>
+      <div class="quiz-question">${e.question.replace('___', '<span class="blank">___</span>')}</div>
+      <div class="quiz-choices" id="quizChoices">
+        ${e.choices.map(c => `<button type="button" class="quiz-choice" data-choice="${c}">${c}</button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button type="button" class="jp-toggle" id="quizJpToggle">日本語訳を確認</button>
+      <div class="jp-box" id="quizJpBox">${e.translation || '(和訳未登録)'}</div>
+      <div class="answer-box" id="quizAnswerBox">
+        <div class="dim-line">EXPLANATION</div>
+        <div class="explanation"><span class="explanation-label">解説</span>${e.explanation}</div>
+      </div>
+      <div class="quiz-footer">
+        <button type="button" class="ghost-btn" id="quizExit">中断してリストに戻る</button>
+        <button type="button" class="primary-btn" id="quizNext" disabled>次の問題へ &rarr;</button>
+      </div>
+    `;
+
+    document.getElementById('quizJpToggle').addEventListener('click', () => {
+      document.getElementById('quizJpBox').classList.toggle('show');
+    });
+
+    document.querySelectorAll('.quiz-choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (quizAnswered) return;
+        quizAnswered = true;
+        const picked = btn.dataset.choice;
+        const isCorrect = picked === e.answer;
+        if (isCorrect) quizCorrectCount++;
+        const stat = recordAnswer(e.id, isCorrect);
+        syncRowToSheet(e, stat);
+
+        document.querySelectorAll('.quiz-choice').forEach(b => {
+          b.disabled = true;
+          if (b.dataset.choice === e.answer) b.classList.add('reveal-correct');
+          if (b === btn && isCorrect) b.classList.add('picked-correct');
+          if (b === btn && !isCorrect) b.classList.add('picked-wrong');
+        });
+
+        const fb = document.getElementById('quizFeedback');
+        fb.textContent = isCorrect ? '正解!' : `不正解 -- 正解は「${e.answer}」`;
+        fb.className = 'quiz-feedback ' + (isCorrect ? 'ok' : 'ng');
+        document.getElementById('quizAnswerBox').classList.add('show');
+
+        document.getElementById('quizScoreLive').textContent = `現在の正解数: ${quizCorrectCount}`;
+        document.getElementById('quizNext').disabled = false;
+      });
+    });
+
+    document.getElementById('quizExit').addEventListener('click', exitQuiz);
+    document.getElementById('quizNext').addEventListener('click', () => {
+      quizIndex++;
+      if (quizIndex >= quizQueue.length) showQuizSummary();
+      else renderQuizQuestion();
+    });
+  }
+
+  function showQuizSummary() {
+    const pct = Math.round((quizCorrectCount / quizQueue.length) * 100);
+    document.getElementById('quizProgress').textContent = '結果';
+    document.getElementById('quizScoreLive').textContent = '';
+    document.getElementById('quizCard').innerHTML = `
+      <div class="quiz-summary">
+        <div class="score">${quizCorrectCount} / ${quizQueue.length} 問正解(${pct}%)</div>
+        <div class="hint">結果は各問題の正答率・最終回答日として蓄積され、設定済みならスプレッドシートにも送信されました</div>
+        <div class="quiz-footer" style="justify-content:center; margin-top:20px;">
+          <button type="button" class="primary-btn" id="quizBackToList">リストに戻る</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('quizBackToList').addEventListener('click', exitQuiz);
+  }
+
+  function exitQuiz() {
+    quizView.classList.remove('show');
+    listView.classList.remove('hide');
+    renderList();
+  }
+
+  // =========================================================
+  // シート連携設定パネル
+  // =========================================================
+  const sheetUrlInput = document.getElementById('sheetUrl');
+  sheetUrlInput.value = getSheetUrl();
+  document.getElementById('saveSheetUrl').addEventListener('click', () => {
+    setSheetUrl(sheetUrlInput.value.trim());
+    const statusEl = document.getElementById('syncStatus');
+    statusEl.textContent = sheetUrlInput.value.trim()
+      ? '保存しました。次にクイズで解答すると自動送信されます。'
+      : 'URLをクリアしました(自動送信は停止します)。';
+    statusEl.className = 'sync-status ok';
+  });
+
+  document.getElementById('appsScriptCode').value = APPS_SCRIPT_CODE;
+  document.getElementById('showSyncHelp').addEventListener('click', () => {
+    document.getElementById('syncHelpBox').classList.toggle('show');
+  });
+  document.getElementById('copyAppsScript').addEventListener('click', () => {
+    const ta = document.getElementById('appsScriptCode');
+    ta.select();
+    navigator.clipboard.writeText(ta.value).then(() => {
+      const msg = document.getElementById('copyAppsScriptMsg');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1800);
+    }).catch(() => { document.execCommand('copy'); });
+  });
+
+  // ---- 手動バックアップ(タブ区切りエクスポート) ----
+  document.getElementById('exportStats').addEventListener('click', () => {
+    const stats = loadStats();
+    const rows = ['id\t教材\t分野\t設問No\t試行回数\t正解数\t正答率(%)\t最終回答日'];
+    entries.forEach(e => {
+      const s = stats[e.id];
+      if (!s || s.attempts === 0) return;
+      const pct = Math.round((s.correct / s.attempts) * 100);
+      rows.push(`${e.id}\t${materialLabel(e.material)}\t${fieldLabel(e.field)}\t${e.qno}\t${s.attempts}\t${s.correct}\t${pct}\t${s.lastDate}`);
+    });
+    const ta = document.getElementById('statsCsvText');
+    ta.value = rows.length === 1 ? 'まだ回答記録がありません。クイズモードで解くとここに反映されます。' : rows.join('\n');
+    document.getElementById('statsCodeOutput').classList.add('show');
+  });
+  document.getElementById('copyStatsCsv').addEventListener('click', () => {
+    const ta = document.getElementById('statsCsvText');
+    ta.select();
+    navigator.clipboard.writeText(ta.value).then(() => {
+      const msg = document.getElementById('copyStatsMsg');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1800);
+    }).catch(() => { document.execCommand('copy'); });
+  });
+
+  // =========================================================
+  // 問題追加フォーム
+  // =========================================================
+  const addForm = document.getElementById('addForm');
+  const codeOutput = document.getElementById('codeOutput');
+  const codeText = document.getElementById('codeText');
+
+  function toJsObjectString(e) {
+    const esc = (s) => String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    return `  {
+    material: "${esc(e.material)}",
+    field: "${esc(e.field)}",
+    qno: "${esc(e.qno)}",
+    question: "${esc(e.question)}",
+    choices: [${e.choices.map(c => `"${esc(c)}"`).join(', ')}],
+    answer: "${esc(e.answer)}",
+    translation: "${esc(e.translation)}",
+    explanation: "${esc(e.explanation)}"
+  },`;
+  }
+
+  addForm.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const q = document.getElementById('f-question').value.trim();
+    const answer = document.getElementById('f-answer').value.trim();
+    const material = document.getElementById('f-add-material').value;
+    const field = document.getElementById('f-add-field').value;
+    const qno = document.getElementById('f-add-qno').value.trim();
+    if (!q || !answer || !qno) return;
+
+    const newEntry = {
+      material, field, qno,
+      question: q,
+      choices: document.getElementById('f-choices').value.split(',').map(s => s.trim()).filter(Boolean),
+      answer,
+      translation: document.getElementById('f-translation').value.trim(),
+      explanation: document.getElementById('f-explanation').value.trim()
+    };
+    newEntry.id = makeId(newEntry);
+    entries.push(newEntry);
+
+    codeText.value = toJsObjectString(newEntry);
+    codeOutput.classList.add('show');
+
+    renderList();
+    addForm.reset();
+  });
+
+  document.getElementById('copyCode').addEventListener('click', () => {
+    codeText.select();
+    navigator.clipboard.writeText(codeText.value).then(() => {
+      const msg = document.getElementById('copyMsg');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1800);
+    }).catch(() => { document.execCommand('copy'); });
+  });
+
+  renderList();
+</script>
+
+</body>
+</html>
