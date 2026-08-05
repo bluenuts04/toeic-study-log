@@ -735,7 +735,7 @@
   /* =========================================================
      entries: 1問=1オブジェクト。id は 教材コード+設問No から自動生成。
   ========================================================= */
-  const entries = [
+    const entries = [
   {
     material: "D10",
     field: "2",
@@ -947,6 +947,8 @@
     explanation: "unless otherwise instructedで『特別な指示がない限り』という頻出表現。otherwiseは副詞。"
   }
 ];
+
+  
 
 
   function makeId(e) { return `${e.material}-${e.qno}`.trim(); }
