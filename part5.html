@@ -21,6 +21,7 @@
     --font-body: 'Noto Sans JP', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
+
   * { box-sizing: border-box; }
 
   body {
@@ -1633,6 +1634,30 @@
   });
 
   renderList();
+
+  // =========================================================
+  // ページロード時: ランダムな30問を自動開始
+  // =========================================================
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      if (entries.length === 0) return;
+      
+      // 30問またはentries全数の少ない方
+      let list = shuffle(entries.slice());
+      list = list.slice(0, Math.min(30, list.length));
+      
+      quizQueue = list;
+      quizPage = 0;
+      quizCorrectCount = 0;
+      quizAnsweredCount = 0;
+      quizAnsweredIds.clear();
+      
+      listView.classList.add('hide');
+      quizView.classList.add('show');
+      renderQuizPage();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }, 300);
+  });
 </script>
 
 </body>
