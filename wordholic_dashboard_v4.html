@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wordholic - 統計ダッシュボード v4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .version-badge {
+            background: #48bb78;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-nav {
+            padding: 10px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .btn-nav:hover { background: #5568d3; transform: translateY(-2px); }
+        
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .table-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .table-controls {
+            padding: 16px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .sort-dropdown {
+            position: relative;
+        }
+        
+        .sort-btn {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .sort-btn:hover {
+            background: #e0e0e0;
+        }
+        
+        .sort-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 4px;
+            z-index: 100;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .sort-item {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .sort-item:last-child {
+            border-bottom: none;
+        }
+        
+        .sort-item:hover {
+            background: #f7f7f7;
+            color: #667eea;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f7f7f7;
+            border-bottom: 2px solid #eee;
+        }
+        
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .word-cell {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .pos-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .accuracy {
+            font-weight: 600;
+        }
+        
+        .accuracy.high { color: #48bb78; }
+        .accuracy.medium { color: #f6ad55; }
+        .accuracy.low { color: #f56565; }
+        
+        .date-cell {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: #999;
+        }
+        
+        @media (max-width: 768px) {
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <div>
+                <h1>
+                    <i class="fas fa-chart-bar"></i>
+                    wordholic - 統計ダッシュボード
+                    <span class="version-badge">v4.0</span>
+                </h1>
+                <p style="color: #666; font-size: 14px;">10種類のソート機能対応</p>
+            </div>
+            <div class="header-nav">
+                <a href="wordholic_cards_v4.html" class="btn-nav">
+                    <i class="fas fa-book"></i> 学習に戻る
+                </a>
+                <a href="index.html" class="btn-nav" style="background: #718096;">
+                    <i class="fas fa-home"></i> ホーム
+                </a>
+            </div>
+        </div>
+        
+        <!-- タブメニュー -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('words')">
+                <i class="fas fa-list"></i> 単語一覧
+            </button>
+        </div>
+        
+        <!-- 単語一覧 -->
+        <div id="words" class="tab-content active">
+            <div class="table-wrapper">
+                <div class="table-controls">
+                    <input type="text" id="searchBox" class="search-box" placeholder="単語を検索...">
+                    <div class="sort-dropdown">
+                        <button class="sort-btn" onclick="toggleSortMenu()">
+                            <i class="fas fa-sort"></i> ソート
+                        </button>
+                        <div class="sort-menu" id="sortMenu" style="display: none;">
+                            <button class="sort-item" onclick="sortWords('default')">
+                                <i class="fas fa-list"></i> デフォルト（登録順）
+                            </button>
+                            <button class="sort-item" onclick="sortWords('english-asc')">
+                                <i class="fas fa-sort-alpha-down"></i> 英単語（A→Z）
+                            </button>
+                            <button class="sort-item" onclick="sortWords('english-desc')">
+                                <i class="fas fa-sort-alpha-up"></i> 英単語（Z→A）
+                            </button>
+                            <button class="sort-item" onclick="sortWords('pos')">
+                                <i class="fas fa-tags"></i> 品詞順
+                            </button>
+                            <button class="sort-item" onclick="sortWords('accuracy-low')">
+                                <i class="fas fa-arrow-down"></i> 正答率低順（復習優先）
+                            </button>
+                            <button class="sort-item" onclick="sortWords('accuracy-high')">
+                                <i class="fas fa-arrow-up"></i> 正答率高順
+                            </button>
+                            <button class="sort-item" onclick="sortWords('attempts')">
+                                <i class="fas fa-repeat"></i> 学習回数多順
+                            </button>
+                            <button class="sort-item" onclick="sortWords('recent')">
+                                <i class="fas fa-clock"></i> 最近学習順
+                            </button>
+                            <button class="sort-item" onclick="sortWords('old')">
+                                <i class="fas fa-history"></i> 未学習優先
+                            </button>
+                            <button class="sort-item" onclick="sortWords('japanese')">
+                                <i class="fas fa-language"></i> 日本語順
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>英単語</th>
+                            <th>品詞</th>
+                            <th>日本語</th>
+                            <th>正答率</th>
+                            <th>学習回数</th>
+                            <th>最後の復習</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wordTable">
+                    </tbody>
+                </table>
+                
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-inbox"></i>
+                    <p>データがありません</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let allWords = [];
+        let filteredWords = [];
+        let currentSort = 'default';
+        
+        window.addEventListener('load', function() {
+            loadData();
+            renderWordTable();
+        });
+        
+        function loadData() {
+            const stored = localStorage.getItem('wordHolicWords');
+            if (stored) {
+                allWords = JSON.parse(stored);
+            }
+            filteredWords = [...allWords];
+        }
+        
+        function toggleSortMenu() {
+            const menu = document.getElementById('sortMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // 他の場所をクリックするとメニューを閉じる
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('sortMenu');
+            if (menu && !event.target.closest('.sort-dropdown')) {
+                menu.style.display = 'none';
+            }
+        });
+        
+        /**
+         * 改良版 sortWords - 10種類のソート対応
+         */
+        function sortWords(type) {
+            currentSort = type;
+            document.getElementById('sortMenu').style.display = 'none';
+            
+            switch(type) {
+                case 'default':
+                    filteredWords = [...allWords];
+                    break;
+                    
+                case 'english-asc':
+                    // 英単語を A→Z でソート
+                    filteredWords.sort((a, b) => 
+                        a.english.toLowerCase().localeCompare(b.english.toLowerCase(), 'en')
+                    );
+                    break;
+                    
+                case 'english-desc':
+                    // 英単語を Z→A でソート
+                    filteredWords.sort((a, b) => 
+                        b.english.toLowerCase().localeCompare(a.english.toLowerCase(), 'en')
+                    );
+                    break;
+                    
+                case 'pos':
+                    // 品詞でソート
+                    filteredWords.sort((a, b) => 
+                        a.pos.localeCompare(b.pos, 'ja')
+                    );
+                    break;
+                    
+                case 'accuracy-low':
+                    // 正答率が低い順（復習優先度）
+                    filteredWords.sort((a, b) => {
+                        const accA = a.correct + a.incorrect > 0 ? 
+                            (a.correct / (a.correct + a.incorrect)) : 0;
+                        const accB = b.correct + b.incorrect > 0 ? 
+                            (b.correct / (b.correct + b.incorrect)) : 0;
+                        return accA - accB;
+                    });
+                    break;
+                    
+                case 'accuracy-high':
+                    // 正答率が高い順
+                    filteredWords.sort((a, b) => {
+                        const accA = a.correct + a.incorrect > 0 ? 
+                            (a.correct / (a.correct + a.incorrect)) : 0;
+                        const accB = b.correct + b.incorrect > 0 ? 
+                            (b.correct / (b.correct + b.incorrect)) : 0;
+                        return accB - accA;
+                    });
+                    break;
+                    
+                case 'attempts':
+                    // 学習回数が多い順
+                    filteredWords.sort((a, b) => {
+                        const totalA = a.correct + a.incorrect;
+                        const totalB = b.correct + b.incorrect;
+                        return totalB - totalA;
+                    });
+                    break;
+                    
+                case 'recent':
+                    // 最近学習した順
+                    filteredWords.sort((a, b) => {
+                        const dateA = a.lastReviewDate ? new Date(a.lastReviewDate).getTime() : 0;
+                        const dateB = b.lastReviewDate ? new Date(b.lastReviewDate).getTime() : 0;
+                        return dateB - dateA;
+                    });
+                    break;
+                    
+                case 'old':
+                    // 未学習優先（学習回数が少ない順）
+                    filteredWords.sort((a, b) => {
+                        const totalA = a.correct + a.incorrect;
+                        const totalB = b.correct + b.incorrect;
+                        return totalA - totalB;
+                    });
+                    break;
+                    
+                case 'japanese':
+                    // 日本語でソート
+                    filteredWords.sort((a, b) => 
+                        a.japanese.localeCompare(b.japanese, 'ja')
+                    );
+                    break;
+            }
+            
+            renderWordTable();
+        }
+        
+        function renderWordTable() {
+            const tbody = document.getElementById('wordTable');
+            
+            if (filteredWords.length === 0) {
+                tbody.innerHTML = '';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('emptyState').style.display = 'none';
+            tbody.innerHTML = filteredWords.map((word, idx) => {
+                const total = word.correct + word.incorrect;
+                const accuracy = total > 0 ? Math.round((word.correct / total) * 100) : 0;
+                const accuracyClass = accuracy < 40 ? 'low' : accuracy < 70 ? 'medium' : 'high';
+                const lastReview = formatDate(word.lastReviewDate);
+                
+                return `
+                    <tr>
+                        <td class="word-cell">${word.english}</td>
+                        <td><span class="pos-badge">${word.pos}</span></td>
+                        <td>${word.japanese}</td>
+                        <td><span class="accuracy ${accuracyClass}">${accuracy}%</span></td>
+                        <td>${total}</td>
+                        <td class="date-cell">${lastReview}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            const today = new Date();
+            const diffTime = today - date;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return '今日';
+            if (diffDays === 1) return '昨日';
+            if (diffDays < 7) return `${diffDays}日前`;
+            return date.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
+        }
+        
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const search = e.target.value.toLowerCase();
+            filteredWords = allWords.filter(w => 
+                w.english.toLowerCase().includes(search) || 
+                w.japanese.toLowerCase().includes(search)
+            );
+            
+            if (currentSort !== 'default') {
+                sortWords(currentSort);
+            } else {
+                renderWordTable();
+            }
+        });
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
