@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wordholic Dashboard v4 Mode</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .version-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .btn-nav {
+            padding: 10px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        
+        .btn-nav:hover {
+            background: #5568d3;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-btn:hover {
+            background: #ddd;
+        }
+        
+        .tab-btn.active:hover {
+            background: #5568d3;
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: #f7fafc;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .mode-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .mode-card {
+            background: #f7fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .mode-card.audio {
+            border-left-color: #ed8936;
+        }
+        
+        .mode-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mode-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .mode-stat label {
+            color: #666;
+        }
+        
+        .mode-stat .value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        
+        select {
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        th {
+            background: #f0f4ff;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background: #f9fafc;
+        }
+        
+        .accuracy {
+            font-weight: 600;
+            color: #48bb78;
+        }
+        
+        .accuracy.low {
+            color: #f56565;
+        }
+        
+        .accuracy.medium {
+            color: #ed8936;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge.visual {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        
+        .badge.audio {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .search-box {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .distribution {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .dist-bar {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .dist-bar label {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .dist-bar .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            margin-top: 8px;
+        }
+        
+        @media (max-width: 600px) {
+            .mode-stats { grid-template-columns: 1fr; }
+            table { font-size: 12px; }
+            th, td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>
+                    <i class="fas fa-chart-bar"></i>
+                    wordholic Dashboard
+                    <span class="version-badge">v4.0 Mode</span>
+                </h1>
+                <p style="color: #666; font-size: 14px;">モード別統計トラッキング</p>
+            </div>
+            <a href="wordholic_cards_with_gs_v4_auto_mode.html" class="btn-nav">
+                <i class="fas fa-book"></i> 学習に戻る
+            </a>
+        </div>
+        
+        <!-- タブ -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('overview')">
+                <i class="fas fa-chart-pie"></i> 概要
+            </button>
+            <button class="tab-btn" onclick="switchTab('words')">
+                <i class="fas fa-list"></i> 単語一覧
+            </button>
+            <button class="tab-btn" onclick="switchTab('modes')">
+                <i class="fas fa-chart-line"></i> モード分析
+            </button>
+            <button class="tab-btn" onclick="switchTab('management')">
+                <i class="fas fa-cog"></i> データ管理
+            </button>
+        </div>
+        
+        <!-- 概要タブ -->
+        <div id="overview" class="tab-content active">
+            <div class="card">
+                <h2 style="margin-bottom: 16px;">📊 学習概要</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">総単語数</div>
+                        <div class="stat-value" id="totalWords">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">総学習回数</div>
+                        <div class="stat-value" id="totalAttempts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">平均正答率</div>
+                        <div class="stat-value" id="avgAccuracy">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">未学習</div>
+                        <div class="stat-value" id="unstudied">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 style="margin-bottom: 16px;">👁️👂 モード別統計</h2>
+                <div class="mode-stats">
+                    <div class="mode-card">
+                        <div class="mode-title">
+                            <i class="fas fa-eye"></i> 視覚モード
+                        </div>
+                        <div class="mode-stat">
+                            <label>学習回数</label>
+                            <span class="value" id="visualAttempts">0</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>正答数</label>
+                            <span class="value" id="visualCorrect">0</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>不正答数</label>
+                            <span class="value" id="visualIncorrect">0</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>正答率</label>
+                            <span class="value accuracy" id="visualRate">0%</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>最終学習日</label>
+                            <span class="value" id="visualLastDate">---</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mode-card audio">
+                        <div class="mode-title">
+                            <i class="fas fa-ear"></i> 聴覚モード
+                        </div>
+                        <div class="mode-stat">
+                            <label>学習回数</label>
+                            <span class="value" id="audioAttempts">0</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>正答数</label>
+                            <span class="value" id="audioCorrect">0</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>不正答数</label>
+                            <span class="value" id="audioIncorrect">0</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>正答率</label>
+                            <span class="value accuracy" id="audioRate">0%</span>
+                        </div>
+                        <div class="mode-stat">
+                            <label>最終学習日</label>
+                            <span class="value" id="audioLastDate">---</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 style="margin-bottom: 16px;">📈 正答率分布</h2>
+                <div class="distribution">
+                    <div class="dist-bar">
+                        <label>0-20%</label>
+                        <div class="value" id="dist0">0</div>
+                    </div>
+                    <div class="dist-bar">
+                        <label>21-40%</label>
+                        <div class="value" id="dist1">0</div>
+                    </div>
+                    <div class="dist-bar">
+                        <label>41-60%</label>
+                        <div class="value" id="dist2">0</div>
+                    </div>
+                    <div class="dist-bar">
+                        <label>61-80%</label>
+                        <div class="value" id="dist3">0</div>
+                    </div>
+                    <div class="dist-bar">
+                        <label>81-100%</label>
+                        <div class="value" id="dist4">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 単語一覧タブ -->
+        <div id="words" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 16px;">📚 単語一覧</h2>
+                <div class="controls">
+                    <input type="text" id="searchBox" class="search-box" placeholder="英単語で検索..." onkeyup="filterWords()" />
+                    <select onchange="sortWords(this.value)">
+                        <option value="default">デフォルト順</option>
+                        <option value="english-asc">英単語 A→Z</option>
+                        <option value="english-desc">英単語 Z→A</option>
+                        <option value="pos">品詞順</option>
+                        <option value="accuracy-low">正答率 低順</option>
+                        <option value="accuracy-high">正答率 高順</option>
+                        <option value="attempts">学習回数 多順</option>
+                        <option value="recent">最近学習順</option>
+                        <option value="old">未学習優先</option>
+                        <option value="japanese">日本語順</option>
+                    </select>
+                </div>
+                
+                <div class="table-container">
+                    <table id="wordsTable">
+                        <thead>
+                            <tr>
+                                <th>英単語</th>
+                                <th>品詞</th>
+                                <th>日本語</th>
+                                <th>総正答率</th>
+                                <th>視覚</th>
+                                <th>聴覚</th>
+                                <th>学習回数</th>
+                                <th>最終復習</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wordsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- モード分析タブ -->
+        <div id="modes" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 16px;">📊 モード比較分析</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>英単語</th>
+                                <th>視覚正答率</th>
+                                <th>聴覚正答率</th>
+                                <th>差分</th>
+                                <th>得意モード</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modeTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- データ管理タブ -->
+        <div id="management" class="card" style="display:none;">
+            <h2 style="margin-bottom: 16px;">🔧 データ管理</h2>
+            <div style="margin-bottom: 16px;">
+                <button class="btn" onclick="exportJSON()">
+                    <i class="fas fa-download"></i> JSON形式でエクスポート
+                </button>
+                <button class="btn" onclick="importJSON()" style="background: #48bb78; margin-left: 8px;">
+                    <i class="fas fa-upload"></i> JSON形式でインポート
+                </button>
+                <button class="btn" onclick="resetData()" style="background: #f56565; margin-left: 8px;">
+                    <i class="fas fa-trash"></i> 全データをリセット
+                </button>
+            </div>
+            <input type="file" id="jsonFile" accept=".json" style="display: none;" onchange="importJSONFile()">
+            <div id="backupInfo" style="background: #f0f4ff; padding: 12px; border-radius: 8px; margin-top: 16px;">
+                <p style="font-size: 13px; color: #667eea;">
+                    <i class="fas fa-info-circle"></i>
+                    最後のバックアップ: <span id="lastBackup">なし</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let allWords = [];
+        let filteredWords = [];
+        
+        window.addEventListener('load', function() {
+            loadWords();
+            updateOverview();
+            updateWordsList();
+            updateModeAnalysis();
+        });
+        
+        function loadWords() {
+            const stored = localStorage.getItem('wordHolicWords');
+            if (stored) {
+                allWords = JSON.parse(stored);
+            }
+        }
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            const tabEl = document.getElementById(tabName);
+            if (tabEl) tabEl.classList.add('active');
+            
+            event.target.classList.add('active');
+            
+            if (tabName === 'management') {
+                document.getElementById('management').style.display = 'block';
+            }
+        }
+        
+        function updateOverview() {
+            if (allWords.length === 0) return;
+            
+            // 全体統計
+            document.getElementById('totalWords').textContent = allWords.length;
+            
+            let totalCorrect = 0, totalIncorrect = 0;
+            let visualCorrect = 0, visualIncorrect = 0;
+            let audioCorrect = 0, audioIncorrect = 0;
+            let unstudied = 0;
+            let visualLastDate = null, audioLastDate = null;
+            
+            allWords.forEach(word => {
+                totalCorrect += word.correct || 0;
+                totalIncorrect += word.incorrect || 0;
+                visualCorrect += word.visualCorrect || 0;
+                visualIncorrect += word.visualIncorrect || 0;
+                audioCorrect += word.audioCorrect || 0;
+                audioIncorrect += word.audioIncorrect || 0;
+                
+                if (!word.correct && !word.incorrect) unstudied++;
+                if (word.visualLastReviewDate) {
+                    if (!visualLastDate || new Date(word.visualLastReviewDate) > new Date(visualLastDate)) {
+                        visualLastDate = word.visualLastReviewDate;
+                    }
+                }
+                if (word.audioLastReviewDate) {
+                    if (!audioLastDate || new Date(word.audioLastReviewDate) > new Date(audioLastDate)) {
+                        audioLastDate = word.audioLastReviewDate;
+                    }
+                }
+            });
+            
+            const totalAttempts = totalCorrect + totalIncorrect;
+            const avgAccuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
+            const visualAttempts = visualCorrect + visualIncorrect;
+            const audioAttempts = audioCorrect + audioIncorrect;
+            const visualRate = visualAttempts > 0 ? Math.round((visualCorrect / visualAttempts) * 100) : 0;
+            const audioRate = audioAttempts > 0 ? Math.round((audioCorrect / audioAttempts) * 100) : 0;
+            
+            document.getElementById('totalAttempts').textContent = totalAttempts;
+            document.getElementById('avgAccuracy').textContent = avgAccuracy + '%';
+            document.getElementById('unstudied').textContent = unstudied;
+            
+            document.getElementById('visualAttempts').textContent = visualAttempts;
+            document.getElementById('visualCorrect').textContent = visualCorrect;
+            document.getElementById('visualIncorrect').textContent = visualIncorrect;
+            document.getElementById('visualRate').textContent = visualRate + '%';
+            document.getElementById('visualLastDate').textContent = visualLastDate ? new Date(visualLastDate).toLocaleDateString('ja-JP') : '---';
+            
+            document.getElementById('audioAttempts').textContent = audioAttempts;
+            document.getElementById('audioCorrect').textContent = audioCorrect;
+            document.getElementById('audioIncorrect').textContent = audioIncorrect;
+            document.getElementById('audioRate').textContent = audioRate + '%';
+            document.getElementById('audioLastDate').textContent = audioLastDate ? new Date(audioLastDate).toLocaleDateString('ja-JP') : '---';
+            
+            // 正答率分布
+            const distribution = [0, 0, 0, 0, 0];
+            allWords.forEach(word => {
+                const total = (word.correct || 0) + (word.incorrect || 0);
+                if (total > 0) {
+                    const rate = Math.round((word.correct / total) * 100);
+                    if (rate <= 20) distribution[0]++;
+                    else if (rate <= 40) distribution[1]++;
+                    else if (rate <= 60) distribution[2]++;
+                    else if (rate <= 80) distribution[3]++;
+                    else distribution[4]++;
+                }
+            });
+            
+            for (let i = 0; i < 5; i++) {
+                document.getElementById('dist' + i).textContent = distribution[i];
+            }
+        }
+        
+        function updateWordsList() {
+            filteredWords = [...allWords];
+            renderWordsTable();
+        }
+        
+        function renderWordsTable() {
+            const tbody = document.getElementById('wordsTableBody');
+            tbody.innerHTML = '';
+            
+            if (filteredWords.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="no-data">単語がありません</td></tr>';
+                return;
+            }
+            
+            filteredWords.forEach(word => {
+                const total = (word.correct || 0) + (word.incorrect || 0);
+                const accuracy = total > 0 ? Math.round((word.correct / total) * 100) : 0;
+                
+                const visualTotal = (word.visualCorrect || 0) + (word.visualIncorrect || 0);
+                const visualRate = visualTotal > 0 ? Math.round((word.visualCorrect / visualTotal) * 100) : 0;
+                
+                const audioTotal = (word.audioCorrect || 0) + (word.audioIncorrect || 0);
+                const audioRate = audioTotal > 0 ? Math.round((word.audioCorrect / audioTotal) * 100) : 0;
+                
+                const lastReview = word.lastReviewDate ? new Date(word.lastReviewDate).toLocaleDateString('ja-JP') : '---';
+                
+                const row = `
+                    <tr>
+                        <td><strong>${word.english}</strong></td>
+                        <td>${word.pos}</td>
+                        <td>${word.japanese}</td>
+                        <td><span class="accuracy ${accuracy < 50 ? 'low' : accuracy < 80 ? 'medium' : ''}">${accuracy}%</span></td>
+                        <td><span class="badge visual">${visualRate}% (${visualTotal})</span></td>
+                        <td><span class="badge audio">${audioRate}% (${audioTotal})</span></td>
+                        <td>${total}</td>
+                        <td>${lastReview}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+        
+        function filterWords() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            filteredWords = allWords.filter(word => 
+                word.english.toLowerCase().includes(query) ||
+                word.japanese.toLowerCase().includes(query)
+            );
+            renderWordsTable();
+        }
+        
+        function sortWords(sortType) {
+            const compare = (a, b, field) => {
+                if (a[field] < b[field]) return -1;
+                if (a[field] > b[field]) return 1;
+                return 0;
+            };
+            
+            switch(sortType) {
+                case 'english-asc':
+                    filteredWords.sort((a, b) => compare(a, b, 'english'));
+                    break;
+                case 'english-desc':
+                    filteredWords.sort((a, b) => compare(b, a, 'english'));
+                    break;
+                case 'pos':
+                    filteredWords.sort((a, b) => compare(a, b, 'pos'));
+                    break;
+                case 'accuracy-low':
+                    filteredWords.sort((a, b) => {
+                        const accA = (a.correct || 0) / ((a.correct || 0) + (a.incorrect || 0) || 1);
+                        const accB = (b.correct || 0) / ((b.correct || 0) + (b.incorrect || 0) || 1);
+                        return accA - accB;
+                    });
+                    break;
+                case 'accuracy-high':
+                    filteredWords.sort((a, b) => {
+                        const accA = (a.correct || 0) / ((a.correct || 0) + (a.incorrect || 0) || 1);
+                        const accB = (b.correct || 0) / ((b.correct || 0) + (b.incorrect || 0) || 1);
+                        return accB - accA;
+                    });
+                    break;
+                case 'attempts':
+                    filteredWords.sort((a, b) => {
+                        const attA = (a.correct || 0) + (a.incorrect || 0);
+                        const attB = (b.correct || 0) + (b.incorrect || 0);
+                        return attB - attA;
+                    });
+                    break;
+                case 'recent':
+                    filteredWords.sort((a, b) => {
+                        const dateA = new Date(a.lastReviewDate || 0);
+                        const dateB = new Date(b.lastReviewDate || 0);
+                        return dateB - dateA;
+                    });
+                    break;
+                case 'old':
+                    filteredWords.sort((a, b) => {
+                        const attA = (a.correct || 0) + (a.incorrect || 0);
+                        const attB = (b.correct || 0) + (b.incorrect || 0);
+                        return attA - attB;
+                    });
+                    break;
+                case 'japanese':
+                    filteredWords.sort((a, b) => a.japanese.localeCompare(b.japanese, 'ja'));
+                    break;
+            }
+            renderWordsTable();
+        }
+        
+        function updateModeAnalysis() {
+            const tbody = document.getElementById('modeTableBody');
+            tbody.innerHTML = '';
+            
+            const wordsWithModes = allWords.filter(word => {
+                const vTotal = (word.visualCorrect || 0) + (word.visualIncorrect || 0);
+                const aTotal = (word.audioCorrect || 0) + (word.audioIncorrect || 0);
+                return vTotal > 0 || aTotal > 0;
+            });
+            
+            if (wordsWithModes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="no-data">モード別データがありません</td></tr>';
+                return;
+            }
+            
+            wordsWithModes.forEach(word => {
+                const vTotal = (word.visualCorrect || 0) + (word.visualIncorrect || 0);
+                const vRate = vTotal > 0 ? Math.round((word.visualCorrect / vTotal) * 100) : 0;
+                
+                const aTotal = (word.audioCorrect || 0) + (word.audioIncorrect || 0);
+                const aRate = aTotal > 0 ? Math.round((word.audioCorrect / aTotal) * 100) : 0;
+                
+                const diff = Math.abs(vRate - aRate);
+                const strongerMode = vRate > aRate ? '視覚が強い' : aRate > vRate ? '聴覚が強い' : '同等';
+                
+                const row = `
+                    <tr>
+                        <td><strong>${word.english}</strong></td>
+                        <td><span class="badge visual">${vRate}%</span></td>
+                        <td><span class="badge audio">${aRate}%</span></td>
+                        <td>${diff}%</td>
+                        <td>${strongerMode}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+        
+        function exportJSON() {
+            const json = JSON.stringify(allWords, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `wordholic_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            localStorage.setItem('lastBackup', new Date().toISOString());
+            updateBackupInfo();
+        }
+        
+        function importJSON() {
+            document.getElementById('jsonFile').click();
+        }
+        
+        function importJSONFile() {
+            const file = document.getElementById('jsonFile').files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        allWords = data;
+                        localStorage.setItem('wordHolicWords', JSON.stringify(allWords));
+                        updateOverview();
+                        updateWordsList();
+                        updateModeAnalysis();
+                        alert('✅ データをインポートしました');
+                    }
+                } catch (error) {
+                    alert('❌ ファイルの読み込みに失敗しました');
+                }
+            };
+            reader.readAsText(file);
+            document.getElementById('jsonFile').value = '';
+        }
+        
+        function resetData() {
+            if (confirm('本当に全データをリセットしますか？この操作は取り消せません。')) {
+                if (confirm('本当にリセットしますか？')) {
+                    localStorage.removeItem('wordHolicWords');
+                    allWords = [];
+                    updateOverview();
+                    updateWordsList();
+                    updateModeAnalysis();
+                    alert('✅ 全データをリセットしました');
+                }
+            }
+        }
+        
+        function updateBackupInfo() {
+            const lastBackup = localStorage.getItem('lastBackup');
+            if (lastBackup) {
+                const date = new Date(lastBackup).toLocaleDateString('ja-JP');
+                document.getElementById('lastBackup').textContent = date;
+            }
+        }
+    </script>
+</body>
+</html>
