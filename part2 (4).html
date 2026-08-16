@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOEIC Part2 対策 | 傾向・実戦ドリル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blueprint-navy: #16324a;
+    --blueprint-navy-deep: #0f2436;
+    --blueprint-line: #6f95ad;
+    --blueprint-line-faint: rgba(255,255,255,0.10);
+    --paper: #eef2ee;
+    --paper-dim: #c7d3d6;
+    --safety-orange: #e8631c;
+    --safety-orange-dim: #b74e16;
+    --ok-green: #6fae7c;
+    --warn-red: #c9564c;
+    --purple: #a887d6;
+    --font-body: 'Noto Sans JP', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background-color: var(--blueprint-navy);
+    background-image: linear-gradient(var(--blueprint-line-faint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line-faint) 1px, transparent 1px);
+    background-size: 28px 28px; color: var(--paper); font-family: var(--font-body); line-height: 1.7; min-height: 100vh;
+  }
+  header { padding: 56px 24px 30px; border-bottom: 1px dashed var(--blueprint-line); max-width: 920px; margin: 0 auto; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; color: var(--safety-orange); text-transform: uppercase; }
+  header h1 { font-size: 28px; margin: 10px 0 8px; font-weight: 700; letter-spacing: .02em; }
+  header .sub { color: var(--paper-dim); font-size: 14px; font-family: var(--font-mono); max-width: 640px; }
+  .material-badge {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--paper);
+    border: 1px solid var(--blueprint-line); padding: 5px 12px; border-radius: 2px;
+  }
+  .material-badge .code { background: var(--safety-orange); color: #1a1206; padding: 1px 8px; border-radius: 2px; font-weight: bold; }
+
+  nav.crumb { max-width: 920px; margin: 14px auto 0; padding: 0 24px 20px; font-family: var(--font-mono); font-size: 12px; }
+  nav.crumb a { color: var(--blueprint-line); text-decoration: none; }
+  nav.crumb a:hover { color: var(--safety-orange); }
+
+  main { max-width: 920px; margin: 0 auto; padding: 36px 24px 80px; }
+  section { margin-bottom: 46px; }
+  .section-title {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; color: var(--blueprint-line);
+    text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content:""; flex:1; height:1px; background: repeating-linear-gradient(90deg, var(--blueprint-line) 0 4px, transparent 4px 8px); }
+  .lead { color: var(--paper-dim); font-size: .92rem; margin-bottom: 18px; }
+
+  /* type overview */
+  .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 14px; }
+  .type-card {
+    border: 1px solid var(--blueprint-line); border-radius: 2px; padding: 16px 16px 14px; background: rgba(255,255,255,0.02);
+  }
+  .type-card .tbadge { font-family: var(--font-mono); font-size: .7rem; padding: 2px 9px; border-radius: 2px; letter-spacing: .03em; display: inline-block; margin-bottom: 8px; }
+  .tbadge.t1 { background: var(--blueprint-line); color: #0f2436; }
+  .tbadge.t2 { background: var(--ok-green); color: #0f2436; }
+  .tbadge.t3 { background: var(--safety-orange); color: #1a1206; }
+  .tbadge.t4 { background: var(--purple); color: #1a1030; }
+  .type-card h3 { margin: 0 0 6px; font-size: .96rem; color: var(--paper); }
+  .type-card p { margin: 0; font-size: .82rem; color: var(--paper-dim); }
+  .memo-link { font-family: var(--font-mono); font-size: .8rem; margin-top: 14px; display: inline-block; }
+  .memo-link a { color: var(--safety-orange); text-decoration: none; }
+  .memo-link a:hover { text-decoration: underline; }
+
+  /* stats */
+  .stats-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat-pill {
+    border: 1px solid var(--blueprint-line); border-radius: 2px; padding: 10px 16px; font-size: .82rem;
+    color: var(--paper-dim); flex: 1; min-width: 110px; text-align: center; background: rgba(255,255,255,0.02);
+    font-family: var(--font-mono);
+  }
+  .stat-pill b { display: block; font-size: 1.2rem; color: var(--paper); margin-bottom: 2px; }
+
+  table.type-stats { width: 100%; border-collapse: collapse; font-size: .84rem; font-family: var(--font-mono); margin-bottom: 18px; }
+  table.type-stats th, table.type-stats td { border: 1px solid var(--blueprint-line); padding: 7px 10px; text-align: left; }
+  table.type-stats th { background: var(--blueprint-navy-deep); color: var(--paper); }
+  table.type-stats td { color: var(--paper-dim); }
+  table.type-stats td.rate-ok { color: var(--ok-green); font-weight: bold; }
+  table.type-stats td.rate-warn { color: var(--safety-orange); font-weight: bold; }
+
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; font-family: var(--font-mono); }
+  .filter-row label { font-size: .78rem; color: var(--paper-dim); }
+  .filter-row select {
+    padding: 6px 10px; border: 1px solid var(--blueprint-line); border-radius: 2px;
+    font-size: .82rem; background: var(--blueprint-navy-deep); color: var(--paper); font-family: var(--font-mono);
+  }
+
+  .qcard {
+    position: relative; border: 1px solid var(--blueprint-line); border-radius: 2px;
+    padding: 18px 20px 18px 56px; margin-bottom: 16px; background: rgba(255,255,255,0.02);
+  }
+  .qcard::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 40px; border-right: 1px dashed var(--blueprint-line); }
+  .qcard .qcode {
+    position: absolute; left: 0; top: 18px; width: 40px; text-align: center;
+    font-family: var(--font-mono); font-size: .64rem; color: var(--safety-orange-dim); font-weight: bold; line-height: 1.3; white-space: pre-line;
+  }
+  .qcard .qmeta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; min-height: 20px; }
+  .qcard .qmeta-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .badge { font-family: var(--font-mono); font-size: .68rem; padding: 2px 8px; border-radius: 2px; letter-spacing: .03em; }
+  .badge.t1 { background: var(--blueprint-line); color: #0f2436; }
+  .badge.t2 { background: var(--ok-green); color: #0f2436; }
+  .badge.t3 { background: var(--safety-orange); color: #1a1206; }
+  .badge.t4 { background: var(--purple); color: #1a1030; }
+  .badge.custom { background: #7b5cd6; color: #fff; }
+  .badge.hidden-type { visibility: hidden; }
+  .review-count { font-family: var(--font-mono); font-size: .72rem; color: var(--paper-dim); }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+  .tag-pill {
+    font-family: var(--font-mono); font-size: .68rem; color: var(--paper);
+    padding: 2px 8px; border-radius: 2px; border: 1px solid var(--blueprint-line); background: rgba(255,255,255,0.03);
+  }
+
+  /* audio-first hidden question */
+  .play-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .play-btn {
+    font-family: var(--font-mono); background: var(--safety-orange); color: #1a1206; border: none;
+    padding: 10px 18px; border-radius: 2px; font-size: .84rem; cursor: pointer; letter-spacing: .02em;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .play-btn:hover { background: var(--safety-orange-dim); }
+  .play-btn.playing { background: var(--ok-green); color: #0f2436; }
+  .qtext {
+    font-size: .98rem; color: var(--paper); margin-bottom: 12px;
+    background: rgba(255,255,255,0.03); border: 1px dashed var(--blueprint-line); border-radius: 2px; padding: 10px 12px;
+  }
+  .qtext .en { display: none; }
+  .qtext .ja { display: none; color: var(--paper-dim); font-size: .84rem; margin-top: 4px; }
+  .qtext .placeholder { font-family: var(--font-mono); font-size: .78rem; color: var(--paper-dim); }
+  .qtext.revealed .en, .qtext.revealed .ja { display: block; }
+  .qtext.revealed .placeholder { display: none; }
+
+  .choices { list-style: none; margin: 0 0 12px; padding: 0; font-size: .9rem; }
+  .choices li {
+    display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px;
+    border: 1px solid var(--blueprint-line); border-radius: 2px; margin-bottom: 6px;
+    cursor: pointer; transition: .15s; color: var(--paper-dim);
+  }
+  .choices li:hover { border-color: var(--safety-orange); background: rgba(255,255,255,0.03); }
+  .choices li.selected { background: rgba(111,149,173,0.18); border-color: var(--blueprint-line); color: var(--paper); }
+  .choices li.graded.correct-answer { background: rgba(111,174,124,0.18); border-color: var(--ok-green); color: var(--paper); font-weight: bold; }
+  .choices li.graded.wrong-selected { background: rgba(201,86,76,0.18); border-color: var(--warn-red); color: var(--paper); }
+  .choices li .letter {
+    font-family: var(--font-mono); font-weight: bold; width: 20px; flex-shrink: 0;
+  }
+  .choices li .ctext .en { display: none; }
+  .choices li .ctext .ja { display: none; font-size: .82rem; color: var(--paper-dim); margin-top: 3px; }
+  .choices li.graded .ctext .en, .choices li.graded .ctext .ja { display: block; }
+  .choices li .ctext .placeholder { font-family: var(--font-mono); font-size: .78rem; }
+  .choices li.graded .ctext .placeholder { display: none; }
+
+  .qcard-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    font-family: var(--font-mono); background: var(--safety-orange); color: #1a1206; border: none;
+    padding: 8px 18px; border-radius: 2px; font-size: .8rem; cursor: pointer; letter-spacing: .02em;
+  }
+  .btn:hover { background: var(--safety-orange-dim); }
+  .btn.secondary { background: transparent; color: var(--paper); border: 1px solid var(--blueprint-line); }
+  .btn.secondary:hover { border-color: var(--safety-orange); color: var(--safety-orange); }
+  .btn.danger { background: transparent; color: var(--warn-red); border: 1px solid var(--warn-red); }
+  .btn.danger:hover { background: rgba(201,86,76,0.15); }
+  .btn:disabled { opacity: .35; cursor: default; }
+
+  .result-line {
+    display: none; font-family: var(--font-mono); font-size: .78rem; padding: 6px 10px; border-radius: 2px;
+  }
+  .result-line.show { display: inline-block; }
+  .result-line.ok { background: rgba(111,174,124,0.18); color: var(--ok-green); }
+  .result-line.ng { background: rgba(201,86,76,0.18); color: var(--warn-red); }
+
+  .note-box {
+    display: none; margin-top: 10px; font-size: .84rem; color: var(--paper-dim);
+    background: rgba(111,149,173,0.12); padding: 10px 12px; border-radius: 2px; border-left: 2px solid var(--blueprint-line);
+  }
+  .note-box.show { display: block; }
+
+  /* add-question form */
+  .add-form { border: 1px solid var(--blueprint-line); border-radius: 2px; padding: 22px; background: rgba(255,255,255,0.02); }
+  .add-form .row { margin-bottom: 14px; }
+  .add-form label { display: block; font-family: var(--font-mono); font-size: .78rem; color: var(--blueprint-line); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em; }
+  .add-form input[type=text], .add-form select, .add-form textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--blueprint-line); border-radius: 2px;
+    font-size: .88rem; font-family: var(--font-body); background: var(--blueprint-navy-deep); color: var(--paper);
+  }
+  .add-form .choice-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .add-form .choice-row input[type=text] { flex: 1; }
+  .add-form .choice-row input[type=radio] { flex-shrink: 0; accent-color: var(--safety-orange); }
+  .add-form .hint { font-size: .76rem; color: var(--paper-dim); margin-top: -8px; margin-bottom: 10px; }
+
+  .btn-row { text-align: center; margin-top: 8px; }
+
+  .toast {
+    display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--safety-orange); color: #1a1206; padding: 10px 20px; border-radius: 2px;
+    font-family: var(--font-mono); font-size: .82rem; z-index: 50; box-shadow: 0 4px 14px rgba(0,0,0,.3);
+  }
+
+  footer { max-width: 920px; margin: 0 auto; padding: 0 24px 60px; font-family: var(--font-mono); font-size: 11px; color: var(--paper-dim); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">TOEIC STUDY LOG &mdash; PART2 RESPONSE DRILL</div>
+  <h1>Part2 対策 — 傾向・実戦ドリル</h1>
+  <div class="sub">音声を再生して問題を解く、リスニング主体の復習ページ。問題文・選択肢は解答するまで非表示です。</div>
+  <div class="material-badge">
+    <span class="code">730</span>
+    <span>TOEIC L&amp;Rテスト730点 奪取の方法(旺文社) &middot; Unit2-3 CD1-27〜61</span>
+  </div>
+</header>
+
+<nav class="crumb">
+  <a href="index.html">&larr; トップに戻る</a> ｜
+  <a href="part2-memo.html">要点メモ</a> ｜
+  <a href="part5.html">Part5 診断ログ &rarr;</a>
+</nav>
+
+<main>
+
+  <section>
+    <div class="section-title">01 &nbsp;OUTPUT PATTERNS</div>
+    <p class="lead">Part2(応答問題)は放送される質問・発言に対して最も適切な応答を選ぶ形式。出題は大きく以下の4タイプに分類できる。</p>
+
+    <div class="type-grid">
+      <div class="type-card">
+        <span class="tbadge t1">TYPE 1</span>
+        <h3>WH疑問文</h3>
+        <p>What/Where/When/Who/Why/Howで始まる。具体的な情報を尋ねる。Yes/Noで返す選択肢は基本的に不正解。</p>
+      </div>
+      <div class="type-card">
+        <span class="tbadge t2">TYPE 2</span>
+        <h3>一般・否定・付加・選択疑問文</h3>
+        <p>Do/Are/Have等で始まる、または否定形・付加疑問・"or"を使った選択疑問。Yes/Noを省略した応答も多い。</p>
+      </div>
+      <div class="type-card">
+        <span class="tbadge t3">TYPE 3</span>
+        <h3>依頼・提案・申し出</h3>
+        <p>Could you.../Why don't we.../Shall I...など。定型応答(Sure/I'd be happy to/Sorry, I can't)を押さえる。</p>
+      </div>
+      <div class="type-card">
+        <span class="tbadge t4">TYPE 4</span>
+        <h3>平叙文</h3>
+        <p>疑問文の形を取らない状況説明・情報提供。感想/提案/質問返し/関連情報提供のいずれかで応答する。</p>
+      </div>
+    </div>
+    <div class="memo-link">応答パターンの詳しい解説は <a href="part2-memo.html">要点メモページ →</a></div>
+  </section>
+
+  <section>
+    <div class="section-title">02 &nbsp;DRILL (LISTEN &amp; ANSWER)</div>
+    <p class="lead">▶再生ボタンで音声が流れます。問題文・選択肢は解答するまで非表示です。選んだら「採点する」でタイプ・和訳・解説が開きます。</p>
+
+    <div class="stats-bar" id="statsBar"></div>
+    <table class="type-stats" id="typeStatsTable"></table>
+
+    <div class="filter-row">
+      <label for="typeFilter">タイプ:</label>
+      <select id="typeFilter" onchange="onFilterChange()">
+        <option value="0">すべて表示</option>
+        <option value="1">① WH疑問文</option>
+        <option value="2">② 一般・否定・付加・選択疑問文</option>
+        <option value="3">③ 依頼・提案・申し出</option>
+        <option value="4">④ 平叙文</option>
+      </select>
+
+      <label for="tagFilter">問題元タグ:</label>
+      <select id="tagFilter" onchange="onFilterChange()"><option value="">すべて表示</option></select>
+
+      <label for="speedSelect">再生速度:</label>
+      <select id="speedSelect" onchange="onSpeedChange()">
+        <option value="0.95" selected>標準(TOEICと同程度)</option>
+        <option value="1.05">やや速め</option>
+        <option value="1.15">速め</option>
+        <option value="1.3">かなり速い</option>
+      </select>
+
+      <button class="btn secondary" onclick="shuffleAndRender()">🔀 出題順をシャッフル</button>
+      <button class="btn danger" onclick="resetStats()">記録を全て消去</button>
+    </div>
+
+    <div id="quiz"></div>
+  </section>
+
+  <section>
+    <div class="section-title">03 &nbsp;ADD NEW QUESTION</div>
+    <p class="lead">自分でつまずいた問題を追加して、同じドリルの流れ(音声再生→解答→採点)で復習できます。</p>
+
+    <div class="add-form">
+      <div class="row">
+        <label>タイプ</label>
+        <select id="fType">
+          <option value="1">① WH疑問文</option>
+          <option value="2">② 一般・否定・付加・選択疑問文</option>
+          <option value="3">③ 依頼・提案・申し出</option>
+          <option value="4">④ 平叙文</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>質問文(英語)</label>
+        <input type="text" id="fQ" placeholder="例: When does the store open?">
+      </div>
+      <div class="row">
+        <label>質問文(和訳・任意)</label>
+        <input type="text" id="fQJa" placeholder="例: いつお店は開きますか。">
+      </div>
+      <div class="row">
+        <label>選択肢(正解を左のラジオボタンで選択)</label>
+        <div class="choice-row"><input type="radio" name="fCorrect" value="0" checked><input type="text" id="fC0" placeholder="選択肢A(英語)"></div>
+        <div class="choice-row"><input type="radio" name="fCorrect" value="1"><input type="text" id="fC1" placeholder="選択肢B(英語)"></div>
+        <div class="choice-row"><input type="radio" name="fCorrect" value="2"><input type="text" id="fC2" placeholder="選択肢C(英語)"></div>
+        <div class="hint">正解の選択肢の左のラジオボタンをオンにしてください(和訳は解説欄にまとめて記入可)</div>
+      </div>
+      <div class="row">
+        <label>解説(任意・和訳を含めてOK)</label>
+        <textarea id="fNote" rows="2" placeholder="例: When(時間)には具体的な時間・時期で答える。"></textarea>
+      </div>
+      <div class="row">
+        <label>問題元タグ(任意・カンマ区切りで複数可)</label>
+        <input type="text" id="fTags" list="tagSuggestions" placeholder="例: 公式問題集1, 模試2026, 自分の間違い">
+        <datalist id="tagSuggestions"></datalist>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="addQuestion()">この問題を追加</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>TOEIC学習サイト &middot; Part2対策ページ &nbsp;/&nbsp; HOSTED ON GITHUB PAGES</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- 設問データ (教材コード:730 / TOEIC L&Rテスト730点奪取の方法 Unit2-3) ---------- */
+
+const rawQuestions = [
+{code:"CD1-27",type:1,en:"Where are you meeting with Mr. Murphy today?",ja:"あなたはMurphyさんと今日どこで会う予定ですか。",
+ choices:[
+  {en:"That's been rescheduled for next Friday.",ja:"それは次の金曜日に予定変更されました。",correct:true},
+  {en:"I know him from college.",ja:"私は彼と大学時代から知り合いです。",correct:false},
+  {en:"Right after the lunch break.",ja:"お昼休憩の直後です。",correct:false}
+ ],note:""},
+
+{code:"CD1-28",type:1,en:"Who used the projector for the presentations yesterday?",ja:"誰が昨日プレゼンテーションのために、プロジェクターを使いましたか。",
+ choices:[
+  {en:"Ms. Lee can probably tell you.",ja:"Leeさんがたぶん教えてくれます。",correct:true},
+  {en:"It was not as good as projected.",ja:"それは、予測されたほどよくなかったです。",correct:false},
+  {en:"I presented my passport.",ja:"私はパスポートを提示しました。",correct:false},
+  {en:"Actually, I wasn't there.",ja:"実は、私はその場にいませんでした。",correct:true},
+  {en:"Mike used to work here.",ja:"Mikeはここでかつて働いていました。",correct:false}
+ ],note:"「誰が使ったのか」という情報がほしい相手に対して誰に尋ねるべきかという情報入手のための手はずを答えているのが(A)。一方、問いかけの前提が覆されているのが(D)。プレゼンテーションの場にいたという前提を覆しています。"},
+
+{code:"CD1-29",type:1,en:"Where did you park your car this morning?",ja:"今朝どこに車を停めましたか。",
+ choices:[
+  {en:"It won't open until eight o'clock.",ja:"そこは8時まで開きません。",correct:false},
+  {en:"Rodrigo gave me a ride today.",ja:"Rodrigoが今日は乗せてきてくれました。",correct:true},
+  {en:"I'm not sure which street it was on.",ja:"どの通りだったかはっきり分かりません。",correct:true},
+  {en:"There is a nice hiking trail.",ja:"いいハイキングコースがあります。",correct:false},
+  {en:"I'll help you find one.",ja:"あなたが1つ見つけるのを手伝います。",correct:false}
+ ],note:"「どこに車を停めたのか」という情報を求める相手に、「今日は自分の車で来ていない(=停めてもいない)」と問いかけの前提を覆しているのが(B)。一方、分からないと答えているのが(C)。"},
+
+{code:"CD1-30",type:1,en:"How can I buy a concert ticket online?",ja:"どうすればオンラインでコンサートのチケットを買えますか。",
+ choices:[
+  {en:"Two tickets for the balcony.",ja:"バルコニー席のチケットを2枚。",correct:false},
+  {en:"Are you a member of this theater?",ja:"あなたはこの劇場の会員ですか。",correct:true},
+  {en:"In front of the box office.",ja:"チケット売り場の前で。",correct:false},
+  {en:"These tickets are still valid.",ja:"これらのチケットはまだ有効です。",correct:false},
+  {en:"I'll show you on our Web site.",ja:"我々のウェブサイト上でお見せします。",correct:true}
+ ],note:"「オンラインでのチケット購入法」という情報を求める相手に対して、質問で返すパターンが(B)。会員かどうかを確認してから、必要な手続きを案内する流れになるのでしょう。一方、「ウェブサイト上で見せる」と情報入手のための手はずを答えているのが(E)。"},
+
+{code:"CD1-31",type:2,en:"Didn't Jane help organize the art fair last year?",ja:"Janeは去年、美術展示会の運営を手伝っていませんでしたか。",
+ choices:[
+  {en:"The normal fare was raised.",ja:"通常運賃は値上げされました。",correct:false},
+  {en:"You should ask her.",ja:"彼女に聞いたほうがいいです。",correct:true},
+  {en:"The one held in the central plaza?",ja:"中央広場で行われた会のことですか。",correct:true},
+  {en:"She is very organized.",ja:"彼女はとてもきちんとしています。",correct:false},
+  {en:"I have no idea.",ja:"私は全く分かりません。",correct:true}
+ ],note:"「Janeが運営を手伝ったかどうか」という情報がほしい相手に対して、情報入手のための手はずを答えているのが(B)。直接本人に尋ねるように伝えています。一方、質問で返すパターンが(C)。該当するイベントがどれなのか、確認のために尋ねています。知らないと答えているのが(E)。"},
+
+{code:"CD1-32",type:2,en:"Your article has been published in a medical journal, hasn't it?",ja:"あなたの記事は医学雑誌に掲載されたのですよね。",
+ choices:[
+  {en:"Would you like to read it?",ja:"それを読みたいですか。",correct:true},
+  {en:"They are on the editorial staff.",ja:"彼らは編集スタッフです。",correct:false},
+  {en:"It's a monthly subscription plan.",ja:"それは毎月の購読プランです。",correct:false},
+  {en:"Yes, I work in public relations.",ja:"はい、私は広報の仕事をしています。",correct:false},
+  {en:"I'm still waiting for the feedback.",ja:"私はまだ意見を待っています。",correct:true}
+ ],note:"「雑誌に掲載されたのか」という問いかけに対し、Yes/Noを省略して答えているのが(A)(E)。(A)にはYes、(E)にはNoを頭の中で補いながら聞くと、正解だと判断しやすくなります。"},
+
+{code:"CD1-33",type:2,en:"Should I book train tickets now or wait until the last minute?",ja:"電車の切符を今予約すべきでしょうか。それともギリギリまで待つべきですか。",
+ choices:[
+  {en:"Are reservations really necessary at this time of the year?",ja:"この時期に、予約は本当に必要なのですか。",correct:true},
+  {en:"You'd better check with Dr. Yang.",ja:"Yang博士に確認したほうがいいです。",correct:true},
+  {en:"I already took care of it.",ja:"私が既に手配済みです。",correct:true},
+  {en:"The training starts next week.",ja:"研修は来週始まります。",correct:false},
+  {en:"Which platform will it depart from?",ja:"どのホームからそれは出発しますか。",correct:false}
+ ],note:"「電車の予約をする時期」に関する意見がほしい相手に対して、予約自体が必要かどうかを確認するために質問で返すパターンが(A)。情報入手のための手はずを答えているのが(B)。一方、「まだ予約をしていない」ことを前提にした質問に対し、それを覆す情報を伝えているパターンが(C)。"},
+
+{code:"CD1-34",type:3,en:"Would you mind dropping this off at the architect's office?",ja:"差し支えなければ、設計士の事務所に、これを届けてくれませんか。",
+ choices:[
+  {en:"It's not mine.",ja:"それは私のではありません。",correct:false},
+  {en:"In fact, it's freezing in here.",ja:"実際、この中は凍えるほど寒いです。",correct:false},
+  {en:"I think they are closed for the holidays.",ja:"休暇で彼らは閉鎖していると思います。",correct:true},
+  {en:"I don't know where it is.",ja:"事務所がどこにあるか知らないんです。",correct:true},
+  {en:"The floor plan is not ready yet.",ja:"見取り図はまだ準備できていません。",correct:false}
+ ],note:"「設計士の事務所に届け物をする」というアクションが必要だと感じ、依頼している相手に対して、「先方は休暇中(だから届けても無駄)」と伝え「届け物をすべき」という前提を覆しているのが(C)。一方、(場所を)知らないと答えているのが(D)。"},
+
+{code:"CD1-35",type:3,en:"Shall I show you how to take pictures with your new cell phone?",ja:"あなたの新しい携帯電話で、写真を撮る方法を見せましょうか。",
+ choices:[
+  {en:"I usually use my digital camera.",ja:"私は普段デジタルカメラを使います。",correct:true},
+  {en:"It seems rather complicated.",ja:"かなり複雑そうですね。",correct:true},
+  {en:"The musical show is quite popular.",ja:"そのミュージカルはかなり人気です。",correct:false},
+  {en:"I forgot to pay the phone bill.",ja:"私は電話料金を払うのを忘れました。",correct:false},
+  {en:"They are all sold out.",ja:"それらは全て売り切れです。",correct:false}
+ ],note:"「写真の撮り方を見せる」というアクションが必要だと感じ、自ら申し出ている相手に対し省略して答えているのが(A)(B)。(A)にはNo(thanks)、(B)にはYesを頭の中で補うと正解だと判断しやすくなります。"},
+
+{code:"CD1-36",type:3,en:"Why don't we go see a movie tonight after work?",ja:"今夜仕事の後、映画を見に行きませんか。",
+ choices:[
+  {en:"Three animated films.",ja:"3本のアニメ映画です。",correct:false},
+  {en:"Who else is coming?",ja:"他に誰が行きますか。",correct:true},
+  {en:"Will you move forward a little?",ja:"もう少し前に移動してもらえませんか。",correct:false},
+  {en:"I'm expecting an important call at seven.",ja:"7時に大事な電話がかかってくる予定です。",correct:true},
+  {en:"Sure, I don't mind working late.",ja:"いいですよ。私は残業しても構いません。",correct:false}
+ ],note:"「仕事の後の映画鑑賞」を提案している相手に対し、質問で返すパターンが(B)。他に一緒に行くメンバーを確認してから決断したいようです。一方、SorryやUnfortunatelyを省略して答えているのが(D)。"},
+
+{code:"CD1-37",type:1,en:"Which conference rooms are available this afternoon?",ja:"今日の午後、どの会議室が使えますか。",
+ choices:[
+  {en:"Twelve people will attend the meeting.",ja:"12名がその会議に出席する予定です。",correct:false},
+  {en:"We may need to reschedule it.",ja:"私たちは予定を変更する必要があるかもしれません。",correct:false},
+  {en:"I'm afraid they're all taken.",ja:"残念ながら全てふさがっています。",correct:true}
+ ],note:"「空室があるはず」という前提の下「使える会議室はどれか」と問いかける相手に対し、その前提を覆し「空いている部屋はない」と伝えているのが(C)。誤答は言葉の連想を利用。(A)(B)はそれぞれ、発話のconferenceから連想されるmeeting、rescheduleでひっかけようとしています。"},
+
+{code:"CD1-38",type:2,en:"You haven't visited the construction site yet, have you?",ja:"あなたはまだ建設現場に行っていませんよね。",
+ choices:[
+  {en:"I went there this morning.",ja:"私はそこに今朝行きました。",correct:true},
+  {en:"Everything is on schedule.",ja:"全て予定通りです。",correct:false},
+  {en:"I'm not the Web site manager.",ja:"私はウェブサイトの管理人ではありません。",correct:false}
+ ],note:"「建設現場に行ったかどうか」という情報を求められて、省略して答えている(A)が正解。Yesを補うと判断しやすいですね。(C)は発話で使われているsiteを使って惑わせようとしています。"},
+
+{code:"CD1-39",type:3,en:"Could you call the car rental agency for me?",ja:"私の代わりにレンタカー業者に電話してくれませんか。",
+ choices:[
+  {en:"The one near the station?",ja:"駅のそばの業者ですか。",correct:true},
+  {en:"No, I bought this vehicle.",ja:"いいえ、私はこの車を買いました。",correct:false},
+  {en:"Sure, here's my phone.",ja:"もちろんです。私の電話をどうぞ。",correct:false}
+ ],note:"「レンタカー業者に電話する」というアクションを依頼されて、具体的に「どこに電話すればいいか」と確認するために質問返しで答えている(A)が正解。誤答は、発話のcar、callからそれぞれ(B)vehicle、(C)phoneという連想させる言葉を使っています。"},
+
+{code:"CD1-40",type:1,en:"When will we launch the new line of eyewear?",ja:"いつ、私たちは眼鏡の新シリーズを発売する予定なのですか。",
+ choices:[
+  {en:"In my presentation materials.",ja:"私のプレゼンテーション資料の中です。",correct:false},
+  {en:"Karen would know that.",ja:"Karenならそれを知っていると思います。",correct:true},
+  {en:"I can't attend the luncheon.",ja:"私はその昼食会には出席できません。",correct:false}
+ ],note:"「新製品の発売時期はいつか」という情報を求められて、情報入手のための手はずを答えている(B)が正解。「(私ではなく)Karenさんに聞けば分かる」という情報を伝えています。また、(C)のluncheonは要注意。発話のlaunchとの音の類似を利用した頻出のひっかけです。"},
+
+{code:"CD1-41",type:2,en:"Did you bring your umbrella?",ja:"傘を持って来ましたか。",
+ choices:[
+  {en:"Sure, I can take you there.",ja:"もちろん。私はあなたをそこへ連れていけます。",correct:false},
+  {en:"It rained heavily during the harvest season.",ja:"収穫時期に、激しい雨が降りました。",correct:false},
+  {en:"But the weather seems to be nice today.",ja:"だけど、今日は天気がよさそうです。",correct:true}
+ ],note:"「傘を持って来たかどうか」という発話は、「傘が必要ですよ」と暗に忠告していると考えられます。これに対し、Noを省略して答えている(C)が正解。Butから始まる応答は、依頼、提案、忠告、申し出などに対して、「そうは言うものの」と相手に異論を唱える際によく登場します。誤答(B)は発話のumbrellaから連想されるrainという言葉を使ったひっかけです。"},
+
+{code:"CD1-42",type:2,en:"Didn't Melissa inspect that riverside property?",ja:"Melissaは、あの川沿いの不動産を視察しなかったのですか。",
+ choices:[
+  {en:"Was she supposed to?",ja:"彼女がそうすることになっていたのですか。",correct:true},
+  {en:"She was wearing proper clothing.",ja:"彼女はきちんとした服装を身に着けていました。",correct:false},
+  {en:"I respect her decision.",ja:"私は彼女の決断を尊重します。",correct:false}
+ ],note:"「視察したかどうか」という情報を求められて、彼女がその作業をすべきだったのかどうか確認するために質問返しで答えている(A)が正解。誤答は発話のproperty、inspectの類音、(B)proper、(C)respectでひっかけようとしています。"},
+
+{code:"CD1-43",type:2,en:"Should we choose someone to attend the charity event?",ja:"慈善行事に出席する人を誰か選ぶべきでしょうか。",
+ choices:[
+  {en:"We're accepting donations now.",ja:"私たちは現在、寄付を受付中です。",correct:false},
+  {en:"He was selected for promotion.",ja:"彼は選ばれて昇格しました。",correct:false},
+  {en:"Claire has already offered to.",ja:"既にClaireが申し出てくれました。",correct:true}
+ ],note:"「誰かを選ぶ」というアクションが必要ではないかと問いかけられて、Noを省略して答えている(C)が正解。「既に申し出た人がいる=選ぶ必要はない」ということですね。誤答(A)は、発話のcharityからdonationsを連想させるひっかけ。さらに、chooseの類義語selectで惑わせようとしているのは(B)です。"},
+
+{code:"CD1-44",type:1,en:"What would be a good place to hold a company party?",ja:"会社のパーティーを開くのによい場所は、どれでしょうか。",
+ choices:[
+  {en:"How many are you expecting?",ja:"何人が来ると思っていますか。",correct:true},
+  {en:"I will be out of town that week.",ja:"私はその週、出かけています。",correct:false},
+  {en:"We have a family picnic every year.",ja:"私たちは毎年、家族でピクニックをしています。",correct:false}
+ ],note:"「パーティーをするのによい場所は」という情報を求められて、参加人数を確認するために質問返しで答えている(A)が正解。誤答(C)は発話のpartyから連想されるpicnicでひっかけようとしています。"},
+
+{code:"CD1-45",type:2,en:"Can you update the shipping document now, or shall I?",ja:"今すぐ出荷書類を更新できますか、それとも私がやりましょうか。",
+ choices:[
+  {en:"Yes, it'll be shipped today.",ja:"はい、それは本日出荷される予定です。",correct:false},
+  {en:"Kyle's just done it.",ja:"Kyleがちょうどそれを終えたところです。",correct:true},
+  {en:"Here are two copies.",ja:"ここに2部あります。",correct:false}
+ ],note:"「あなたがやってくれるのか、それとも私がやるべきか」という2択を迫っているのは「まだ誰もやっていない」ことを前提にしているから。それを「Kyleが既にやってくれている」と答えて、相手の前提を覆しているのが(B)。誤答(C)は発話のdocumentからcopiesを連想させてひっかけようとしています。さらに、(A)は冒頭のYesを聞いた瞬間に誤答だと判断したいですね。2択を迫る選択疑問文では、Yes/Noで答えることはないためです。"},
+
+{code:"CD1-46",type:4,en:"We sent the surveys to our past customers this morning.",ja:"私たちは今朝、以前の顧客に調査票を送りました。",
+ choices:[
+  {en:"I'm interested in their responses.",ja:"私は彼らの回答に興味があります。",correct:true},
+  {en:"We should send them soon.",ja:"私たちはそれらをすぐに送るべきです。",correct:false},
+  {en:"What questions should we ask?",ja:"私たちはどんな質問をするべきでしょうか。",correct:false}
+ ],note:"この発話は何かを相手に問いかけているわけではなく、話者が持っている情報を伝えているだけ。正解(A)は感想・意見を伝えるパターン。「調査票を既に送ったよ」という情報に対して、「回答結果が楽しみだ」と、自分の抱いた感想を伝えています。"},
+
+{code:"CD1-47",type:4,en:"My flight has been canceled due to inclement weather.",ja:"悪天候のため、私のフライトはキャンセルされました。",
+ choices:[
+  {en:"That's so unfortunate.",ja:"それはとても残念です。",correct:true},
+  {en:"We charge cancellation fees.",ja:"私どもはキャンセル料を請求します。",correct:false},
+  {en:"You'd better stay with us tonight.",ja:"今夜はうちに泊まるといいです。",correct:true},
+  {en:"That depends on the weather.",ja:"それは天気によります。",correct:false},
+  {en:"The airport is not so far.",ja:"その空港はそんなに遠くありません。",correct:false}
+ ],note:"「フライトがキャンセルになった」という問題を報告している相手に対して、感想をシンプルに伝えているのが(A)。一方、移動手段のない相手に対して「うちに泊まっていい」と問題に対処するべく提案するパターンが(C)。"},
+
+{code:"CD1-48",type:4,en:"The stockroom is very hot and humid.",ja:"倉庫がとても蒸し暑いです。",
+ choices:[
+  {en:"It's out of stock.",ja:"それは在庫切れです。",correct:false},
+  {en:"Shall I open the window?",ja:"窓を開けましょうか。",correct:true},
+  {en:"Yes, it's very uncomfortable.",ja:"ええ、とても不快です。",correct:true},
+  {en:"I prefer winter sports.",ja:"私は冬のスポーツのほうが好きです。",correct:false},
+  {en:"The air-conditioner isn't working properly.",ja:"空調がちゃんと効いていません。",correct:true}
+ ],note:"「蒸し暑い」という問題を伝えている相手に対して、解決策を提案するパターンが(B)。一方で、相手に同調した意見を伝えているのが(C)。さらには、関連情報を提供するパターンが(E)。なぜ「蒸し暑い」という問題が発生しているのか伝えています。"},
+
+{code:"CD1-49",type:4,en:"I found some typos in the financial report.",ja:"私は財務報告書にタイプミスをいくつか見つけました。",
+ choices:[
+  {en:"He was appointed as the new CFO.",ja:"彼は最高財務責任者に任命されました。",correct:false},
+  {en:"How many were there?",ja:"いくつありましたか。",correct:true},
+  {en:"I'll show you a prototype.",ja:"試作品をあなたにお見せします。",correct:false},
+  {en:"Actually, I've already corrected them.",ja:"実は、既に私がそれらを修正しました。",correct:true},
+  {en:"They are imported from Italy.",ja:"それらはイタリアから輸入されています。",correct:false}
+ ],note:"「タイプミス発見」という問題を報告する相手に対して、質問で返すパターンが(B)。事態をより詳細に把握しようと試みています。一方で、「既に解決済みだ」と関連情報を提供しているのが(D)。"},
+
+{code:"CD1-50",type:4,en:"I'd like to make a dinner reservation for six o'clock tonight.",ja:"今夜6時に、夕食の予約を入れたいです。",
+ choices:[
+  {en:"How was the food there?",ja:"そこの料理はどうでしたか。",correct:false},
+  {en:"What's the size of your group?",ja:"何名様ですか。",correct:true},
+  {en:"Do they have a vegetarian menu?",ja:"そこには菜食メニューがありますか。",correct:false},
+  {en:"We prefer a table on the patio.",ja:"私たちは中庭のテーブルを希望します。",correct:false},
+  {en:"I'm afraid we are fully booked.",ja:"残念ながら満席です。",correct:true}
+ ],note:"「予約をしたい」という要望に対して、質問で返すパターンが(B)。相手の要望をより明確にしてから回答する流れです。一方、Noという答えを間接的に伝える関連情報を提供しているのが(E)。"},
+
+{code:"CD1-51",type:4,en:"You should probably install the latest security software.",ja:"あなたはおそらく、最新のセキュリティソフトウェアをインストールすべきです。",
+ choices:[
+  {en:"That's exactly what I thought.",ja:"それはまさに私が考えていたことです。",correct:true},
+  {en:"It is rather sturdy.",ja:"それはずいぶん頑丈です。",correct:false},
+  {en:"How much would that cost?",ja:"それはいくらかかりますか。",correct:true},
+  {en:"I won't be late for class.",ja:"私は授業には遅れません。",correct:false},
+  {en:"I'll need the manager's approval.",ja:"私は部長の承認が必要です。",correct:true}
+ ],note:"「ソフトウェアをインストールすべき」という提案に対して、相手に同調した意見を伝えているのが(A)。提案内容の詳細(=金額)を確認するために質問で返すパターンが(C)。関連情報を提供するパターンが(E)。"},
+
+{code:"CD1-52",type:4,en:"I can fax the revised itinerary, if you like.",ja:"ご希望でしたら、修正済みの旅程表をファクスできますよ。",
+ choices:[
+  {en:"Yes, I work in IT support.",ja:"ええ、ITサポート業務をしています。",correct:false},
+  {en:"We don't sell fax machines.",ja:"私たちはファクス機を売っていません。",correct:false},
+  {en:"You could e-mail it to me instead.",ja:"代わりにEメールで送ってもらってもいいですよ。",correct:true},
+  {en:"What's been changed from the previous version?",ja:"何が以前のバージョンより変更されたのですか。",correct:true},
+  {en:"I've already checked it online.",ja:"既にオンラインで確認済みです。",correct:true}
+ ],note:"「ファクスしてあげよう」という申し出に対して、Eメール送信でもいいと提案しているのが(C)。「変更内容」を確認しようと質問で返すパターンが(D)。一方で、「既に確認済みだ」と関連情報を提供しているのが(E)です。"},
+
+{code:"CD1-53",type:4,en:"The staff meeting will start at seven tomorrow evening.",ja:"スタッフ会議は明日の夜7時に始まります。",
+ choices:[
+  {en:"It seems rather late.",ja:"それはずいぶん遅いようです。",correct:true},
+  {en:"We need to hire more staff.",ja:"もっとスタッフを雇う必要があります。",correct:false},
+  {en:"Is it mandatory?",ja:"それは出席が必須ですか。",correct:true},
+  {en:"It will be launched next week.",ja:"それは来週発売される予定です。",correct:false},
+  {en:"But I'll have a teleconference at seven thirty.",ja:"だけど、私は7時30分にテレビ会議を予定しています。",correct:true}
+ ],note:"「スタッフ会議の開始時間」という情報に対して、「遅いスタート時間だね」と感想を伝えているのが(A)。「出席が必須なのか」と質問で返すパターンが(C)。(E)は関連情報を提供するパターンで、同時間帯に予定が入っているという困った状態だと伝えています。"},
+
+{code:"CD1-54",type:4,en:"I've found a caterer for our annual celebration in May.",ja:"5月に行う例年の祝宴にケータリングしてくれる業者を見つけました。",
+ choices:[
+  {en:"For our wedding anniversary.",ja:"私たちの結婚記念日のためです。",correct:false},
+  {en:"I thought we decided to postpone it.",ja:"それは延期が決まったと思っていました。",correct:true},
+  {en:"Did you tell them our budget?",ja:"彼らにこちらの予算は伝えましたか。",correct:true},
+  {en:"I may have to go there by train.",ja:"私はそこへ電車で行かなくてはならないかもしれません。",correct:false},
+  {en:"Cakes from a popular bakery.",ja:"人気のパン店のケーキです。",correct:false}
+ ],note:"「ケータリング業者を見つけた」という情報に対して、「行事は延期されたはず」という関連情報を提供するパターンが(B)。どこまで話が進んでいるのか質問で確認しようとしているのが(C)です。"},
+
+{code:"CD1-55",type:4,en:"Our new logo looks simple but attractive.",ja:"新しいロゴはシンプルですが、魅力的です。",
+ choices:[
+  {en:"That's not what Mary thinks.",ja:"Maryはそう思っていません。",correct:true},
+  {en:"Cargo will be unloaded soon.",ja:"貨物はまもなく荷降ろしされます。",correct:false},
+  {en:"I don't really want to go.",ja:"私はあまり行きたくないんです。",correct:false},
+  {en:"Yes, much better than the original one.",ja:"はい、最初のものよりずっといいです。",correct:true},
+  {en:"Could you take a look?",ja:"ちょっと見てくれませんか。",correct:false}
+ ],note:"新しいロゴを称賛する相手に対して、「そう思わない人もいる」と関連情報を提供しているのが(A)。一方(D)は、相手に同調した感想を伝えています。"},
+
+{code:"CD1-56",type:4,en:"The machine won't print my receipt.",ja:"この機械では私の領収書を印刷できないんです。",
+ choices:[
+  {en:"Keep it with you.",ja:"それをそのままお持ちください。",correct:false},
+  {en:"Let me take a look.",ja:"ちょっと見せてください。",correct:true},
+  {en:"Here are the blueprints.",ja:"ここに図面があります。",correct:false}
+ ],note:"「印刷できない」という問題点を訴える人に対して、「見てあげる」と改善策を提案している(B)が正解。print→(C)blueprintという類音語のひっかけ、receipt「領収書」→(A)keep it with you「保管する」という連想を狙ったひっかけに要注意です。"},
+
+{code:"CD1-57",type:4,en:"Congratulations on your promotion!",ja:"昇進おめでとうございます!",
+ choices:[
+  {en:"No, I'll relocate next week.",ja:"いいえ、私は来週引っ越します。",correct:false},
+  {en:"Are these the promotional materials?",ja:"これらが販売促進用の資料ですか。",correct:false},
+  {en:"I never expected it, honestly.",ja:"正直なところ、私は全く期待していませんでした。",correct:true}
+ ],note:"昇進を祝う言葉に対して、「期待していなかった」と控えめに感想を伝えている(C)が正解。promotion→(B)promotionalという派生語を利用したひっかけに要注意。"},
+
+{code:"CD1-58",type:4,en:"Mr. Singh has been to ten countries in the last two years.",ja:"Singhさんはここ2年間で10カ国を訪れました。",
+ choices:[
+  {en:"Our headquarters is located in Singapore.",ja:"私たちの本社はシンガポールにあります。",correct:false},
+  {en:"Does he enjoy traveling that much?",ja:"彼は旅行がそんなに好きなのですか。",correct:true},
+  {en:"Yes, I joined the company a year ago.",ja:"はい、私はその会社に1年前に入社しました。",correct:false}
+ ],note:"「10カ国を訪れた」という情報に対して、「そんなに旅行が好きなのですか」と質問で返している(B)が正解。countries→(A)Singaporeという具体的な国名で惑わせようとしたり、two years→(C)a yearと、年数でひっかけようとしたりしています。"},
+
+{code:"CD1-59",type:4,en:"I'd like to have my order delivered to a different address.",ja:"私の注文品を別の住所に届けてほしいのですが。",
+ choices:[
+  {en:"Unfortunately, we already shipped it.",ja:"残念ながら、既に出荷いたしました。",correct:true},
+  {en:"Our address is listed on our Web site.",ja:"私どもの住所はウェブサイト上に記載しております。",correct:false},
+  {en:"No, the order has not changed.",ja:"いいえ、その注文は変わっていません。",correct:false}
+ ],note:"「別住所に送ってほしい」という要望に対し、「既に出荷済み」という情報を与えて要望には応えられないことを伝えている(A)が正解。誤答(B)(C)はそれぞれaddress、orderと同じ語で惑わせようとしているだけで、要望に対する応答にはなっていません。"},
+
+{code:"CD1-60",type:4,en:"This is the third month in a row that our sales have dropped.",ja:"これで3カ月連続、売上が落ちました。",
+ choices:[
+  {en:"That's usual for this time of year.",ja:"1年のこの時期なら普通です。",correct:true},
+  {en:"I'll go on a sailing trip, though.",ja:"だけど、私は船の旅に出かける予定です。",correct:false},
+  {en:"Actually, it's only a two-month course.",ja:"実は、それは2カ月だけの講座なのです。",correct:false}
+ ],note:"「売上が連続ダウン」と伝えられて、全く動じず「例年のことだよ」という情報を提供して答えている(A)が正解。sales→(B)sailingという類音語のひっかけや、third month→(C)two-monthと同じmonthを使って惑わせようとしています。"},
+
+{code:"CD1-61",type:4,en:"I need a replacement for this phone I purchased last week.",ja:"先週買ったこの電話を交換してほしいのですが。",
+ choices:[
+  {en:"You got a great deal on these earphones.",ja:"あなたはこのイヤホンに関してとてもお得なお買い物をされました。",correct:false},
+  {en:"May I ask why you're unhappy with this one?",ja:"これにご不満な理由をうかがってもいいですか。",correct:true},
+  {en:"Can you give me a refund?",ja:"返金してもらえますか。",correct:false}
+ ],note:"「交換してほしい」という要望に対して「その理由は何か」と、質問で返している(B)が正解。phone→(A)earphonesという類音語のひっかけ、そして、replacement「交換」→(C)refund「返金」という関連語を使ったひっかけにも要注意。"}
+];
+
+// 実教材35問には共通で「サンプル問題」ではなく「教材730」タグ・source:builtin を付与
+rawQuestions.forEach(q=>{
+  q.source = "builtin";
+  q.tags = ["730_Unit2-3"];
+});
+
+const typeLabel = {1:"① WH疑問文", 2:"② 一般・否定・付加・選択疑問文", 3:"③ 依頼・提案・申し出", 4:"④ 平叙文"};
+const typeBadgeClass = {1:"t1", 2:"t2", 3:"t3", 4:"t4"};
+const STORAGE_KEY = "toeic_part2_v2";
+
+/* ---------- localStorage ---------- */
+function loadStore(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return {customQuestions:[], stats:{}};
+}
+function saveStore(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
+let store = loadStore();
+
+function allQuestions(){ return rawQuestions.concat(store.customQuestions); }
+
+function allTags(){
+  const set = new Set();
+  allQuestions().forEach(q=> (q.tags||[]).forEach(t=> set.add(t)));
+  return [...set].sort();
+}
+
+function getStat(code){
+  if(!store.stats[code]) store.stats[code] = {attempts:0, correct:0};
+  return store.stats[code];
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ---------- 再生速度 ---------- */
+let currentRate = 0.95;
+function onSpeedChange(){
+  currentRate = parseFloat(document.getElementById("speedSelect").value);
+}
+
+/* ---------- 音声再生(質問+選択肢をまとめて連続再生) ---------- */
+function speakQuestion(item, btn){
+  if(!('speechSynthesis' in window)){
+    showToast("この端末は音声読み上げに対応していません");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const texts = [item.en, ...item.choices.map((c,i)=> String.fromCharCode(65+i) + ". " + c.en)];
+  if(btn){ btn.classList.add("playing"); btn.textContent = "🔊 再生中..."; }
+
+  let i = 0;
+  function playNext(){
+    if(i >= texts.length){
+      if(btn){ btn.classList.remove("playing"); btn.textContent = "▶ 音声を再生"; }
+      return;
+    }
+    const u = new SpeechSynthesisUtterance(texts[i]);
+    u.lang = "en-US";
+    u.rate = currentRate;
+    u.onend = ()=>{ i++; playNext(); };
+    u.onerror = ()=>{ if(btn){ btn.classList.remove("playing"); btn.textContent = "▶ 音声を再生"; } };
+    window.speechSynthesis.speak(u);
+  }
+  playNext();
+}
+
+/* ---------- 統計描画 ---------- */
+function renderStatsBar(){
+  const qs = allQuestions();
+  let attempts=0, correct=0;
+  qs.forEach(q=>{ const s=getStat(q.code); attempts+=s.attempts; correct+=s.correct; });
+  const rate = attempts>0 ? Math.round(correct/attempts*100) : 0;
+  document.getElementById("statsBar").innerHTML = `
+    <div class="stat-pill"><b>${qs.length}</b>総問題数</div>
+    <div class="stat-pill"><b>${attempts}</b>総解答回数</div>
+    <div class="stat-pill"><b>${correct}</b>総正解数</div>
+    <div class="stat-pill"><b>${rate}%</b>累計正答率</div>
+  `;
+
+  let rows = "";
+  for(let t=1;t<=4;t++){
+    const tqs = qs.filter(q=>q.type===t);
+    let a=0,c=0;
+    tqs.forEach(q=>{ const s=getStat(q.code); a+=s.attempts; c+=s.correct; });
+    const r = a>0 ? Math.round(c/a*100) : 0;
+    const rateCls = a===0 ? "" : (r>=70 ? "rate-ok" : "rate-warn");
+    rows += `<tr><td>${typeLabel[t]}</td><td>${tqs.length}問</td><td>${a}回</td><td class="${rateCls}">${a>0? r+"%" : "-"}</td></tr>`;
+  }
+  document.getElementById("typeStatsTable").innerHTML = `
+    <tr><th>タイプ</th><th>出題数</th><th>解答回数</th><th>正答率</th></tr>
+    ${rows}
+  `;
+}
+
+function renderTagOptions(){
+  const filterEl = document.getElementById("tagFilter");
+  const current = filterEl.value;
+  const tags = allTags();
+  filterEl.innerHTML = '<option value="">すべて表示</option>' +
+    tags.map(t=>`<option value="${t}">${t}</option>`).join("");
+  if(tags.includes(current)) filterEl.value = current;
+
+  const datalist = document.getElementById("tagSuggestions");
+  datalist.innerHTML = tags.map(t=>`<option value="${t}">`).join("");
+}
+
+/* ---------- フィルタ ---------- */
+let currentList = [];
+function onFilterChange(){ shuffleAndRender(); }
+
+function shuffleAndRender(){
+  renderTagOptions();
+  const typeF = parseInt(document.getElementById("typeFilter").value, 10);
+  const tagF = document.getElementById("tagFilter").value;
+  let pool = allQuestions();
+  if(typeF !== 0) pool = pool.filter(q=>q.type===typeF);
+  if(tagF) pool = pool.filter(q=> (q.tags||[]).includes(tagF));
+  currentList = shuffle(pool);
+  render();
+}
+
+/* ---------- 描画 ---------- */
+const quizEl = document.getElementById("quiz");
+
+function render(){
+  quizEl.innerHTML = "";
+  if(currentList.length === 0){
+    quizEl.innerHTML = '<p class="lead">この条件に一致する問題はまだありません。</p>';
+    return;
+  }
+  currentList.forEach((item)=>{
+    const stat = getStat(item.code);
+    const isCustom = item.source === "custom";
+
+    const card = document.createElement("div");
+    card.className = "qcard";
+
+    const codeEl = document.createElement("div");
+    codeEl.className = "qcode";
+    codeEl.textContent = item.code;
+    card.appendChild(codeEl);
+
+    const meta = document.createElement("div");
+    meta.className = "qmeta";
+    meta.innerHTML = `
+      <div class="qmeta-left">
+        <span class="badge ${typeBadgeClass[item.type]} hidden-type">${typeLabel[item.type]}</span>
+        ${isCustom ? '<span class="badge custom">追加問題</span>' : ''}
+      </div>
+      <span class="review-count">解答 ${stat.attempts}回 / 正解 ${stat.correct}回</span>
+    `;
+    card.appendChild(meta);
+
+    if(item.tags && item.tags.length){
+      const tagRow = document.createElement("div");
+      tagRow.className = "tag-row";
+      tagRow.innerHTML = item.tags.map(t=>`<span class="tag-pill">${t}</span>`).join("");
+      card.appendChild(tagRow);
+    }
+
+    // 再生ボタン行
+    const playRow = document.createElement("div");
+    playRow.className = "play-row";
+    const playBtn = document.createElement("button");
+    playBtn.className = "play-btn";
+    playBtn.textContent = "▶ 音声を再生";
+    playBtn.onclick = ()=> speakQuestion(item, playBtn);
+    playRow.appendChild(playBtn);
+    card.appendChild(playRow);
+
+    // 問題文(非表示スロット)
+    const qtext = document.createElement("div");
+    qtext.className = "qtext";
+    qtext.innerHTML = `<div class="placeholder">🔒 解答すると問題文が表示されます</div><div class="en">${item.en}</div><div class="ja">${item.ja}</div>`;
+    card.appendChild(qtext);
+
+    const ul = document.createElement("ul");
+    ul.className = "choices";
+    const selected = new Set();
+
+    item.choices.forEach((c, ci)=>{
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="letter">${String.fromCharCode(65+ci)}</span><span class="ctext"><span class="placeholder">🔒 非表示</span><span class="en">${c.en}</span><span class="ja">${c.ja}</span></span>`;
+      li.onclick = ()=>{
+        if(li.dataset.graded) return;
+        li.classList.toggle("selected");
+        if(li.classList.contains("selected")) selected.add(ci); else selected.delete(ci);
+      };
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+
+    const actions = document.createElement("div");
+    actions.className = "qcard-actions";
+    const gradeBtn = document.createElement("button");
+    gradeBtn.className = "btn";
+    gradeBtn.textContent = "採点する";
+    const resultLine = document.createElement("span");
+    resultLine.className = "result-line";
+
+    gradeBtn.onclick = ()=>{
+      if(selected.size === 0){
+        resultLine.textContent = "選択肢を1つ以上選んでください";
+        resultLine.className = "result-line show ng";
+        return;
+      }
+      const correctSet = new Set();
+      item.choices.forEach((c,ci)=>{ if(c.correct) correctSet.add(ci); });
+      let isCorrect = correctSet.size === selected.size;
+      if(isCorrect){ for(const i of selected){ if(!correctSet.has(i)){ isCorrect=false; break; } } }
+
+      [...ul.children].forEach((li, ci)=>{
+        li.dataset.graded = "1";
+        li.classList.add("graded");
+        if(item.choices[ci].correct) li.classList.add("correct-answer");
+        else if(li.classList.contains("selected")) li.classList.add("wrong-selected");
+      });
+
+      meta.querySelector(".badge").classList.remove("hidden-type");
+      qtext.classList.add("revealed");
+
+      stat.attempts += 1;
+      if(isCorrect) stat.correct += 1;
+      saveStore();
+      meta.querySelector(".review-count").textContent = `解答 ${stat.attempts}回 / 正解 ${stat.correct}回`;
+
+      resultLine.textContent = isCorrect ? "◯ 正解" : "✕ 不正解";
+      resultLine.className = "result-line show " + (isCorrect ? "ok" : "ng");
+
+      noteBox.classList.add("show");
+      gradeBtn.disabled = true;
+      renderStatsBar();
+    };
+
+    actions.appendChild(gradeBtn);
+    actions.appendChild(resultLine);
+    card.appendChild(actions);
+
+    const noteBox = document.createElement("div");
+    noteBox.className = "note-box";
+    noteBox.textContent = "解説: " + (item.note || "(この設問には解説の記載がありません)");
+    card.appendChild(noteBox);
+
+    quizEl.appendChild(card);
+  });
+}
+
+/* ---------- 問題追加 ---------- */
+function addQuestion(){
+  const type = parseInt(document.getElementById("fType").value, 10);
+  const q = document.getElementById("fQ").value.trim();
+  const qJa = document.getElementById("fQJa").value.trim();
+  const c0 = document.getElementById("fC0").value.trim();
+  const c1 = document.getElementById("fC1").value.trim();
+  const c2 = document.getElementById("fC2").value.trim();
+  const note = document.getElementById("fNote").value.trim();
+  const tagsRaw = document.getElementById("fTags").value.trim();
+  const correctIdx = parseInt(document.querySelector('input[name=fCorrect]:checked').value, 10);
+
+  if(!q || !c0 || !c1 || !c2){
+    showToast("質問文と選択肢A/B/Cをすべて入力してください");
+    return;
+  }
+
+  const tags = tagsRaw ? tagsRaw.split(",").map(t=>t.trim()).filter(t=>t.length>0) : ["未分類"];
+
+  const newQ = {
+    code: "USER-" + Date.now(),
+    type: type,
+    en: q,
+    ja: qJa,
+    choices: [
+      {en:c0, ja:"", correct: correctIdx===0},
+      {en:c1, ja:"", correct: correctIdx===1},
+      {en:c2, ja:"", correct: correctIdx===2}
+    ],
+    note: note,
+    source: "custom",
+    tags: tags
+  };
+  store.customQuestions.push(newQ);
+  saveStore();
+
+  document.getElementById("fQ").value = "";
+  document.getElementById("fQJa").value = "";
+  document.getElementById("fC0").value = "";
+  document.getElementById("fC1").value = "";
+  document.getElementById("fC2").value = "";
+  document.getElementById("fNote").value = "";
+  document.getElementById("fTags").value = "";
+  document.querySelector('input[name=fCorrect][value="0"]').checked = true;
+
+  shuffleAndRender();
+  renderStatsBar();
+  showToast("問題を追加しました");
+}
+
+/* ---------- リセット ---------- */
+function resetStats(){
+  if(!confirm("すべての正答率の記録を消去します。よろしいですか?")) return;
+  store.stats = {};
+  saveStore();
+  renderStatsBar();
+  render();
+  showToast("記録を消去しました");
+}
+
+/* ---------- トースト ---------- */
+let toastTimer;
+function showToast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ el.style.display = "none"; }, 2200);
+}
+
+renderStatsBar();
+shuffleAndRender();
+</script>
+
+</body>
+</html>
