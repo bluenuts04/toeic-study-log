@@ -509,7 +509,11 @@
       .accuracy-bar {
         display: inline-block;
         height: 20px;
-        background: linear-gradient(90deg, var(--ng-red) 0%, var(--ok-green) 100%);
+        background: linear-gradient(
+          90deg,
+          var(--ng-red) 0%,
+          var(--ok-green) 100%
+        );
         border-radius: 2px;
         min-width: 60px;
         position: relative;
@@ -570,7 +574,11 @@
 
       .distribution-bar {
         flex: 1;
-        background: linear-gradient(180deg, var(--safety-orange) 0%, var(--ok-green) 100%);
+        background: linear-gradient(
+          180deg,
+          var(--safety-orange) 0%,
+          var(--ok-green) 100%
+        );
         border-radius: 2px;
         min-width: 30px;
         position: relative;
@@ -948,9 +956,15 @@
         </div>
         <div class="filter-actions" style="margin-top: 12px">
           <div class="mode-buttons">
-            <button type="button" class="ghost-btn" id="viewListMode">📋 一覧</button>
-            <button type="button" class="ghost-btn" id="viewStatsMode">📊 統計</button>
-            <button type="button" class="ghost-btn" id="viewQuizMode">🎯 クイズ</button>
+            <button type="button" class="ghost-btn" id="viewListMode">
+              📋 一覧
+            </button>
+            <button type="button" class="ghost-btn" id="viewStatsMode">
+              📊 統計
+            </button>
+            <button type="button" class="ghost-btn" id="viewQuizMode">
+              🎯 クイズ
+            </button>
           </div>
           <div class="filter-buttons">
             <button type="button" class="ghost-btn" id="exportStats">
@@ -1040,14 +1054,16 @@
 
       <div id="statsView">
         <h2>統計ダッシュボード</h2>
-        
+
         <div class="stats-summary" id="statsSummary"></div>
-        
+
         <h3>正答率分布</h3>
         <div class="distribution-chart" id="distributionChart"></div>
 
         <div class="stats-tabs">
-          <button class="stats-tab-btn active" data-tab="by-question">問題毎</button>
+          <button class="stats-tab-btn active" data-tab="by-question">
+            問題毎
+          </button>
           <button class="stats-tab-btn" data-tab="by-field">分野毎</button>
           <button class="stats-tab-btn" data-tab="by-material">教材毎</button>
         </div>
@@ -1057,7 +1073,9 @@
             <thead id="statsTableHead"></thead>
             <tbody id="statsTableBody"></tbody>
           </table>
-          <div class="no-data-msg" id="noDataMsg" style="display: none;">データがありません</div>
+          <div class="no-data-msg" id="noDataMsg" style="display: none">
+            データがありません
+          </div>
         </div>
       </div>
 
@@ -3922,6 +3940,97 @@
           explanation:
             "場所の便利さを強調するため、主語（空港）が文末に移動した倒置形。The Benin City Airport is situated about 20 kilometers from the city center の形に戻して考える。situate の過去分詞が形容詞化した Situated（～の場所にある）を空所に補えば文意が通る。",
         },
+        {
+          material: "D10",
+          field: "7",
+          qno: "514",
+          question:
+            "Steady sales of the new digital camera have been attributed to high _____ picture quality.",
+          choices: ["its", "them", "itself", "theirs"],
+          answer: "its",
+          translation:
+            "新しいデジタルカメラの安定した売上は、その高い画質によるものである。",
+          explanation:
+            "空所後に名詞 picture quality があるので、その名詞の所有者を示す所有格が必要。単数の the new digital camera を受ける its が正解。前置詞 to の目的語が必要と考えて目的格 them を選ばないように注意。itself は再帰代名詞、 theirs は所有代名詞。",
+        },
+        {
+          material: "D10",
+          field: "7",
+          qno: "522",
+          question:
+            "Ms. Gao requested that the department staff send _____ the final draft of the sales report before submitting it to management.",
+          choices: ["she", "her", "hers", "herself"],
+          answer: "her",
+          translation:
+            "Gao さんは、部門のスタッフに、売上報告書の最終原稿を経営陣に提出する前に、彼女に送るよう要請した。",
+          explanation:
+            "send は SVOO の形を取れる。空所後に直接目的語 the final draft があるので、空所には送付相手となる間接目的語が必要。目的格の her が正解。staff と Ms. Gao は異なる人物なので、再帰代名詞 herself は不適切。",
+        },
+        {
+          material: "D10",
+          field: "7",
+          qno: "525",
+          question:
+            "The CEO, Mr. Wozniak has shown _____ to have a polished manner, confidence as a speaker, and the ability to make a deep impression on audiences.",
+          choices: ["he", "his", "him", "himself"],
+          answer: "himself",
+          translation:
+            "最高経営責任者である Wozniak 氏は、洗練された振る舞い、話し手としての自信、そして、聴衆に強い印象を与えることができる能力が自らにあることを証明した。",
+          explanation:
+            "他動詞 has shown の目的語が空所に必要。主語 Mr. Wozniak と目的語が同一人物なので、再帰代名詞 himself が正解。he は主格、his は所有格または所有代名詞、him は目的格。",
+        },
+        {
+          material: "D10",
+          field: "7",
+          qno: "531",
+          question:
+            "For _____ interested in flower arrangement, Maya Li will be providing an introductory course in the first week of May.",
+          choices: ["they", "their", "them", "those"],
+          answer: "those",
+          translation:
+            "フラワーアレンジメントに興味のある人のために、Maya Li は5月第1週に入門コースを開講する予定だ。",
+          explanation:
+            "前置詞 For の目的語が必要。空所後に過去分詞 interested 以下の修飾語句が続いているので、「～の人々」を表す those が正解。those interested in ... で「～に興味のある人々」という意味になる。them は修飾語を伴わない。",
+        },
+        {
+          material: "D10",
+          field: "7",
+          qno: "533",
+          question:
+            "You can purchase used pianos at a fraction of _____ retail value by attending a musical instrument auction in Whitehaven this weekend.",
+          choices: ["its", "my", "their", "our"],
+          answer: "their",
+          translation:
+            "今週末に開かれる Whitehaven の楽器オークションに参加すれば、市場価格のわずかな金額で中古ピアノを購入できる。",
+          explanation:
+            "空所後の名詞 retail value を修飾する所有格が必要。retail value は複数名詞 pianos の価格を指しているので、複数を受ける their が正解。its は単数名詞を受ける所有格なので数が合わない。",
+        },
+        {
+          material: "D10",
+          field: "7",
+          qno: "539",
+          question:
+            "It was a point of contention that Mr. Cox's research results were different from _____ of his colleagues.",
+          choices: ["those", "it", "them", "theirs"],
+          answer: "those",
+          translation:
+            "Cox さんの調査結果が、彼の同僚が得た結果と異なっていたことが、議論の争点だった。",
+          explanation:
+            "Mr. Cox's research results と his colleagues' research results を比較している。空所には the results を言い換える代名詞が必要なので、複数名詞の代わりに用いる those が正解。those of his colleagues で「彼の同僚の結果」という意味になる。",
+        },
+        {
+          material: "D10",
+          field: "7",
+          qno: "540",
+          question:
+            "_____ of the customers at Philips Grill have complimented the chef for his professionalism and the wonderful gourmet experience provided.",
+          choices: ["Whomever", "Several", "Someone", "Everybody"],
+          answer: "Several",
+          translation:
+            "Philips グリルの顧客の何人かは、シェフのプロ意識と、提供されている素晴らしい料理に賛辞を述べている。",
+          explanation:
+            "空所には主語が必要。述語動詞 have complimented が複数形なので、複数扱いとなる Several が正解。Several of + 複数名詞 で「～のいくつか、～の何人か」。Someone と Everybody は単数扱いなので主述が合わない。Whomever は主語ではなく目的語として用いられる。",
+        },
 
         {
           material: "730",
@@ -4692,16 +4801,16 @@
           const url = sheetUrl + "?sheet=PART5復習";
           const response = await fetch(url);
           const data = await response.json();
-          
+
           if (Array.isArray(data)) {
             const stats = {};
-            data.forEach(row => {
+            data.forEach((row) => {
               if (row.id) {
                 stats[row.id] = {
                   attempts: row.attempts || 0,
                   correct: row.correct || 0,
                   rate: row.rate || 0,
-                  lastDate: row.lastDate
+                  lastDate: row.lastDate,
                 };
               }
             });
@@ -4720,10 +4829,14 @@
 
       async function getSheetStats(forceRefresh = false) {
         const now = Date.now();
-        if (cachedSheetStats && !forceRefresh && now - lastSheetStatsFetch < SHEET_STATS_CACHE_TIME) {
+        if (
+          cachedSheetStats &&
+          !forceRefresh &&
+          now - lastSheetStatsFetch < SHEET_STATS_CACHE_TIME
+        ) {
           return cachedSheetStats;
         }
-        
+
         const sheetUrl = getSheetUrl();
         cachedSheetStats = await loadStatsFromSheet(sheetUrl);
         lastSheetStatsFetch = now;
@@ -5172,7 +5285,8 @@
         entries.forEach((e) => {
           const s = stats[e.id];
           if (s) {
-            if (!fieldStats[e.field]) fieldStats[e.field] = { attempts: 0, correct: 0 };
+            if (!fieldStats[e.field])
+              fieldStats[e.field] = { attempts: 0, correct: 0 };
             fieldStats[e.field].attempts += s.attempts;
             fieldStats[e.field].correct += s.correct;
           }
@@ -5201,7 +5315,8 @@
         entries.forEach((e) => {
           const s = stats[e.id];
           if (s) {
-            if (!matStats[e.material]) matStats[e.material] = { attempts: 0, correct: 0 };
+            if (!matStats[e.material])
+              matStats[e.material] = { attempts: 0, correct: 0 };
             matStats[e.material].attempts += s.attempts;
             matStats[e.material].correct += s.correct;
           }
@@ -5224,9 +5339,17 @@
         const allStats = await calculateStats();
 
         // サマリー
-        const totalAttempts = Object.values(stats).reduce((sum, s) => sum + s.attempts, 0);
-        const totalCorrect = Object.values(stats).reduce((sum, s) => sum + s.correct, 0);
-        const totalAccuracy = totalAttempts ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
+        const totalAttempts = Object.values(stats).reduce(
+          (sum, s) => sum + s.attempts,
+          0,
+        );
+        const totalCorrect = Object.values(stats).reduce(
+          (sum, s) => sum + s.correct,
+          0,
+        );
+        const totalAccuracy = totalAttempts
+          ? Math.round((totalCorrect / totalAttempts) * 100)
+          : 0;
         const attemptedQuestions = Object.keys(stats).length;
 
         const summaryHtml = `
@@ -5267,10 +5390,11 @@
             <div class="distribution-count">${count}</div>
             <div class="distribution-label">${idx * 20 + 1}-${(idx + 1) * 20}%</div>
           </div>
-        `
+        `,
           )
           .join("");
-        document.getElementById("distributionChart").innerHTML = distributionHtml;
+        document.getElementById("distributionChart").innerHTML =
+          distributionHtml;
 
         // タブ処理
         document.querySelectorAll(".stats-tab-btn").forEach((btn) => {
@@ -5278,12 +5402,16 @@
           btn.addEventListener("click", async (e) => {
             currentStatsTab = e.target.dataset.tab;
             await renderStatsTable();
-            document.querySelectorAll(".stats-tab-btn").forEach((b) => b.classList.remove("active"));
+            document
+              .querySelectorAll(".stats-tab-btn")
+              .forEach((b) => b.classList.remove("active"));
             e.target.classList.add("active");
           });
         });
 
-        document.querySelector(`.stats-tab-btn[data-tab="${currentStatsTab}"]`).classList.add("active");
+        document
+          .querySelector(`.stats-tab-btn[data-tab="${currentStatsTab}"]`)
+          .classList.add("active");
         await renderStatsTable();
       }
 
@@ -5296,7 +5424,15 @@
         let headers = [];
 
         if (currentStatsTab === "by-question") {
-          headers = ["問題ID", "教材", "分野", "設問No", "試行数", "正解数", "正答率"];
+          headers = [
+            "問題ID",
+            "教材",
+            "分野",
+            "設問No",
+            "試行数",
+            "正解数",
+            "正答率",
+          ];
           data = await calculateStats();
 
           let html = headers.map((h) => `<th>${h}</th>`).join("");
@@ -5315,10 +5451,12 @@
               <td>${s.correct}</td>
               <td><div class="accuracy-bar" style="width: ${s.accuracy}%"><span class="accuracy-text">${s.accuracy}%</span></div></td>
             </tr>
-          `
+          `,
             )
             .join("");
-          tableBody.innerHTML = html || "<tr><td colspan=\"7\" class=\"no-data-msg\">データがありません</td></tr>";
+          tableBody.innerHTML =
+            html ||
+            '<tr><td colspan="7" class="no-data-msg">データがありません</td></tr>';
         } else if (currentStatsTab === "by-field") {
           headers = ["分野", "試行数", "正解数", "正答率"];
           data = await getStatsByField();
@@ -5335,10 +5473,12 @@
               <td>${s.correct}</td>
               <td><div class="accuracy-bar" style="width: ${s.accuracy}%"><span class="accuracy-text">${s.accuracy}%</span></div></td>
             </tr>
-          `
+          `,
             )
             .join("");
-          tableBody.innerHTML = html || "<tr><td colspan=\"4\" class=\"no-data-msg\">データがありません</td></tr>";
+          tableBody.innerHTML =
+            html ||
+            '<tr><td colspan="4" class="no-data-msg">データがありません</td></tr>';
         } else if (currentStatsTab === "by-material") {
           headers = ["教材", "試行数", "正解数", "正答率"];
           data = await getStatsByMaterial();
@@ -5355,10 +5495,12 @@
               <td>${s.correct}</td>
               <td><div class="accuracy-bar" style="width: ${s.accuracy}%"><span class="accuracy-text">${s.accuracy}%</span></div></td>
             </tr>
-          `
+          `,
             )
             .join("");
-          tableBody.innerHTML = html || "<tr><td colspan=\"4\" class=\"no-data-msg\">データがありません</td></tr>";
+          tableBody.innerHTML =
+            html ||
+            '<tr><td colspan="4" class="no-data-msg">データがありません</td></tr>';
         }
       }
 
@@ -5366,11 +5508,12 @@
         listView.classList.add("hide");
         quizView.classList.remove("show");
         statsView.classList.add("show");
-        
+
         // ローディング表示
-        document.getElementById("statsSummary").innerHTML = '<div class="no-data-msg">📊 統計データを読み込み中...</div>';
-        document.getElementById("statsTableBody").innerHTML = '';
-        
+        document.getElementById("statsSummary").innerHTML =
+          '<div class="no-data-msg">📊 統計データを読み込み中...</div>';
+        document.getElementById("statsTableBody").innerHTML = "";
+
         await renderStatsView();
         window.scrollTo({ top: 0, behavior: "instant" });
       }
@@ -5401,9 +5544,15 @@
         window.scrollTo({ top: 0, behavior: "instant" });
       }
 
-      document.getElementById("viewListMode").addEventListener("click", showList);
-      document.getElementById("viewStatsMode").addEventListener("click", showStats);
-      document.getElementById("viewQuizMode").addEventListener("click", showQuiz);
+      document
+        .getElementById("viewListMode")
+        .addEventListener("click", showList);
+      document
+        .getElementById("viewStatsMode")
+        .addEventListener("click", showStats);
+      document
+        .getElementById("viewQuizMode")
+        .addEventListener("click", showQuiz);
 
       // =========================================================
       // シート連携設定パネル
