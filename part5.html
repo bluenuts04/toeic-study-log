@@ -4862,6 +4862,7 @@
         if (!url) return;
         const pct = Math.round((stat.correct / stat.attempts) * 100);
         const body = new URLSearchParams({
+          sheet: 'PART5復習',  // ← ここを追加！
           id: e.id,
           material: materialLabel(e.material),
           field: fieldLabel(e.field),
