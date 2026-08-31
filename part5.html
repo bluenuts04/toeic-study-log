@@ -4031,6 +4031,75 @@
           explanation:
             "空所には主語が必要。述語動詞 have complimented が複数形なので、複数扱いとなる Several が正解。Several of + 複数名詞 で「～のいくつか、～の何人か」。Someone と Everybody は単数扱いなので主述が合わない。Whomever は主語ではなく目的語として用いられる。",
         },
+        {
+          material: "D10",
+          field: "9",
+          qno: "598",
+          question:
+            "Career consultant Louise Bennett, ------- latest book was published last week, will be speaking at the workshop this afternoon.",
+          choices: ["whatever", "whom", "what", "whose"],
+          answer: "whose",
+          translation:
+            "最新の著書が先週出版された、キャリア・コンサルタントのLouise Bennettは、本日午後のワークショップで講演する予定だ。",
+          explanation:
+            "先行詞が Louise Bennett という人なので、(B) whom と (D) whose が候補。空所に所有格 his を入れてみると his latest book was published last week となり文構造が成立するため、所有格の関係代名詞 whose が正解。",
+        },
+
+        {
+          material: "D10",
+          field: "9",
+          qno: "602",
+          question:
+            "----- is selected as the team leader will be required to provide regular motivational talks.",
+          choices: ["Whoever", "What", "Where", "Whenever"],
+          answer: "Whoever",
+          translation:
+            "チームリーダーに選ばれた人は誰でも、定期的に士気を高める話をするよう求められる。",
+          explanation:
+            "文頭の空所から leader までが主語で、will be required が述語動詞。主語となる名詞節を作り、かつ「チームリーダーとして選ばれた人」という人を表す Whoever が正解。Whoever は Anyone who に置き換えられ、「～する人は誰でも」の意味。",
+        },
+
+        {
+          material: "D10",
+          field: "9",
+          qno: "607",
+          question:
+            "The learning program provides online exercises to help employees practice ----- is taught in the workshop.",
+          choices: ["that", "how", "which", "what"],
+          answer: "what",
+          translation:
+            "その学習プログラムは、従業員が研修会で教えられたことを練習するのを助けるオンラインエクササイズを提供する。",
+          explanation:
+            "help employees practice は「help＋人＋原形動詞」の形。practice は「～を練習する」という他動詞なので、その目的語となる名詞節が必要。what は「～すること、～するもの」を表す関係代名詞で、what is taught in the workshop で「研修会で教えられたこと」となるため正解。",
+        },
+
+        {
+          material: "D10",
+          field: "9",
+          qno: "608",
+          question:
+            "Speed Ltd. is a manufacturing company whose ----- extends to all areas of indoor and outdoor signage.",
+          choices: ["expert", "expertly", "expertise", "expertize"],
+          answer: "expertise",
+          translation:
+            "Speed社は、屋内外の看板の、広範囲にわたる専門知識を持つメーカーだ。",
+          explanation:
+            "whose は所有格の関係代名詞で、空所には動詞 extends の主語となる名詞が必要。expert は「専門家」、expertise は「専門知識」という名詞。文意に合うのは expertise。expertly は副詞、expertize は動詞。",
+        },
+
+        {
+          material: "D10",
+          field: "9",
+          qno: "612",
+          question:
+            "The construction contract will be given to ------- team makes the best proposal by September.",
+          choices: ["every", "these", "whichever", "their"],
+          answer: "whichever",
+          translation:
+            "その建築契約は、9月までに最もよい提案をしたいずれかのチームに与えられる。",
+          explanation:
+            "空所前の前置詞 to の目的語となる名詞節を導き、直後の名詞 team を修飾するのが複合関係形容詞の whichever。「～するどちらの～でも」の意味。every、these、their は名詞を修飾できるが、後ろに makes the best proposal という節を続けることはできない。",
+        },
 
         {
           material: "730",
@@ -4862,7 +4931,7 @@
         if (!url) return;
         const pct = Math.round((stat.correct / stat.attempts) * 100);
         const body = new URLSearchParams({
-          sheet: 'PART5復習',  // ← ここを追加！
+          sheet: "PART5復習", // ← ここを追加！
           id: e.id,
           material: materialLabel(e.material),
           field: fieldLabel(e.field),
