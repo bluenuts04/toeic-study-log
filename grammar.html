@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文法解説 | TOEIC学習サイト</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --navy: #0a1929;
+    --navy-light: #132a3f;
+    --navy-lighter: #1c3a54;
+    --orange: #ff8c42;
+    --orange-dim: #cc7035;
+    --text: #e8edf2;
+    --text-dim: #8fa3b8;
+    --border: #2a4258;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.7;
+    padding: 24px 16px 60px;
+  }
+
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .back-link {
+    display: inline-block;
+    color: var(--orange);
+    text-decoration: none;
+    font-size: 13px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed var(--orange-dim);
+  }
+
+  h1 {
+    font-size: 20px;
+    color: var(--orange);
+    border-bottom: 2px solid var(--orange-dim);
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle { color: var(--text-dim); font-size: 12px; margin-bottom: 28px; }
+
+  details.topic {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  details.topic[open] { border-color: var(--orange-dim); }
+
+  summary {
+    padding: 14px 18px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  .code-badge {
+    background: var(--orange-dim);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  summary .plus {
+    color: var(--orange);
+    font-size: 18px;
+    margin-left: auto;
+  }
+
+  details[open] summary .plus::before { content: "−"; }
+  details:not([open]) summary .plus::before { content: "+"; }
+
+  .topic-body { padding: 2px 18px 22px; }
+
+  /* 中分類 (例: 9-2) */
+  h2 {
+    font-size: 14px;
+    color: var(--orange);
+    margin: 22px 0 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+  .sub-num {
+    display: inline-block;
+    background: var(--navy-lighter);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-right: 6px;
+  }
+
+  /* 小分類 (例: 5-3-1) */
+  h3 {
+    font-size: 12.5px;
+    color: var(--text);
+    margin: 14px 0 6px;
+  }
+  h3 .sub-num { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+
+  p.lead { font-size: 13px; color: var(--text-dim); margin: 2px 0 8px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+  }
+
+  th {
+    background: var(--navy-lighter);
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin-bottom: 8px; font-size: 13px; }
+  li strong { color: var(--text); }
+
+  .example {
+    background: var(--navy-lighter);
+    border-left: 3px solid var(--orange-dim);
+    padding: 8px 12px;
+    margin: 6px 0;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .ng { color: #ff6b6b; }
+  .ok { color: #5fd18a; }
+
+  .point-box {
+    background: rgba(255, 140, 66, 0.08);
+    border: 1px solid var(--orange-dim);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-top: 10px;
+  }
+  .point-box ul { margin: 4px 0; }
+
+  .toc {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="index.html">← トップに戻る</a>
+  <h1>文法解説</h1>
+  <p class="subtitle">Part5対策 / 誤りやすいポイントの再確認用(基本事項は省略・大分類→中分類→小分類)</p>
+
+  <!-- ============ 01 品詞選択 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">01</span>品詞選択</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">1-1</span>品詞判別の基本</h2>
+      <ul>
+        <li>空所前後の文法構造で判定:冠詞/所有格の直後→名詞、be動詞の直後→形容詞か分詞、副詞は動詞・形容詞・文全体を修飾(名詞は修飾しない)</li>
+      </ul>
+
+      <h2><span class="sub-num">1-2</span>紛らわしい語尾・派生語</h2>
+      <ul>
+        <li>似た語尾で品詞が紛らわしいもの:-ive/-ative(形容詞) vs -ion(名詞)、-ic vs -ical で意味が変わる語(economic/economical, historic/historical)</li>
+        <li>派生語で意味が変わるもの:considerable(かなりの) vs considerate(思いやりのある)</li>
+      </ul>
+
+      <h2><span class="sub-num">1-3</span>感情動詞の分詞形容詞</h2>
+      <ul>
+        <li>現在分詞(-ing)と過去分詞(-ed)の使い分け:人がsatisfied/interested、物・事がsatisfying/interesting</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 02 動詞の時制 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">02</span>動詞の時制</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">2-1</span>時・条件を表す副詞節</h2>
+      <ul>
+        <li>when, if, before, as soon as等が導く副詞節の中は、未来のことでも現在形(×will do → ○do)</li>
+      </ul>
+
+      <h2><span class="sub-num">2-2</span>シグナル語と時制の対応</h2>
+      <ul>
+        <li>since+過去の一点→現在完了、by+未来の一点→未来完了、for+期間→現在完了(継続)</li>
+      </ul>
+
+      <h2><span class="sub-num">2-3</span>過去完了の用法</h2>
+      <ul>
+        <li>had+過去分詞は「過去のある時点より前」の出来事に限定。単なる過去の出来事にhad+p.p.を使わない</li>
+      </ul>
+
+      <h2><span class="sub-num">2-4</span>進行形による未来表現</h2>
+      <ul>
+        <li>現在進行形(be -ing)が近い未来の確定した予定を表す場合がある</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 03 態 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">03</span>態(受動/能動)</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">3-1</span>自動詞は受動態にならない</h2>
+      <ul>
+        <li>occur, happen, arrive, exist, remain等は受動態にできない</li>
+      </ul>
+
+      <h2><span class="sub-num">3-2</span>目的語の有無での判定</h2>
+      <ul>
+        <li>空所の後ろに名詞(目的語)があれば能動態、なければ受動態の可能性が高い</li>
+      </ul>
+
+      <h2><span class="sub-num">3-3</span>by以外の前置詞を伴う受動表現</h2>
+      <ul>
+        <li>be satisfied with, be interested in, be equipped with, be composed of</li>
+      </ul>
+
+      <h2><span class="sub-num">3-4</span>受動態の進行形</h2>
+      <ul>
+        <li>進行中の動作はbeing+p.p.(受動態の進行形)になる場合がある</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 04 主語と動詞の一致 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">04</span>主語と動詞の一致</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">4-1</span>単数扱いになる語</h2>
+      <ul>
+        <li>each, every-, one of the+複数名詞, the number of ~(← a number of ~は複数扱い)</li>
+      </ul>
+
+      <h2><span class="sub-num">4-2</span>ひとまとまりを表す主語</h2>
+      <ul>
+        <li>距離・金額・時間・重さのひとまとまりは単数扱い(Five years is a long time.)</li>
+      </ul>
+
+      <h2><span class="sub-num">4-3</span>主語と動詞の間の修飾語句</h2>
+      <ul>
+        <li>主語と動詞の間に前置詞句・関係詞節が挟まっていると、直前の名詞につられて一致を誤りやすい→本当の主語まで戻って確認する</li>
+      </ul>
+
+      <h2><span class="sub-num">4-4</span>集合名詞</h2>
+      <ul>
+        <li>staff, family等の集合名詞は文脈により単数/複数どちらもあり得る</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 05 前置詞 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">05</span>前置詞</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">5-1</span>基本の要点</h2>
+      <ul>
+        <li>空所の後ろが名詞句なら前置詞、節(主語+動詞)なら接続詞、という基本判定をまず確認</li>
+      </ul>
+
+      <h2><span class="sub-num">5-2</span>紛らわしい前置詞</h2>
+      <ul>
+        <li>by(期限・~までに完了) vs until(~まで継続)</li>
+        <li>during(特定の期間中に)+名詞 vs while+節</li>
+        <li>in/on/atの使い分け:年月→in、日付・曜日→on、時刻→at(住所は番地がat、通り名がon)</li>
+      </ul>
+
+      <h2><span class="sub-num">5-3</span>群前置詞</h2>
+      <p class="lead">複数語で1つの前置詞として働く表現。後ろは必ず名詞句。難易度目安で分けて暗記する。</p>
+
+      <h3><span class="sub-num">5-3-1</span>TOEIC〜700</h3>
+      <ul>
+        <li>due to(~が原因で)、because of(~のために)、instead of(~の代わりに)</li>
+        <li>according to(~によると)、in addition to(~に加えて)、in spite of(~にもかかわらず)</li>
+      </ul>
+
+      <h3><span class="sub-num">5-3-2</span>TOEIC〜800</h3>
+      <ul>
+        <li>with regard to / in regard to(~に関して)、in terms of(~の点で)</li>
+        <li>in response to(~に応じて)、in the event of(~の場合には)、on behalf of(~を代表して)</li>
+      </ul>
+
+      <h3><span class="sub-num">5-3-3</span>TOEIC〜900</h3>
+      <ul>
+        <li>in conjunction with(~と共同して)、with a view to(~する目的で、to は前置詞なので後ろは動名詞)</li>
+        <li>in compliance with(~を遵守して)、at the expense of(~を犠牲にして)、in lieu of(~の代わりに)</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 06 接続詞 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">06</span>接続詞</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">6-1</span>接続詞と前置詞の混同</h2>
+      <ul>
+        <li>although/though(接続詞・後ろは節) vs despite/in spite of(前置詞・後ろは名詞句)</li>
+        <li>because(接続詞・後ろは節) vs because of(前置詞・後ろは名詞句)</li>
+      </ul>
+
+      <h2><span class="sub-num">6-2</span>接続副詞</h2>
+      <ul>
+        <li>however, therefore, moreover, otherwiseは接続詞ではない→この語だけで2つの文をつなげない(ピリオドかセミコロンが必要)</li>
+      </ul>
+
+      <h2><span class="sub-num">6-3</span>等位接続詞</h2>
+      <ul>
+        <li>and, but, orは文法的に対等な要素を結ぶ(品詞・時制を揃える)</li>
+      </ul>
+
+      <h2><span class="sub-num">6-4</span>従属接続詞と時制</h2>
+      <ul>
+        <li>従属接続詞が導く副詞節中は時制の制限あり(分野02-1参照)</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 07 代名詞 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">07</span>代名詞</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">7-1</span>所有格の直後</h2>
+      <ul>
+        <li>所有格の直後は名詞(または動名詞):his arrival, their understanding</li>
+      </ul>
+
+      <h2><span class="sub-num">7-2</span>再帰代名詞</h2>
+      <ul>
+        <li>主語=目的語のときのみ使う(He hurt himself.)</li>
+        <li>強調用法(oneself)は文中から省略しても文が成立する</li>
+      </ul>
+
+      <h2><span class="sub-num">7-3</span>数の一致</h2>
+      <ul>
+        <li>指示する名詞との単数/複数の一致を必ず確認する(it/they, its/their)</li>
+      </ul>
+
+      <h2><span class="sub-num">7-4</span>不定代名詞</h2>
+      <ul>
+        <li>one(不特定の同種)、another(別の一つ)、the other(残り一つ)、others/the others(複数の区別)</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 08 比較級・最上級 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">08</span>比較級・最上級</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">8-1</span>型の混同に注意</h2>
+      <ul>
+        <li>原級はas ~ as、比較級はthan、最上級はthe+in/ofで対象範囲を示す、という型を混同しない</li>
+      </ul>
+
+      <h2><span class="sub-num">8-2</span>the+比較級構文</h2>
+      <ul>
+        <li>the+比較級 ~, the+比較級 …(~すればするほど…)は、theを忘れやすい</li>
+      </ul>
+
+      <h2><span class="sub-num">8-3</span>比較対象を省略できない語</h2>
+      <ul>
+        <li>preferable to, superior to, senior to(thanではなくtoを使う)</li>
+      </ul>
+
+      <h2><span class="sub-num">8-4</span>-er/-est と more/most の使い分け</h2>
+      <ul>
+        <li>2音節以上の語は基本more/most、-er/-estにするのは短い語(1〜2音節)</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 09 関係詞 ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">09</span>関係詞</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">9-1</span>関係代名詞と関係副詞の区別</h2>
+      <ul>
+        <li>後ろが不完全な文(名詞が欠けている)→関係代名詞(who/which/that)、完全な文→関係副詞(when/where/why/how)</li>
+        <li>whoseは所有格、直後に名詞が続く(whose car, whose idea)</li>
+        <li>前置詞+関係代名詞の形(in which, for whom)では、thatは使えない</li>
+      </ul>
+
+      <h2><span class="sub-num">9-2</span>関係副詞:制限用法・非制限用法</h2>
+      <table>
+        <tr><th>関係副詞</th><th>先行詞</th><th>制限用法</th><th>非制限用法</th></tr>
+        <tr><td>when</td><td>時</td><td>○</td><td>○</td></tr>
+        <tr><td>where</td><td>場所</td><td>○</td><td>○</td></tr>
+        <tr><td>why</td><td>理由</td><td>○</td><td>×</td></tr>
+        <tr><td>how</td><td>方法</td><td>○</td><td>×</td></tr>
+      </table>
+      <div class="example"><span class="ok">制限用法(コンマなし)</span>:This is the house where I was born.(先行詞を特定するために必須)</div>
+      <div class="example"><span class="ok">非制限用法(コンマあり)</span>:We stayed in Kyoto, where my grandmother was born.(先行詞は既に特定済み、補足情報)</div>
+      <div class="point-box">
+        <ul>
+          <li>コンマの有無で意味が変わる箇所がひっかけになりやすい</li>
+          <li>先行詞が固有名詞・特定できる名詞(地名・年号など)→非制限用法の可能性を疑う</li>
+          <li><span class="ng">why / howがコンマ付き(非制限用法)</span>で出てきたら文法的に誤り</li>
+          <li>関係代名詞の後ろに完全な文が来ている(＝本来は関係副詞が必要な箇所)のに関係代名詞を選んでしまう誤り</li>
+        </ul>
+      </div>
+
+      <h2><span class="sub-num">9-3</span>-everとno matter -の違い</h2>
+      <ul>
+        <li>whoever/whatever/whichever/however(複合関係詞)は、<strong>名詞節</strong>(~するものは誰でも)と<strong>副詞節</strong>(たとえ~でも)の両方で使える</li>
+        <li>no matter who/what/which/howは<strong>副詞節のみ</strong>(たとえ~でも)。名詞節としては使えない点がひっかけになりやすい</li>
+        <li>意味的にはno matter who = whoeverと置き換え可能な場面が多いが、置き換えられない(名詞節)場合を区別する</li>
+      </ul>
+      <div class="example">Whoever calls, tell them I'm out.(副詞節=no matter whoに置換可)</div>
+      <div class="example">Whoever calls first will win the prize.(名詞節=主語。no matter whoには置換不可)</div>
+
+      <h2><span class="sub-num">9-4</span>連鎖関係代名詞節</h2>
+      <p class="lead">主格の関係代名詞の直後に I think / I believe / they say 等の挿入節が入り、動詞が一見遠くに見える形。</p>
+      <div class="example">the woman who I think is honest(私が正直だと思う女性)</div>
+      <ul>
+        <li>who(主格)の直後にI thinkが挿入され、その後ろにisという本来の動詞が続く</li>
+        <li>挿入節(I think等)を一旦飛ばして読むと、who ~ is honestという主格関係代名詞の通常構造が見える</li>
+        <li>whomやwhichを誤って選ばないよう注意(挿入節があっても主格の判定は変わらない)</li>
+      </ul>
+
+      <h2><span class="sub-num">9-5</span>関係代名詞を用いた慣用表現</h2>
+      <ul>
+        <li>as is often the case with ~(~にはよくあることだが)</li>
+        <li>such ~ as …(…のような~)</li>
+        <li>the same ~ as …(…と同じ~)</li>
+        <li>what is called / what we call ~(いわゆる~)</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- ============ 10 語彙・コロケーション ============ -->
+  <details class="topic">
+    <summary><span class="code-badge">10</span>語彙・コロケーション</summary>
+    <div class="topic-body">
+
+      <h2><span class="sub-num">10-1</span>紛らわしい類義語</h2>
+      <ul>
+        <li>raise(他動詞・~を上げる) vs rise(自動詞・上がる)</li>
+        <li>affect(動詞・影響する) vs effect(名詞・影響)</li>
+      </ul>
+
+      <h2><span class="sub-num">10-2</span>動詞+前置詞のコロケーション</h2>
+      <ul>
+        <li>comply with, account for, result in/from, refrain from(丸暗記が必要)</li>
+      </ul>
+
+      <h2><span class="sub-num">10-3</span>文脈判断問題</h2>
+      <ul>
+        <li>選択肢すべてが文法的に正しい場合が多い→前後の文意との組み合わせの自然さで判断する</li>
+      </ul>
+
+      <h2><span class="sub-num">10-4</span>ビジネス頻出類義語</h2>
+      <ul>
+        <li>increase / expand / enhance、implement / conduct / carry outなど、対象となる名詞との相性で選ぶ</li>
+      </ul>
+
+    </div>
+  </details>
+
+  <!-- 新しい中分類・小分類はここに h2/h3 を追加していく -->
+
+</div>
+</body>
+</html>
