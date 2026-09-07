@@ -323,6 +323,25 @@
       <button id="shuffleBtn">🔀 シャッフル</button>
     </div>
 
+    <div id="voicePanel" class="sheet-panel">
+      <h3>🔊 音声設定（読み上げが棒読みな場合はこちら）</h3>
+      <p style="color:var(--muted);margin-top:0;">
+        読み上げ品質はスマホに入っているTTSエンジンに依存します。下の一覧から自然な声を選んでプレビューしてください。
+        Androidは「Google音声認識合成エンジン」、iPhoneは「設定 > アクセシビリティ > 読み上げコンテンツ > 声」で
+        高品質(Enhanced/Premium)ボイスを追加すると改善する場合があります。
+      </p>
+      <label>女性役の声
+        <select id="voiceSelectF"></select>
+      </label>
+      <label>男性役の声
+        <select id="voiceSelectM"></select>
+      </label>
+      <div class="sheet-row">
+        <button id="previewFBtn">女性役をプレビュー</button>
+        <button id="previewMBtn">男性役をプレビュー</button>
+      </div>
+    </div>
+
     <div id="sheetToggleArea" class="sheet-panel">
       <h3>Googleスプレッドシート連携</h3>
       <label>Apps Script Web App URL
@@ -425,49 +444,130 @@ function recordAnswer(convId, qno, correct){
 }
 
 /* ========================= 音声再生（TTS） ========================= */
+const LS_VOICE_F = "part3_voice_f";
+const LS_VOICE_M = "part3_voice_m";
 let voices = [];
+
 function loadVoices(){
   voices = window.speechSynthesis.getVoices();
+  populateVoiceSelects();
 }
 loadVoices();
 if(typeof speechSynthesis !== "undefined"){
   speechSynthesis.onvoiceschanged = loadVoices;
 }
 
+// 品質が高い傾向にあるエンジン名を優先的に上位表示（Google/Microsoft Online/Enhanced/Natural等）
+function voiceQualityScore(v){
+  const n = v.name.toLowerCase();
+  let score = 0;
+  if(n.includes("google")) score += 3;
+  if(n.includes("online")) score += 3;
+  if(n.includes("natural")) score += 3;
+  if(n.includes("enhanced")) score += 2;
+  if(n.includes("premium")) score += 2;
+  if(n.includes("neural")) score += 3;
+  if(v.localService === false) score += 1; // クラウド音声は品質が高いことが多い
+  return score;
+}
+
+function populateVoiceSelects(){
+  const enVoices = voices
+    .filter(v => v.lang && v.lang.startsWith("en"))
+    .sort((a,b) => voiceQualityScore(b) - voiceQualityScore(a));
+  if(enVoices.length === 0) return;
+
+  const selF = document.getElementById("voiceSelectF");
+  const selM = document.getElementById("voiceSelectM");
+  if(!selF || !selM) return;
+
+  [selF, selM].forEach(sel => { sel.innerHTML = ""; });
+  enVoices.forEach(v => {
+    const label = `${v.name} (${v.lang})${v.localService ? "" : " ☁"}`;
+    const optF = document.createElement("option");
+    optF.value = v.name; optF.textContent = label;
+    selF.appendChild(optF);
+    const optM = document.createElement("option");
+    optM.value = v.name; optM.textContent = label;
+    selM.appendChild(optM);
+  });
+
+  const savedF = localStorage.getItem(LS_VOICE_F);
+  const savedM = localStorage.getItem(LS_VOICE_M);
+  if(savedF && enVoices.some(v => v.name === savedF)) selF.value = savedF;
+  if(savedM && enVoices.some(v => v.name === savedM)) selM.value = savedM;
+  else if(enVoices[1]) selM.value = enVoices[1].name; // 女性と別の声をデフォルトに
+
+  selF.onchange = () => localStorage.setItem(LS_VOICE_F, selF.value);
+  selM.onchange = () => localStorage.setItem(LS_VOICE_M, selM.value);
+}
+
 function pickVoice(gender){
   const enVoices = voices.filter(v => v.lang && v.lang.startsWith("en"));
   if(enVoices.length === 0) return null;
-  // 女性/男性らしい声を名前から推定、なければ先頭とその次を割り当て
-  const femaleHints = ["female","woman","samantha","victoria","zira","susan","karen","tessa"];
-  const maleHints = ["male","man","daniel","alex","fred","david","mark"];
-  let pick;
-  if(gender === "女性"){
-    pick = enVoices.find(v => femaleHints.some(h => v.name.toLowerCase().includes(h)));
-  } else {
-    pick = enVoices.find(v => maleHints.some(h => v.name.toLowerCase().includes(h)));
-  }
-  return pick || enVoices[0];
+  const savedName = gender === "女性" ? localStorage.getItem(LS_VOICE_F) : localStorage.getItem(LS_VOICE_M);
+  const saved = enVoices.find(v => v.name === savedName);
+  if(saved) return saved;
+  // 選択がなければ品質スコア順で自動選択
+  const sorted = [...enVoices].sort((a,b) => voiceQualityScore(b) - voiceQualityScore(a));
+  return gender === "女性" ? sorted[0] : (sorted[1] || sorted[0]);
+}
+
+// 文をカンマ・ピリオド等で分割し、短いフレーズごとに読み上げることで
+// 抑揚のない一本調子な読み上げを避け、自然な間（ポーズ）を作る
+function splitIntoPhrases(text){
+  return text
+    .split(/(?<=[,.!?])\s+/)
+    .map(s => s.trim())
+    .filter(Boolean);
 }
 
 function speakConversation(conv, speedRate, onDone){
   window.speechSynthesis.cancel();
-  const utterances = conv.lines.map(line => {
-    const u = new SpeechSynthesisUtterance(line.en);
-    const v = pickVoice(line.speaker);
-    if(v) u.voice = v;
-    u.rate = speedRate;
-    u.pitch = line.speaker === "女性" ? 1.15 : 0.9;
-    return u;
+  const queue = [];
+  conv.lines.forEach((line, lineIdx) => {
+    const voice = pickVoice(line.speaker);
+    const phrases = splitIntoPhrases(line.en);
+    phrases.forEach((phrase, pIdx) => {
+      queue.push({
+        text: phrase,
+        voice: voice,
+        rate: speedRate,
+        pitch: line.speaker === "女性" ? 1.08 : 0.92,
+        pauseAfter: pIdx === phrases.length - 1 ? 450 : 120 // 話者交代時は長めの間
+      });
+    });
   });
+
   let i = 0;
   function playNext(){
-    if(i >= utterances.length){ if(onDone) onDone(); return; }
-    const u = utterances[i];
-    u.onend = () => { i++; playNext(); };
+    if(i >= queue.length){ if(onDone) onDone(); return; }
+    const item = queue[i];
+    const u = new SpeechSynthesisUtterance(item.text);
+    if(item.voice) u.voice = item.voice;
+    u.rate = item.rate;
+    u.pitch = item.pitch;
+    u.onend = () => { i++; setTimeout(playNext, item.pauseAfter); };
     window.speechSynthesis.speak(u);
   }
   playNext();
 }
+
+function previewVoice(gender){
+  window.speechSynthesis.cancel();
+  const voice = pickVoice(gender);
+  const sample = gender === "女性"
+    ? "Hello, do you have some time on Tuesday?"
+    : "Actually, I will be gone on a business trip till Tuesday.";
+  const u = new SpeechSynthesisUtterance(sample);
+  if(voice) u.voice = voice;
+  u.rate = 1;
+  u.pitch = gender === "女性" ? 1.08 : 0.92;
+  window.speechSynthesis.speak(u);
+}
+
+document.getElementById("previewFBtn").onclick = () => previewVoice("女性");
+document.getElementById("previewMBtn").onclick = () => previewVoice("男性");
 
 /* ========================= 描画 ========================= */
 function materialOptions(){
