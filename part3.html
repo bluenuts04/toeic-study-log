@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Part3対策 | TOEIC学習サイト</title>
+<style>
+  :root{
+    --navy:#0b2447;
+    --navy-light:#14355e;
+    --orange:#ff7a29;
+    --orange-dark:#e0621a;
+    --bg:#f3efe6;
+    --card:#ffffff;
+    --text:#1c1c1c;
+    --muted:#6b6b6b;
+    --correct:#1f9d55;
+    --wrong:#d64545;
+    --border:#e0dcd0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'JetBrains Mono','Hiragino Kaku Gothic ProN','Yu Gothic',monospace,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding-bottom:60px;
+  }
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  header a{
+    color:#fff;
+    text-decoration:none;
+    font-size:20px;
+  }
+  header h1{
+    font-size:17px;
+    margin:0;
+    letter-spacing:0.5px;
+  }
+  .container{
+    max-width:760px;
+    margin:0 auto;
+    padding:16px;
+  }
+  .navbar{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .navbar button{
+    flex:1;
+    padding:10px;
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:8px;
+    font-family:inherit;
+    font-size:13px;
+    cursor:pointer;
+    color:var(--navy);
+  }
+  .navbar button.active{
+    background:var(--navy);
+    color:#fff;
+    border-color:var(--navy);
+  }
+  .filter-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:16px;
+    align-items:center;
+  }
+  .filter-bar select, .filter-bar input{
+    font-family:inherit;
+    padding:8px 10px;
+    border-radius:6px;
+    border:1px solid var(--border);
+    font-size:13px;
+  }
+  .filter-bar button{
+    padding:8px 12px;
+    border-radius:6px;
+    border:none;
+    background:var(--orange);
+    color:#fff;
+    font-family:inherit;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .card{
+    background:var(--card);
+    border-radius:12px;
+    border:1px solid var(--border);
+    padding:18px;
+    margin-bottom:20px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.04);
+  }
+  .badges{
+    display:flex;
+    gap:6px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .badge{
+    font-size:11px;
+    padding:3px 8px;
+    border-radius:20px;
+    background:var(--navy-light);
+    color:#fff;
+  }
+  .badge.orange{ background:var(--orange); }
+  .badge.date{ background:#ddd; color:#333; }
+  .play-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:14px 0;
+    flex-wrap:wrap;
+  }
+  .play-btn{
+    background:var(--orange);
+    color:#fff;
+    border:none;
+    border-radius:24px;
+    padding:12px 22px;
+    font-size:15px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .play-btn:hover{ background:var(--orange-dark); }
+  .speed-select{
+    font-family:inherit;
+    padding:6px 8px;
+    border-radius:6px;
+    border:1px solid var(--border);
+    font-size:12px;
+  }
+  .script-box{
+    background:#faf8f2;
+    border:1px dashed var(--border);
+    border-radius:8px;
+    padding:14px;
+    margin-top:10px;
+    display:none;
+    font-size:14px;
+    line-height:1.7;
+  }
+  .script-box.show{ display:block; }
+  .script-line{ margin-bottom:10px; }
+  .speaker-tag{
+    font-weight:bold;
+    color:var(--navy);
+    margin-right:6px;
+  }
+  .script-en{ color:var(--text); }
+  .script-jp{ color:var(--muted); font-size:13px; }
+  .toggle-link{
+    color:var(--orange-dark);
+    font-size:12px;
+    cursor:pointer;
+    text-decoration:underline;
+    margin-left:auto;
+  }
+  .question{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid var(--border);
+  }
+  .question:first-of-type{ border-top:none; }
+  .qtitle{
+    font-weight:bold;
+    margin-bottom:8px;
+    font-size:14.5px;
+  }
+  .choices{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .choice{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13.5px;
+  }
+  .choice:hover{ background:#faf8f2; }
+  .choice.selected{
+    border-color:var(--orange);
+    background:#fff3ea;
+  }
+  .choice.correct-ans{
+    border-color:var(--correct);
+    background:#eafaf0;
+  }
+  .choice.wrong-ans{
+    border-color:var(--wrong);
+    background:#fdecec;
+  }
+  .choice input{ margin:0; }
+  .explain{
+    display:none;
+    margin-top:8px;
+    font-size:12.5px;
+    color:var(--muted);
+    background:#f6f4ee;
+    border-radius:6px;
+    padding:10px;
+  }
+  .explain.show{ display:block; }
+  .grade-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:16px;
+  }
+  .grade-btn{
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:10px 18px;
+    font-size:13.5px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .result-summary{
+    font-size:13px;
+    color:var(--navy);
+    font-weight:bold;
+  }
+  .lastdate{
+    font-size:11px;
+    color:var(--muted);
+  }
+  .sheet-panel{
+    background:var(--card);
+    border-radius:12px;
+    border:1px solid var(--border);
+    padding:16px;
+    margin-bottom:20px;
+    font-size:12.5px;
+  }
+  .sheet-panel h3{ margin:0 0 10px; font-size:14px; color:var(--navy); }
+  .sheet-panel label{ display:block; margin-bottom:8px; }
+  .sheet-panel input[type=text]{
+    width:100%;
+    padding:8px;
+    font-family:inherit;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:12px;
+    margin-top:4px;
+  }
+  .sheet-row{
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .sheet-row button{
+    padding:7px 12px;
+    border-radius:6px;
+    border:1px solid var(--navy);
+    background:#fff;
+    color:var(--navy);
+    font-family:inherit;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .toggle-switch{ display:flex; align-items:center; gap:6px; }
+  .stats-summary{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .stat-box{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px;
+    text-align:center;
+  }
+  .stat-box .num{ font-size:22px; font-weight:bold; color:var(--navy); }
+  .stat-box .label{ font-size:11px; color:var(--muted); margin-top:4px; }
+  #loading{ text-align:center; color:var(--muted); padding:20px; font-size:13px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html">←</a>
+  <h1>Part3 会話問題対策</h1>
+</header>
+
+<div class="container">
+
+  <div class="navbar">
+    <button id="navList" class="active">📋 一覧</button>
+    <button id="navStats">📊 統計</button>
+  </div>
+
+  <div id="listView">
+
+    <div class="filter-bar">
+      <select id="materialFilter"><option value="">教材：すべて</option></select>
+      <button id="applyFilter">絞り込み</button>
+      <button id="shuffleBtn">🔀 シャッフル</button>
+    </div>
+
+    <div id="sheetToggleArea" class="sheet-panel">
+      <h3>Googleスプレッドシート連携</h3>
+      <label>Apps Script Web App URL
+        <input type="text" id="sheetUrl" placeholder="https://script.google.com/macros/s/xxxx/exec">
+      </label>
+      <div class="sheet-row">
+        <button id="saveUrlBtn">保存</button>
+        <button id="testSendBtn">テスト送信</button>
+        <div class="toggle-switch">
+          <input type="checkbox" id="autoSendToggle">
+          <label for="autoSendToggle">採点時に自動送信</label>
+        </div>
+      </div>
+      <div id="sheetStatus" style="margin-top:6px;color:var(--muted);"></div>
+    </div>
+
+    <div id="questionsArea"></div>
+  </div>
+
+  <div id="statsView" style="display:none;">
+    <div class="stats-summary">
+      <div class="stat-box"><div class="num" id="statTotal">0</div><div class="label">総回答数</div></div>
+      <div class="stat-box"><div class="num" id="statCorrect">0</div><div class="label">正解数</div></div>
+      <div class="stat-box"><div class="num" id="statRate">0%</div><div class="label">全体正答率</div></div>
+      <div class="stat-box"><div class="num" id="statAnswered">0</div><div class="label">回答済み設問数</div></div>
+    </div>
+    <div id="statsTable"></div>
+  </div>
+
+</div>
+
+<script>
+/* ==========================================================
+   データ構造：会話(コンバセーション)ごとに3設問をまとめる
+   教材コード: TRN / BIZ / NTC / DMM / WHL / 730 / DIA / D10 / SEN / NEX / SPD / MOS / OFF
+   ========================================================== */
+const conversations = [
+  {
+    id: "TRN-C1-L1",
+    material: "TRN",
+    materialLabel: "トレーニング TOEIC®test",
+    qcode: "C1-L1",
+    addedDate: "2026-09-07",
+    lines: [
+      { speaker:"女性", en:"We'll have some consultants in next week to discuss the presentation for the competition. I want you to attend the meeting as a project manager. Do you have some time on Tuesday?",
+        jp:"来週、コンペのためのプレゼンテーションについて話し合うためにコンサルタントが来ます。あなたにも、プロジェクトマネージャーとして会議に出席して欲しいのですが、火曜日に時間はありますか。" },
+      { speaker:"男性", en:"Actually, I will be gone on a business trip till Tuesday, but maybe I can have a video conference. Either that, or I'm available on Thursday if they prefer a face-to-face meeting.",
+        jp:"実は火曜日まで出張で出ています。しかし、ビデオ会議はできると思います。もしくは、先方が対面の会議を好むようであれば、木曜日が空いています。" },
+      { speaker:"女性", en:"Okay. I think a face-to-face should be better. They'll stay for five days, and it should be ok to move the meeting to Thursday. I'll call them now, and let you know the fixed schedule by e-mail.",
+        jp:"わかりました。対面の方がいいでしょう。彼らは5日間滞在しますから、木曜日に会議を移しても大丈夫だと思います。今彼らに電話して、あなたには後で決まったスケジュールをEメールで知らせます。" }
+    ],
+    questions: [
+      {
+        qno:1,
+        text:"What are the speakers mainly discussing?",
+        choices:{A:"Holding a competition", B:"Scheduling a meeting", C:"Planning a business trip", D:"Consulting a vacation plan"},
+        answer:"B",
+        explain:"女性が「会議に出席してほしい、火曜日は空いているか」と尋ね、以降ずっと会議の日程調整の話をしているため、正解は(B)。(A)competitionは会話の目的（コンペ対策）であり主題ではない。"
+      },
+      {
+        qno:2,
+        text:"Why cannot the man attend the meeting on Tuesday?",
+        choices:{A:"He will be busy making a presentation.", B:"He will be taking a vacation.", C:"He will be on a business trip.", D:"He will be meeting the consultants."},
+        answer:"C",
+        explain:"男性は\"I will be gone on a business trip till Tuesday\"と発言しているため、正解は(C)。"
+      },
+      {
+        qno:3,
+        text:"How will the woman tell the fixed schedule to the man?",
+        choices:{A:"By a phone call", B:"By e-mail", C:"By a video call", D:"In person"},
+        answer:"B",
+        explain:"女性は最後に\"let you know the fixed schedule by e-mail\"と言っているため、正解は(B)。電話はコンサルタントへの連絡に使うだけで、男性への連絡はメール。"
+      }
+    ]
+  }
+];
+
+/* ========================= localStorage ========================= */
+const LS_KEY = "part3_stats_v1";
+const LS_URL_KEY = "part3_sheet_url";
+const LS_AUTOSEND_KEY = "part3_autosend";
+
+function loadStats(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveStats(s){ localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+
+function statKey(convId, qno){ return convId + "-Q" + qno; }
+
+function recordAnswer(convId, qno, correct){
+  const stats = loadStats();
+  const key = statKey(convId, qno);
+  if(!stats[key]) stats[key] = { attempts:0, correct:0, lastDate:"" };
+  stats[key].attempts += 1;
+  if(correct) stats[key].correct += 1;
+  const today = new Date();
+  stats[key].lastDate = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+  saveStats(stats);
+  return stats[key];
+}
+
+/* ========================= 音声再生（TTS） ========================= */
+let voices = [];
+function loadVoices(){
+  voices = window.speechSynthesis.getVoices();
+}
+loadVoices();
+if(typeof speechSynthesis !== "undefined"){
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function pickVoice(gender){
+  const enVoices = voices.filter(v => v.lang && v.lang.startsWith("en"));
+  if(enVoices.length === 0) return null;
+  // 女性/男性らしい声を名前から推定、なければ先頭とその次を割り当て
+  const femaleHints = ["female","woman","samantha","victoria","zira","susan","karen","tessa"];
+  const maleHints = ["male","man","daniel","alex","fred","david","mark"];
+  let pick;
+  if(gender === "女性"){
+    pick = enVoices.find(v => femaleHints.some(h => v.name.toLowerCase().includes(h)));
+  } else {
+    pick = enVoices.find(v => maleHints.some(h => v.name.toLowerCase().includes(h)));
+  }
+  return pick || enVoices[0];
+}
+
+function speakConversation(conv, speedRate, onDone){
+  window.speechSynthesis.cancel();
+  const utterances = conv.lines.map(line => {
+    const u = new SpeechSynthesisUtterance(line.en);
+    const v = pickVoice(line.speaker);
+    if(v) u.voice = v;
+    u.rate = speedRate;
+    u.pitch = line.speaker === "女性" ? 1.15 : 0.9;
+    return u;
+  });
+  let i = 0;
+  function playNext(){
+    if(i >= utterances.length){ if(onDone) onDone(); return; }
+    const u = utterances[i];
+    u.onend = () => { i++; playNext(); };
+    window.speechSynthesis.speak(u);
+  }
+  playNext();
+}
+
+/* ========================= 描画 ========================= */
+function materialOptions(){
+  const sel = document.getElementById("materialFilter");
+  const codes = [...new Set(conversations.map(c => c.material))];
+  codes.forEach(code => {
+    const label = conversations.find(c => c.material === code).materialLabel;
+    const opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = code + " " + label;
+    sel.appendChild(opt);
+  });
+}
+
+function renderConversation(conv){
+  const stats = loadStats();
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const lastDates = conv.questions.map(q => stats[statKey(conv.id,q.qno)]?.lastDate).filter(Boolean);
+  const latest = lastDates.sort().slice(-1)[0];
+
+  card.innerHTML = `
+    <div class="badges">
+      <span class="badge">${conv.material} ${conv.materialLabel}</span>
+      <span class="badge orange">${conv.qcode}</span>
+      <span class="badge date">最終回答: ${latest ? latest : "未回答"}</span>
+    </div>
+    <div class="play-row">
+      <button class="play-btn">▶ 会話を再生</button>
+      <select class="speed-select">
+        <option value="1">標準(TOEICと同程度)</option>
+        <option value="1.15">やや速め</option>
+        <option value="1.3">速め</option>
+        <option value="1.5">かなり速い</option>
+      </select>
+      <span class="toggle-link script-toggle">スクリプト表示/非表示</span>
+    </div>
+    <div class="script-box"></div>
+    <div class="questions-holder"></div>
+    <div class="grade-row">
+      <button class="grade-btn">採点する</button>
+      <span class="result-summary"></span>
+    </div>
+  `;
+
+  // スクリプト
+  const scriptBox = card.querySelector(".script-box");
+  conv.lines.forEach(line => {
+    const div = document.createElement("div");
+    div.className = "script-line";
+    div.innerHTML = `<span class="speaker-tag">${line.speaker}</span><br>
+      <span class="script-en">${line.en}</span><br>
+      <span class="script-jp">${line.jp}</span>`;
+    scriptBox.appendChild(div);
+  });
+  card.querySelector(".script-toggle").onclick = () => {
+    scriptBox.classList.toggle("show");
+  };
+
+  // 再生
+  card.querySelector(".play-btn").onclick = () => {
+    const rate = parseFloat(card.querySelector(".speed-select").value);
+    speakConversation(conv, rate);
+  };
+
+  // 設問
+  const qHolder = card.querySelector(".questions-holder");
+  conv.questions.forEach(q => {
+    const qDiv = document.createElement("div");
+    qDiv.className = "question";
+    qDiv.dataset.qno = q.qno;
+    let choicesHtml = "";
+    Object.keys(q.choices).forEach(letter => {
+      choicesHtml += `
+        <label class="choice" data-letter="${letter}">
+          <input type="radio" name="${conv.id}-q${q.qno}" value="${letter}">
+          <span>(${letter}) ${q.choices[letter]}</span>
+        </label>`;
+    });
+    qDiv.innerHTML = `
+      <div class="qtitle">${q.qno}. ${q.text}</div>
+      <div class="choices">${choicesHtml}</div>
+      <div class="explain"></div>
+    `;
+    qHolder.appendChild(qDiv);
+
+    qDiv.querySelectorAll(".choice").forEach(choiceEl => {
+      choiceEl.addEventListener("click", () => {
+        qDiv.querySelectorAll(".choice").forEach(c => c.classList.remove("selected"));
+        choiceEl.classList.add("selected");
+      });
+    });
+  });
+
+  // 採点
+  card.querySelector(".grade-btn").onclick = () => {
+    let correctCount = 0;
+    conv.questions.forEach(q => {
+      const qDiv = qHolder.querySelector(`.question[data-qno="${q.qno}"]`);
+      const selected = qDiv.querySelector(".choice.selected");
+      const selectedLetter = selected ? selected.dataset.letter : null;
+      const isCorrect = selectedLetter === q.answer;
+      if(isCorrect) correctCount++;
+
+      qDiv.querySelectorAll(".choice").forEach(c => {
+        if(c.dataset.letter === q.answer) c.classList.add("correct-ans");
+        else if(c.dataset.letter === selectedLetter && !isCorrect) c.classList.add("wrong-ans");
+      });
+
+      const explainEl = qDiv.querySelector(".explain");
+      explainEl.textContent = q.explain;
+      explainEl.classList.add("show");
+
+      recordAnswer(conv.id, q.qno, isCorrect);
+      sendToSheetIfEnabled(conv, q, isCorrect);
+    });
+    scriptBox.classList.add("show");
+    card.querySelector(".result-summary").textContent = `${correctCount} / ${conv.questions.length} 問正解`;
+    renderConversation.refreshBadge && renderConversation.refreshBadge();
+  };
+
+  return card;
+}
+
+function renderList(list){
+  const area = document.getElementById("questionsArea");
+  area.innerHTML = "";
+  list.forEach(conv => area.appendChild(renderConversation(conv)));
+}
+
+function applyFilterAndRender(){
+  const material = document.getElementById("materialFilter").value;
+  let list = conversations;
+  if(material) list = list.filter(c => c.material === material);
+  renderList(list);
+}
+
+document.getElementById("applyFilter").onclick = applyFilterAndRender;
+document.getElementById("shuffleBtn").onclick = () => {
+  const shuffled = [...conversations].sort(() => Math.random() - 0.5);
+  renderList(shuffled);
+};
+
+/* ========================= ナビ切り替え ========================= */
+document.getElementById("navList").onclick = () => {
+  document.getElementById("listView").style.display = "block";
+  document.getElementById("statsView").style.display = "none";
+  document.getElementById("navList").classList.add("active");
+  document.getElementById("navStats").classList.remove("active");
+};
+document.getElementById("navStats").onclick = () => {
+  document.getElementById("listView").style.display = "none";
+  document.getElementById("statsView").style.display = "block";
+  document.getElementById("navList").classList.remove("active");
+  document.getElementById("navStats").classList.add("active");
+  renderStats();
+};
+
+/* ========================= 統計 ========================= */
+function renderStats(){
+  const stats = loadStats();
+  let total = 0, correct = 0, answered = 0;
+  const rows = [];
+  conversations.forEach(conv => {
+    conv.questions.forEach(q => {
+      const key = statKey(conv.id, q.qno);
+      const s = stats[key];
+      if(s){
+        total += s.attempts;
+        correct += s.correct;
+        answered += 1;
+        rows.push({
+          label: `${conv.qcode} Q${q.qno}`,
+          material: conv.material,
+          attempts: s.attempts,
+          correct: s.correct,
+          rate: Math.round((s.correct / s.attempts) * 100),
+          lastDate: s.lastDate
+        });
+      }
+    });
+  });
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statCorrect").textContent = correct;
+  document.getElementById("statRate").textContent = total > 0 ? Math.round((correct/total)*100) + "%" : "0%";
+  document.getElementById("statAnswered").textContent = answered;
+
+  const tableDiv = document.getElementById("statsTable");
+  if(rows.length === 0){
+    tableDiv.innerHTML = `<p style="color:var(--muted);font-size:13px;">まだ回答記録がありません。</p>`;
+    return;
+  }
+  rows.sort((a,b) => a.rate - b.rate);
+  let html = `<table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+    <tr style="border-bottom:1px solid var(--border);text-align:left;">
+      <th style="padding:6px;">設問</th><th>教材</th><th>正答率</th><th>回答数</th><th>最終回答</th>
+    </tr>`;
+  rows.forEach(r => {
+    html += `<tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:6px;">${r.label}</td>
+      <td>${r.material}</td>
+      <td>${r.rate}%</td>
+      <td>${r.correct}/${r.attempts}</td>
+      <td>${r.lastDate}</td>
+    </tr>`;
+  });
+  html += "</table>";
+  tableDiv.innerHTML = html;
+}
+
+/* ========================= Googleスプレッドシート連携 ========================= */
+const DEFAULT_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOa0G0AeOBEzRpmTC8anyEy8-PfVojH14BlIbkRwV9EOJYs2q86tF12A_-YKvXgZh7/exec";
+
+function initSheetUI(){
+  const urlInput = document.getElementById("sheetUrl");
+  const savedUrl = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
+  urlInput.value = savedUrl;
+  document.getElementById("autoSendToggle").checked = localStorage.getItem(LS_AUTOSEND_KEY) === "true";
+}
+
+document.getElementById("saveUrlBtn").onclick = () => {
+  localStorage.setItem(LS_URL_KEY, document.getElementById("sheetUrl").value.trim());
+  document.getElementById("sheetStatus").textContent = "URLを保存しました。";
+};
+
+document.getElementById("autoSendToggle").onchange = (e) => {
+  localStorage.setItem(LS_AUTOSEND_KEY, e.target.checked);
+};
+
+document.getElementById("testSendBtn").onclick = () => {
+  const url = document.getElementById("sheetUrl").value.trim();
+  if(!url){ document.getElementById("sheetStatus").textContent = "URLを入力してください。"; return; }
+  const params = new URLSearchParams({
+    sheet: "PART3復習",
+    id: "TEST-Q0",
+    material: "TRN トレーニング TOEIC®test",
+    field: "C1-L1",
+    qno: "0",
+    attempts: "1",
+    correct: "1",
+    rate: "100",
+    lastDate: new Date().toISOString().slice(0,10)
+  });
+  fetch(url, { method:"POST", body: params })
+    .then(() => { document.getElementById("sheetStatus").textContent = "テスト送信しました。スプレッドシートを確認してください。"; })
+    .catch(() => { document.getElementById("sheetStatus").textContent = "送信に失敗しました。URLを確認してください。"; });
+};
+
+function sendToSheetIfEnabled(conv, q, isCorrect){
+  const enabled = localStorage.getItem(LS_AUTOSEND_KEY) === "true";
+  if(!enabled) return;
+  const url = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
+  if(!url) return;
+  const stats = loadStats();
+  const s = stats[statKey(conv.id, q.qno)];
+  const params = new URLSearchParams({
+    sheet: "PART3復習",
+    id: statKey(conv.id, q.qno),
+    material: `${conv.material} ${conv.materialLabel}`,
+    field: conv.qcode,
+    qno: String(q.qno),
+    attempts: String(s.attempts),
+    correct: String(s.correct),
+    rate: String(Math.round((s.correct/s.attempts)*100)),
+    lastDate: s.lastDate
+  });
+  fetch(url, { method:"POST", body: params }).catch(() => {});
+}
+
+/* ========================= 初期化 ========================= */
+materialOptions();
+initSheetUI();
+renderList(conversations);
+</script>
+</body>
+</html>
