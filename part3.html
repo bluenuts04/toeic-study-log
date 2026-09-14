@@ -1,866 +1,1808 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Part3対策 | TOEIC学習サイト</title>
-<style>
-  :root{
-    --navy:#0b2447;
-    --navy-light:#14355e;
-    --orange:#ff7a29;
-    --orange-dark:#e0621a;
-    --bg:#f3efe6;
-    --card:#ffffff;
-    --text:#1c1c1c;
-    --muted:#6b6b6b;
-    --correct:#1f9d55;
-    --wrong:#d64545;
-    --border:#e0dcd0;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:'JetBrains Mono','Hiragino Kaku Gothic ProN','Yu Gothic',monospace,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    padding-bottom:60px;
-  }
-  header{
-    background:var(--navy);
-    color:#fff;
-    padding:16px 20px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    position:sticky;
-    top:0;
-    z-index:20;
-  }
-  header a{
-    color:#fff;
-    text-decoration:none;
-    font-size:20px;
-  }
-  header h1{
-    font-size:17px;
-    margin:0;
-    letter-spacing:0.5px;
-  }
-  .container{
-    max-width:760px;
-    margin:0 auto;
-    padding:16px;
-  }
-  .navbar{
-    display:flex;
-    gap:8px;
-    margin-bottom:16px;
-  }
-  .navbar button{
-    flex:1;
-    padding:10px;
-    border:1px solid var(--border);
-    background:#fff;
-    border-radius:8px;
-    font-family:inherit;
-    font-size:13px;
-    cursor:pointer;
-    color:var(--navy);
-  }
-  .navbar button.active{
-    background:var(--navy);
-    color:#fff;
-    border-color:var(--navy);
-  }
-  .filter-bar{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:16px;
-    align-items:center;
-  }
-  .filter-bar select, .filter-bar input{
-    font-family:inherit;
-    padding:8px 10px;
-    border-radius:6px;
-    border:1px solid var(--border);
-    font-size:13px;
-  }
-  .filter-bar button{
-    padding:8px 12px;
-    border-radius:6px;
-    border:none;
-    background:var(--orange);
-    color:#fff;
-    font-family:inherit;
-    font-size:13px;
-    cursor:pointer;
-  }
-  .card{
-    background:var(--card);
-    border-radius:12px;
-    border:1px solid var(--border);
-    padding:18px;
-    margin-bottom:20px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.04);
-  }
-  .badges{
-    display:flex;
-    gap:6px;
-    margin-bottom:10px;
-    flex-wrap:wrap;
-  }
-  .badge{
-    font-size:11px;
-    padding:3px 8px;
-    border-radius:20px;
-    background:var(--navy-light);
-    color:#fff;
-  }
-  .badge.orange{ background:var(--orange); }
-  .badge.date{ background:#ddd; color:#333; }
-  .play-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin:14px 0;
-    flex-wrap:wrap;
-  }
-  .play-btn{
-    background:var(--orange);
-    color:#fff;
-    border:none;
-    border-radius:24px;
-    padding:12px 22px;
-    font-size:15px;
-    cursor:pointer;
-    font-family:inherit;
-  }
-  .play-btn:hover{ background:var(--orange-dark); }
-  .play-btn.playing{ background:var(--correct); }
-  .pause-btn, .stop-btn{
-    font-family:inherit;
-    border:1px solid var(--navy);
-    background:#fff;
-    color:var(--navy);
-    border-radius:24px;
-    padding:10px 16px;
-    font-size:13px;
-    cursor:pointer;
-  }
-  .pause-btn:disabled, .stop-btn:disabled{
-    opacity:0.4;
-    cursor:default;
-  }
-  .speed-select{
-    font-family:inherit;
-    padding:6px 8px;
-    border-radius:6px;
-    border:1px solid var(--border);
-    font-size:12px;
-  }
-  .script-box{
-    background:#faf8f2;
-    border:1px dashed var(--border);
-    border-radius:8px;
-    padding:14px;
-    margin-top:10px;
-    display:none;
-    font-size:14px;
-    line-height:1.7;
-  }
-  .script-box.show{ display:block; }
-  .script-line{ margin-bottom:10px; }
-  .speaker-tag{
-    font-weight:bold;
-    color:var(--navy);
-    margin-right:6px;
-  }
-  .script-en{ color:var(--text); }
-  .script-jp{ color:var(--muted); font-size:13px; }
-  .toggle-link{
-    color:var(--orange-dark);
-    font-size:12px;
-    cursor:pointer;
-    text-decoration:underline;
-    margin-left:auto;
-  }
-  .question{
-    margin-top:18px;
-    padding-top:14px;
-    border-top:1px solid var(--border);
-  }
-  .question:first-of-type{ border-top:none; }
-  .qtitle{
-    font-weight:bold;
-    margin-bottom:8px;
-    font-size:14.5px;
-  }
-  .choices{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-  .choice{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:9px 10px;
-    border:1px solid var(--border);
-    border-radius:8px;
-    cursor:pointer;
-    font-size:13.5px;
-  }
-  .choice:hover{ background:#faf8f2; }
-  .choice.selected{
-    border-color:var(--orange);
-    background:#fff3ea;
-  }
-  .choice.correct-ans{
-    border-color:var(--correct);
-    background:#eafaf0;
-  }
-  .choice.wrong-ans{
-    border-color:var(--wrong);
-    background:#fdecec;
-  }
-  .choice input{ margin:0; }
-  .explain{
-    display:none;
-    margin-top:8px;
-    font-size:12.5px;
-    color:var(--muted);
-    background:#f6f4ee;
-    border-radius:6px;
-    padding:10px;
-  }
-  .explain.show{ display:block; }
-  .grade-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-top:16px;
-  }
-  .grade-btn{
-    background:var(--navy);
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    padding:10px 18px;
-    font-size:13.5px;
-    cursor:pointer;
-    font-family:inherit;
-  }
-  .result-summary{
-    font-size:13px;
-    color:var(--navy);
-    font-weight:bold;
-  }
-  .lastdate{
-    font-size:11px;
-    color:var(--muted);
-  }
-  .sheet-panel{
-    background:var(--card);
-    border-radius:12px;
-    border:1px solid var(--border);
-    padding:16px;
-    margin-bottom:20px;
-    font-size:12.5px;
-  }
-  .sheet-panel h3{ margin:0 0 10px; font-size:14px; color:var(--navy); }
-  .sheet-panel label{ display:block; margin-bottom:8px; }
-  .sheet-panel input[type=text]{
-    width:100%;
-    padding:8px;
-    font-family:inherit;
-    border:1px solid var(--border);
-    border-radius:6px;
-    font-size:12px;
-    margin-top:4px;
-  }
-  .sheet-row{
-    display:flex;
-    gap:8px;
-    margin-top:8px;
-    flex-wrap:wrap;
-    align-items:center;
-  }
-  .sheet-row button{
-    padding:7px 12px;
-    border-radius:6px;
-    border:1px solid var(--navy);
-    background:#fff;
-    color:var(--navy);
-    font-family:inherit;
-    font-size:12px;
-    cursor:pointer;
-  }
-  .toggle-switch{ display:flex; align-items:center; gap:6px; }
-  .stats-summary{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-    margin-bottom:16px;
-  }
-  .stat-box{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:14px;
-    text-align:center;
-  }
-  .stat-box .num{ font-size:22px; font-weight:bold; color:var(--navy); }
-  .stat-box .label{ font-size:11px; color:var(--muted); margin-top:4px; }
-  #loading{ text-align:center; color:var(--muted); padding:20px; font-size:13px; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Part3対策 | TOEIC学習サイト</title>
+    <style>
+      :root {
+        --navy: #e1e7f0;
+        --navy-light: #eceff2;
+        --orange: #ff7a29;
+        --orange-dark: #e0621a;
+        --bg: #100f0c;
+        --card: #070807;
+        --text: #faf5f5;
+        --muted: #c43c3c;
+        --correct: #1f9d55;
+        --wrong: #d64545;
+        --border: #eeb60d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          "JetBrains Mono", "Hiragino Kaku Gothic ProN", "Yu Gothic", monospace,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding-bottom: 60px;
+      }
+      header {
+        background: var(--navy);
+        color: #1c1b1b;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      header a {
+        color: #171717;
+        text-decoration: none;
+        font-size: 20px;
+      }
+      header h1 {
+        font-size: 17px;
+        margin: 0;
+        letter-spacing: 0.5px;
+      }
+      .container {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+      .navbar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .navbar button {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid var(--border);
+        background: #070707;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        cursor: pointer;
+        color: var(--navy);
+      }
+      .navbar button.active {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+        align-items: center;
+      }
+      .filter-bar select,
+      .filter-bar input {
+        font-family: inherit;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        font-size: 13px;
+      }
+      .filter-bar button {
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: none;
+        background: var(--orange);
+        color: #fff;
+        font-family: inherit;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      }
+      .badges {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        background: var(--navy-light);
+        color: #fff;
+      }
+      .badge.orange {
+        background: var(--orange);
+      }
+      .badge.date {
+        background: #0a0a0a;
+        color: #b84242;
+      }
+      .play-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 14px 0;
+        flex-wrap: wrap;
+      }
+      .play-btn {
+        background: var(--orange);
+        color: #fff;
+        border: none;
+        border-radius: 24px;
+        padding: 12px 22px;
+        font-size: 15px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .play-btn:hover {
+        background: var(--orange-dark);
+      }
+      .play-btn.playing {
+        background: var(--correct);
+      }
+      .pause-btn,
+      .stop-btn {
+        font-family: inherit;
+        border: 1px solid var(--navy);
+        background: #fff;
+        color: var(--navy);
+        border-radius: 24px;
+        padding: 10px 16px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .pause-btn:disabled,
+      .stop-btn:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .speed-select {
+        font-family: inherit;
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        font-size: 12px;
+      }
+      .script-box {
+        background: #393937;
+        border: 1px dashed var(--border);
+        border-radius: 8px;
+        padding: 14px;
+        margin-top: 10px;
+        display: none;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      .script-box.show {
+        display: block;
+      }
+      .script-line {
+        margin-bottom: 10px;
+      }
+      .speaker-tag {
+        font-weight: bold;
+        color: var(--navy);
+        margin-right: 6px;
+      }
+      .script-en {
+        color: var(--text);
+      }
+      .script-jp {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .toggle-link {
+        color: var(--orange-dark);
+        font-size: 12px;
+        cursor: pointer;
+        text-decoration: underline;
+        margin-left: auto;
+      }
+      .question {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+      .question:first-of-type {
+        border-top: none;
+      }
+      .qtitle {
+        font-weight: bold;
+        margin-bottom: 8px;
+        font-size: 14.5px;
+      }
+      .choices {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .choice {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13.5px;
+      }
+      .choice:hover {
+        background: #ecb203;
+      }
+      .choice.selected {
+        border-color: var(--orange);
+        background: #646361;
+      }
+      .choice.correct-ans {
+        border-color: var(--correct);
+        background: #551ce5;
+      }
+      .choice.wrong-ans {
+        border-color: var(--wrong);
+        background: #eb5d5d;
+      }
+      .choice input {
+        margin: 0;
+      }
+      .explain {
+        display: none;
+        margin-top: 8px;
+        font-size: 12.5px;
+        color: var(--muted);
+        background: #e5cd85;
+        border-radius: 6px;
+        padding: 10px;
+      }
+      .explain.show {
+        display: block;
+      }
+      .grade-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .grade-btn {
+        background: var(--navy);
+        color: #d23e3e;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-size: 13.5px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .result-summary {
+        font-size: 13px;
+        color: var(--navy);
+        font-weight: bold;
+      }
+      .lastdate {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .sheet-panel {
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 16px;
+        margin-bottom: 20px;
+        font-size: 12.5px;
+      }
+      .sheet-panel h3 {
+        margin: 0 0 10px;
+        font-size: 14px;
+        color: var(--navy);
+      }
+      .sheet-panel label {
+        display: block;
+        margin-bottom: 8px;
+      }
+      .sheet-panel input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        font-family: inherit;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+      .sheet-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .sheet-row button {
+        padding: 7px 12px;
+        border-radius: 6px;
+        border: 1px solid var(--navy);
+        background: #fff;
+        color: var(--navy);
+        font-family: inherit;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .toggle-switch {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .stat-box {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+      }
+      .stat-box .num {
+        font-size: 22px;
+        font-weight: bold;
+        color: var(--navy);
+      }
+      .stat-box .label {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      #loading {
+        text-align: center;
+        color: var(--muted);
+        padding: 20px;
+        font-size: 13px;
+      }
 
-  /* ===== スマホ表示：文字と余白を縮小して1画面に収まりやすくする ===== */
-  @media (max-width: 480px){
-    .container{ padding:10px 8px; }
-    header{ padding:12px 14px; }
-    header h1{ font-size:14.5px; }
-    .card{ padding:12px 12px; margin-bottom:14px; }
-    .sheet-panel{ padding:12px; }
-    .badge{ font-size:9.5px; padding:2px 6px; }
-    .play-btn{ padding:9px 16px; font-size:13px; }
-    .pause-btn, .stop-btn{ padding:8px 12px; font-size:12px; }
-    .speed-select{ font-size:11px; }
-    .toggle-link{ font-size:11px; }
-    .script-box{ padding:10px; font-size:12.5px; line-height:1.55; }
-    .script-jp{ font-size:11px; }
-    .qtitle{ font-size:13px; margin-bottom:6px; }
-    .choice{ font-size:12px; padding:7px 8px; }
-    .explain{ font-size:11px; padding:8px; }
-    .grade-btn{ padding:9px 14px; font-size:12.5px; }
-    .result-summary{ font-size:12px; }
-    .stat-box .num{ font-size:18px; }
-    .stat-box{ padding:10px; }
-  }
-  @media (max-width: 360px){
-    .card{ padding:10px; }
-    .script-box{ font-size:11.5px; }
-    .choice{ font-size:11.5px; }
-    .qtitle{ font-size:12.5px; }
-  }
-</style>
-</head>
-<body>
+      /* ===== スマホ表示：文字と余白を縮小して1画面に収まりやすくする ===== */
+      @media (max-width: 480px) {
+        .container {
+          padding: 10px 8px;
+        }
+        header {
+          padding: 12px 14px;
+        }
+        header h1 {
+          font-size: 14.5px;
+        }
+        .card {
+          padding: 12px 12px;
+          margin-bottom: 14px;
+        }
+        .sheet-panel {
+          padding: 12px;
+        }
+        .badge {
+          font-size: 9.5px;
+          padding: 2px 6px;
+        }
+        .play-btn {
+          padding: 9px 16px;
+          font-size: 13px;
+        }
+        .pause-btn,
+        .stop-btn {
+          padding: 8px 12px;
+          font-size: 12px;
+        }
+        .speed-select {
+          font-size: 11px;
+        }
+        .toggle-link {
+          font-size: 11px;
+        }
+        .script-box {
+          padding: 10px;
+          font-size: 12.5px;
+          line-height: 1.55;
+        }
+        .script-jp {
+          font-size: 11px;
+        }
+        .qtitle {
+          font-size: 13px;
+          margin-bottom: 6px;
+        }
+        .choice {
+          font-size: 12px;
+          padding: 7px 8px;
+        }
+        .explain {
+          font-size: 11px;
+          padding: 8px;
+        }
+        .grade-btn {
+          padding: 9px 14px;
+          font-size: 12.5px;
+        }
+        .result-summary {
+          font-size: 12px;
+        }
+        .stat-box .num {
+          font-size: 18px;
+        }
+        .stat-box {
+          padding: 10px;
+        }
+      }
+      @media (max-width: 360px) {
+        .card {
+          padding: 10px;
+        }
+        .script-box {
+          font-size: 11.5px;
+        }
+        .choice {
+          font-size: 11.5px;
+        }
+        .qtitle {
+          font-size: 12.5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html">←</a>
+      <h1>Part3 会話問題対策</h1>
+    </header>
 
-<header>
-  <a href="index.html">←</a>
-  <h1>Part3 会話問題対策</h1>
-</header>
-
-<div class="container">
-
-  <div class="navbar">
-    <button id="navList" class="active">📋 一覧</button>
-    <button id="navStats">📊 統計</button>
-  </div>
-
-  <div id="listView">
-
-    <div class="filter-bar">
-      <select id="materialFilter"><option value="">教材：すべて</option></select>
-      <button id="applyFilter">絞り込み</button>
-      <button id="shuffleBtn">🔀 シャッフル</button>
-    </div>
-
-    <div id="sheetToggleArea" class="sheet-panel">
-      <h3>Googleスプレッドシート連携</h3>
-      <label>Apps Script Web App URL
-        <input type="text" id="sheetUrl" placeholder="https://script.google.com/macros/s/xxxx/exec">
-      </label>
-      <div class="sheet-row">
-        <button id="saveUrlBtn">保存</button>
-        <button id="testSendBtn">テスト送信</button>
-        <div class="toggle-switch">
-          <input type="checkbox" id="autoSendToggle">
-          <label for="autoSendToggle">採点時に自動送信</label>
-        </div>
+    <div class="container">
+      <div class="navbar">
+        <button id="navList" class="active">📋 一覧</button>
+        <button id="navStats">📊 統計</button>
       </div>
-      <div id="sheetStatus" style="margin-top:6px;color:var(--muted);"></div>
+
+      <div id="listView">
+        <div class="filter-bar">
+          <select id="materialFilter">
+            <option value="">教材：すべて</option>
+          </select>
+          <button id="applyFilter">絞り込み</button>
+          <button id="shuffleBtn">🔀 シャッフル</button>
+        </div>
+
+        <div id="sheetToggleArea" class="sheet-panel">
+          <h3>Googleスプレッドシート連携</h3>
+          <label
+            >Apps Script Web App URL
+            <input
+              type="text"
+              id="sheetUrl"
+              placeholder="https://script.google.com/macros/s/xxxx/exec"
+            />
+          </label>
+          <div class="sheet-row">
+            <button id="saveUrlBtn">保存</button>
+            <button id="testSendBtn">テスト送信</button>
+            <div class="toggle-switch">
+              <input type="checkbox" id="autoSendToggle" />
+              <label for="autoSendToggle">採点時に自動送信</label>
+            </div>
+          </div>
+          <div
+            id="sheetStatus"
+            style="margin-top: 6px; color: var(--muted)"
+          ></div>
+        </div>
+
+        <div id="questionsArea"></div>
+      </div>
+
+      <div id="statsView" style="display: none">
+        <div class="stats-summary">
+          <div class="stat-box">
+            <div class="num" id="statTotal">0</div>
+            <div class="label">総回答数</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="statCorrect">0</div>
+            <div class="label">正解数</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="statRate">0%</div>
+            <div class="label">全体正答率</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="statAnswered">0</div>
+            <div class="label">回答済み設問数</div>
+          </div>
+        </div>
+        <div id="statsTable"></div>
+      </div>
     </div>
 
-    <div id="questionsArea"></div>
-  </div>
+    <script>
+          /* ==========================================================
+       データ構造：会話(コンバセーション)ごとに3設問をまとめる
+       教材コード: TRN / BIZ / NTC / DMM / WHL / 730 / DIA / D10 / SEN / NEX / SPD / MOS / OFF
+       ========================================================== */
+          const conversations = [
+            {
+              id: "TRN-C1-L1",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L1",
+              addedDate: "2026-09-07",
+              lines: [
+                {
+                  speaker: "女性",
+                  en: "We'll have some consultants in next week to discuss the presentation for the competition. I want you to attend the meeting as a project manager. Do you have some time on Tuesday?",
+                  jp: "来週、コンペのためのプレゼンテーションについて話し合うためにコンサルタントが来ます。あなたにも、プロジェクトマネージャーとして会議に出席して欲しいのですが、火曜日に時間はありますか。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Actually, I will be gone on a business trip till Tuesday, but maybe I can have a video conference. Either that, or I'm available on Thursday if they prefer a face-to-face meeting.",
+                  jp: "実は火曜日まで出張で出ています。しかし、ビデオ会議はできると思います。もしくは、先方が対面の会議を好むようであれば、木曜日が空いています。",
+                },
+                {
+                  speaker: "女性",
+                  en: "Okay. I think a face-to-face should be better. They'll stay for five days, and it should be ok to move the meeting to Thursday. I'll call them now, and let you know the fixed schedule by e-mail.",
+                  jp: "わかりました。対面の方がいいでしょう。彼らは5日間滞在しますから、木曜日に会議を移しても大丈夫だと思います。今彼らに電話して、あなたには後で決まったスケジュールをEメールで知らせます。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "What are the speakers mainly discussing?",
+                  choices: {
+                    A: "Holding a competition",
+                    B: "Scheduling a meeting",
+                    C: "Planning a business trip",
+                    D: "Consulting a vacation plan",
+                  },
+                  answer: "B",
+                  explain:
+                    "女性が「会議に出席してほしい、火曜日は空いているか」と尋ね、以降ずっと会議の日程調整の話をしているため、正解は(B)。(A)competitionは会話の目的（コンペ対策）であり主題ではない。",
+                },
+                {
+                  qno: 2,
+                  text: "Why cannot the man attend the meeting on Tuesday?",
+                  choices: {
+                    A: "He will be busy making a presentation.",
+                    B: "He will be taking a vacation.",
+                    C: "He will be on a business trip.",
+                    D: "He will be meeting the consultants.",
+                  },
+                  answer: "C",
+                  explain:
+                    '男性は"I will be gone on a business trip till Tuesday"と発言しているため、正解は(C)。',
+                },
+                {
+                  qno: 3,
+                  text: "How will the woman tell the fixed schedule to the man?",
+                  choices: {
+                    A: "By a phone call",
+                    B: "By e-mail",
+                    C: "By a video call",
+                    D: "In person",
+                  },
+                  answer: "B",
+                  explain:
+                    '女性は最後に"let you know the fixed schedule by e-mail"と言っているため、正解は(B)。電話はコンサルタントへの連絡に使うだけで、男性への連絡はメール。',
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L2",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L2",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "女性",
+                  en: "Mr. Lee, can you spare some time for me now? I'm very nervous about my first presentation next week, and it would be helpful if you could review and revise my presentation documents.",
+                  jp: "Lee課長、今お時間を割いていただけますか。来週の初めてのプレゼンテーションのことで、とても緊張しているんです。このプレゼンテーション資料を見直していただけるとありがたいのですが。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Hmm. Too many graphs on one page make it harder for the audience to understand what the main point is. I think you should limit the page to one graph that shows your point and explain the other information in separate pages.",
+                  jp: "うーん。一つのページにグラフがたくさん載っていると、聞き手は要点がわからなくなってしまうな。要点を示すグラフ一つに絞って、他の情報は違うページで説明した方が良いと思う。",
+                },
+                {
+                  speaker: "女性",
+                  en: "I see. I'll make some edits. Do you see anything else?",
+                  jp: "なるほど。そのように直します。他にはありますか。",
+                },
+                {
+                  speaker: "男性",
+                  en: "No. I think that's it. But the most important thing, I think, is not to be too nervous. Stay calm, explain your arguments to the audience, and you'll be fine.",
+                  jp: "いいや、それだけだと思うよ。しかし、私が思うに一番大事なのは、緊張しすぎないことだね。落ち着いて聞き手に主張を伝えられれば君なら大丈夫。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "What is the woman concerned about?",
+                  choices: {
+                    A: "Accuracy of the graphs",
+                    B: "Her first presentation",
+                    C: "Controversial presentation topics",
+                    D: "Misspellings on the documents",
+                  },
+                  answer: "B",
+                  explain:
+                    "女性は「my first presentation next week」と述べ、初めてのプレゼンテーションについてとても緊張しているため、(B)。",
+                },
+                {
+                  qno: 2,
+                  text: "What does the man suggest about the documents?",
+                  choices: {
+                    A: "Adding more graphics",
+                    B: "Making the fonts bigger",
+                    C: "Reducing some graphs",
+                    D: "Putting the title in front",
+                  },
+                  answer: "C",
+                  explain:
+                    "男性は「limit the page to one graph」と述べ、1ページのグラフを1つに絞るよう提案しているため、(C)。",
+                },
+                {
+                  qno: 3,
+                  text: "According to the man, what is the most important thing?",
+                  choices: {
+                    A: "To use effective graphics",
+                    B: "To stay calm",
+                    C: "To practice with him.",
+                    D: "To use grammar checking tools",
+                  },
+                  answer: "B",
+                  explain:
+                    "男性は「the most important thing ... is not to be too nervous. Stay calm」と述べているため、(B)。",
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L3",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L3",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "男性",
+                  en: "Hi, is James here today? I'm Joe from across the street.",
+                  jp: "すみません、Jamesさんは今日在宅中ですか。僕はJoeといいます。通りの向こうに住んでいます。",
+                },
+                {
+                  speaker: "女性",
+                  en: "Hi, Joe. He's not here right now. I'm his sister, Lyla. I'm visiting him for the weekend.",
+                  jp: "こんにちは、Joe。今、彼は不在です。私は彼の姉のLylaです。週末だけ、彼を訪ねてきているの。",
+                },
+                {
+                  speaker: "男性",
+                  en: "I see. Um, I've brought his package, which was mistakenly delivered to my house. You know, this has happened a few times now, and actually, it seems he always puts in my address.",
+                  jp: "そうなんですね。あの、彼の小包を持ってきました。間違って、僕の家に届けられたんです。実はこういうことが数回起きていて、彼はいつも僕の住所を書いてるみたいなんです。",
+                },
+                {
+                  speaker: "女性",
+                  en: "Oh no. I'm sorry. You're right. The street number is wrong. He must have remembered his new address wrong. I'll tell him to be careful next time.",
+                  jp: "あら、それはごめんなさい。そうみたいね。番地が間違ってる。彼は自分の住所を間違って覚えてるんだわ。次回は気をつけるように言います。",
+                },
+                {
+                  speaker: "男性",
+                  en: "I understand that as he's recently moved here. But I'd appreciate if you can tell him so.",
+                  jp: "彼もここには最近引越してきたばかりですから、状況はわかります。しかし、あなたが彼にそう伝えていただけると幸いです。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "Why did the man visit the woman's house?",
+                  choices: {
+                    A: "To spend the weekend with her brother",
+                    B: "To ask her if everything was ok",
+                    C: "To help her carry a lot of packages",
+                    D: "To deliver the package to her brother",
+                  },
+                  answer: "D",
+                  explain:
+                    "男性は「I've brought his package」と述べており、間違って自宅に届けられたJamesの小包を届けに来たため、(D)。",
+                },
+                {
+                  qno: 2,
+                  text: "What did the speakers find on the package?",
+                  choices: {
+                    A: "Joe's address",
+                    B: "The woman's address",
+                    C: "The woman's brother's address",
+                    D: "A stranger's address",
+                  },
+                  answer: "A",
+                  explain:
+                    "男性はJamesが「always puts in my address」と述べ、女性も「The street number is wrong」と確認しているため、小包にはJoeの住所が記載されていたとわかる。(A)。",
+                },
+                {
+                  qno: 3,
+                  text: "What will the woman most likely tell to her brother?",
+                  choices: {
+                    A: "Notify his new address to the post office",
+                    B: "Visit Joe for apology",
+                    C: "Write a Thank You note to Joe",
+                    D: "Remember his correct address",
+                  },
+                  answer: "D",
+                  explain:
+                    "女性は「I'll tell him to be careful next time」と述べているため、弟に正しい住所を覚えて間違えないよう伝えると考えられる。(D)。",
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L4",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L4",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "女性",
+                  en: "The sales distribution ratio in the market for this term is shown in this pie chart. Our company ranked third in sales, moving up from fourth because of increased sales. Our new cancer medicine is responsible for these increases.",
+                  jp: "今期のマーケット内の売上構成比率がこのパイチャートに示してあります。私たちの会社は、売上を伸ばしたため、3位になり、4位から順位を上げました。ガンの新薬がこの大きな売り上げに貢献しています。",
+                },
+                {
+                  speaker: "男性",
+                  en: "I see. That's not bad, but I think there must be a way to further increase our sales of other pharmaceutical products.",
+                  jp: "なるほど。悪くはないね。だけど、他の医薬品の売り上げをもっと伸ばす方法は必ずあるはずだと思うんだ。",
+                },
+                {
+                  speaker: "女性",
+                  en: "Exactly. So, as the first step, I'm thinking of developing stronger supply chains. This is one of the ideas that we have tried to implement last term.",
+                  jp: "その通りです。ですので、第一段階として、私はサプライチェーンの強化することを考えています。これは前期にやろうとしていたことの一つです。",
+                },
+                {
+                  speaker: "男性",
+                  en: "That's a good idea. We should also consider cutting more costs. I think there are lots of things we should consider. Let's develop some specific strategies by next week's meeting.",
+                  jp: "それはいい考えだね。それとコストカットも考えるべきだ。考慮することはたくさんある。来週の会議までに詳しい戦略を考えておこう。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "Look at the graphic. Which is the speakers' company?",
+                  imageUrl:
+                    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 360' width='100%' height='100%' style='background:%23fff;'><text x='200' y='35' text-anchor='middle' font-family='serif,sans-serif' font-size='28' font-weight='normal' fill='%23000'>Market Share</text><g stroke='%23000' stroke-width='3' fill='%23fff'><path d='M 200 190 L 200 60 A 130 130 0 0 1 321.3 236.4 Z'/><path d='M 200 190 L 321.3 236.4 A 130 130 0 0 1 140.8 305.8 Z'/><path d='M 200 190 L 140.8 305.8 A 130 130 0 0 1 94.8 113.7 Z'/><path d='M 200 190 L 94.8 113.7 A 130 130 0 0 1 159.8 66.2 Z'/><path d='M 200 190 L 159.8 66.2 A 130 130 0 0 1 200 60 Z'/></g><text x='255' y='145' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle'>Company A</text><text x='255' y='175' font-family='sans-serif' font-size='22' font-weight='bold' text-anchor='middle'>31%</text><text x='225' y='250' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle'>Company B</text><text x='225' y='280' font-family='sans-serif' font-size='22' font-weight='bold' text-anchor='middle'>28%</text><text x='130' y='215' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle'>Company C</text><text x='130' y='245' font-family='sans-serif' font-size='22' font-weight='bold' text-anchor='middle'>24%</text><text x='135' y='125' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle'>12%</text><text x='135' y='150' font-family='sans-serif' font-size='18' font-weight='bold' text-anchor='middle'>Company D</text><text x='180' y='95' font-family='sans-serif' font-size='18' font-weight='bold' text-anchor='middle'>5%</text><text x='145' y='48' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle'>Others</text><line x1='145' y1='52' x2='170' y2='75' stroke='%23000' stroke-width='2'/></svg>",
+                  choices: { A: "C", B: "D", C: "A", D: "B" },
+                  answer: "C",
+                  explain:
+                    "女性は自社が売上順位を4位から3位に上げたと述べている。図では3位がCompany A（31%）なので、(C)。",
+                },
+                {
+                  qno: 2,
+                  text: "Where do the speakers most likely work?",
+                  choices: {
+                    A: "At a pharmaceutical company",
+                    B: "At an automobile company",
+                    C: "At an advertising agency",
+                    D: "At a chemical manufacturer",
+                  },
+                  answer: "A",
+                  explain:
+                    "女性は「our new cancer medicine」「pharmaceutical products」と述べているため、製薬会社で働いていると考えられる。(A)。",
+                },
+                {
+                  qno: 3,
+                  text: "What does the woman suggest to increase the sales?",
+                  choices: {
+                    A: "Create new advertisements",
+                    B: "Cut the costs",
+                    C: "Boost production",
+                    D: "Make stronger supply chains",
+                  },
+                  answer: "D",
+                  explain:
+                    "女性は「developing stronger supply chains」を第一段階として考えていると述べているため、(D)。",
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L5",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L5",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "女性",
+                  en: "Good morning Edwin. Have you already heard about the new intern?",
+                  jp: "おはよう、Edwin。新しいインターンについてもう聞いてる？",
+                },
+                {
+                  speaker: "男性",
+                  en: "Um, I only know that he or she will start working today. Have you already met the person?",
+                  jp: "えっと、今日から働き始めるということだけ知ってるけど。君はもう会ったの？",
+                },
+                {
+                  speaker: "女性",
+                  en: "Yes. I just met her this morning. She is a senior college student. Oh, there she is. Julie, come here.",
+                  jp: "ええ。今朝ちょうど会ったの。彼女は大学4年生よ。あ、いたわ。Julie、こっちに来て。",
+                },
+                {
+                  speaker: "女性2",
+                  en: "Hello. I'm Julie. Nice to meet you.",
+                  jp: "こんにちは。Julieです。はじめまして。",
+                },
+                {
+                  speaker: "女性",
+                  en: "She will be working as an assistant in the marketing department. So I thought you could help her.",
+                  jp: "彼女はマーケティング部でアシスタントとして働くの。だから、あなたが彼女を助けてあげられると思って。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Well, I am now working at the advertising department, but since I used to work there, I can show you around now and introduce you to my former colleagues.",
+                  jp: "そうだな、今は広告部で働いてるんだ。だけど、昔そこで働いていたから、今から案内して、元同僚たちを紹介してあげるよ。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "When did Julie start her internship at this company?",
+                  choices: {
+                    A: "Today",
+                    B: "Yesterday",
+                    C: "A week ago",
+                    D: "4 years ago",
+                  },
+                  answer: "A",
+                  explain:
+                    "男性が「he or she will start working today」と述べ、Julieも新しいインターンとして紹介されているため、(A)。",
+                },
+                {
+                  qno: 2,
+                  text: "Which department does Julie belong to?",
+                  choices: {
+                    A: "The accounting department",
+                    B: "The sales department",
+                    C: "The marketing department",
+                    D: "The advertising department",
+                  },
+                  answer: "C",
+                  explain:
+                    "女性が「She will be working as an assistant in the marketing department」と述べているため、(C)。",
+                },
+                {
+                  qno: 3,
+                  text: "Who will Julie most likely meet next?",
+                  choices: {
+                    A: "Her assistants",
+                    B: "Edwin's current supervisor",
+                    C: "The president of the company",
+                    D: "Edwin's former colleagues",
+                  },
+                  answer: "D",
+                  explain:
+                    "Edwinが「I can show you around now and introduce you to my former colleagues」と述べているため、(D)。",
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L6",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L6",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "女性",
+                  en: "Clark, the training seminar you had planned was great. I heard the trainees' feedback was generally positive.",
+                  jp: "Clark、あなたが企画した研修はとてもよかったわ。研修生からの評価もおおむね好評と聞いたよ。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Thanks. But some trainees complained there were so many speeches that they had fewer chances to communicate with the other employees.",
+                  jp: "ありがとう、だけど、研修生の中には、スピーチが多すぎて他の社員と交流する時間が無かったっていう不満も聞いたんだ。",
+                },
+                {
+                  speaker: "女性",
+                  en: "Really? Well, maybe it's because we had a lot of external guest speakers. Actually, I might have experienced the same as a trainee.",
+                  jp: "本当？まあ、外部からの講演者も多かったからかもね。実際、私も研修生だったら同じ考えだったかも。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Yeah, I think so too. I'll incorporate these opinions to make the next seminar more valuable. By the way, I've also planned a social gathering where trainees can communicate with employees to deepen their understanding of the daily tasks. It'll be helpful if you could join it as well.",
+                  jp: "うん、僕もそう思うだろうな。次の研修をより価値のあるものにするために、これらの意見を反映させるよ。ところで、研修生が社員と話して、日々の仕事の理解を深めるための交流会も企画したんだ。君も参加してくれたら助かるよ。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "What is this conversation mainly about?",
+                  choices: {
+                    A: "The stock market situation",
+                    B: "Developing a new product",
+                    C: "Mergers of companies",
+                    D: "Feedback on a training seminar",
+                  },
+                  answer: "D",
+                  explain:
+                    "会話の中心は、企画した研修セミナーへの研修生からの評価と、次回の研修をよりよくするための意見についてなので、(D)。",
+                },
+                {
+                  qno: 2,
+                  text: "What is the main reason for the negative opinions?",
+                  choices: {
+                    A: "The program was not organized well.",
+                    B: "There was not enough time for a workshop.",
+                    C: "No one knew about the product.",
+                    D: "There were too many speeches.",
+                  },
+                  answer: "D",
+                  explain:
+                    "男性は「there were so many speeches that they had fewer chances to communicate」と述べているため、(D)。",
+                },
+                {
+                  qno: 3,
+                  text: "What does the man ask the woman to do?",
+                  choices: {
+                    A: "Participate in the social gathering",
+                    B: "Plan another seminar next year",
+                    C: "List the suitable guest speakers",
+                    D: "Show him the market quotations",
+                  },
+                  answer: "A",
+                  explain:
+                    "男性は「It'll be helpful if you could join it as well」と述べ、交流会への参加を求めているため、(A)。",
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L7",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L7",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "女性",
+                  en: "Hello, this is Reese from the Bloom Company. I'm calling you regarding our company's dinner at your hotel next month. I wanted to let you know that there are some guests with food allergies.",
+                  jp: "もしもし、Bloom社のReeseです。来月の弊社の夕食会の件でお電話させていただいています。アレルギーをお持ちのお客様がいらっしゃることをお伝えしておきたかったんです。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Hi, Reese. Yes, we are now aware thanks to the guest list you sent me. Since we don't use peanuts in our course meal, those with peanut allergies shouldn't have any problems. For the other three guests, we'll prepare different menus. How does that sound?",
+                  jp: "もしもし、Reese。ええ、あなたが送ってくれたリストのおかげで、そのことは了承しています。私たちのコースメニューにピーナッツは使わないので、ピーナッツアレルギーの方々に関して問題ありません。残る3名の方々には、他のメニューを用意しようと思っていますが、いかがでしょうか。",
+                },
+                {
+                  speaker: "女性",
+                  en: "That would be great. Also, we are expecting a few more guests. Is that ok?",
+                  jp: "それは良かったです。また、あと数人のお客様を見込んでいます。それは大丈夫でしょうか。",
+                },
+                {
+                  speaker: "男性",
+                  en: "No problem. Just let me know the exact number of guests when I call you two days prior to the dinner date.",
+                  jp: "問題ありません。夕食会の2日前にこちらから電話しますので、その時に正確なお客様の数を教えてください。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "What is the conversation mainly about?",
+                  choices: {
+                    A: "Promoting allergy-free meals",
+                    B: "Booking a hotel room",
+                    C: "Cooking for a competition",
+                    D: "Discussing a dinner plan",
+                  },
+                  answer: "D",
+                  explain:
+                    "来月のホテルでの会社の夕食会について、食物アレルギーへの対応や参加人数を話しているため、(D)。",
+                },
+                {
+                  qno: 2,
+                  text: "Look at the graphic. Who will have the meal as the majority of the guests?",
+                  imageUrl: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMzAwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBzdHlsZT0iYmFja2dyb3VuZDojZmZmOyI+PGcgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjMiPjxyZWN0IHg9IjMwIiB5PSIzMCIgd2lkdGg9IjE2NSIgaGVpZ2h0PSI0NSIgZmlsbD0iI2VhZWFlYSIvPjxyZWN0IHg9IjE5NSIgeT0iMzAiIHdpZHRoPSIxNzUiIGhlaWdodD0iNDUiIGZpbGw9IiNlYWVhZWEiLz48cmVjdCB4PSIzMCIgeT0iNzUiIHdpZHRoPSIxNjUiIGhlaWdodD0iNDUiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxOTUiIHk9Ijc1IiB3aWR0aD0iMTc1IiBoZWlnaHQ9IjQ1IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iMzAiIHk9IjEyMCIgd2lkdGg9IjE2NSIgaGVpZ2h0PSI0NSIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjE5NSIgeT0iMTIwIiB3aWR0aD0iMTc1IiBoZWlnaHQ9IjQ1IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iMzAiIHk9IjE2NSIgd2lkdGg9IjE2NSIgaGVpZ2h0PSI0NSIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjE5NSIgeT0iMTY1IiB3aWR0aD0iMTc1IiBoZWlnaHQ9IjQ1IiBmaWxsPSIjZmZmIi8+PHJlY3QgeD0iMzAiIHk9IjIxMCIgd2lkdGg9IjE2NSIgaGVpZ2h0PSI0NSIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjE5NSIgeT0iMjEwIiB3aWR0aD0iMTc1IiBoZWlnaHQ9IjQ1IiBmaWxsPSIjZmZmIi8+PC9nPjx0ZXh0IHg9IjExMi41IiB5PSI2MSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5OYW1lPC90ZXh0Pjx0ZXh0IHg9IjI4Mi41IiB5PSI2MSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Gb29kIEFsbGVyZ3k8L3RleHQ+PHRleHQgeD0iMTEyLjUiIHk9IjEwNiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkthdGUuIFQ8L3RleHQ+PHRleHQgeD0iMjgyLjUiIHk9IjEwNiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkVnZzwvdGV4dD48dGV4dCB4PSIxMTIuNSIgeT0iMTUxIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+V2lsc29uLiBCPC90ZXh0Pjx0ZXh0IHg9IjI4Mi41IiB5PSIxNTEiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5QZWFudXRzPC90ZXh0Pjx0ZXh0IHg9IjExMi41IiB5PSIxOTYiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5HcmFjZS4gSzwvdGV4dD48dGV4dCB4PSIyODIuNSIgeT0iMTk2IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWlsazwvdGV4dD48dGV4dCB4PSIxMTIuNSIgeT0iMjQxIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SmFjb2IuIFM8L3RleHQ+PHRleHQgeD0iMjgyLjUiIHk9IjI0MSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlNocmltcHM8L3RleHQ+PC9zdmc+",
+                  choices: {
+                    A: "Kate T.",
+                    B: "Wilson B.",
+                    C: "Grace K.",
+                    D: "Jacob S.",
+                  },
+                  answer: "B",
+                  explain:
+                    "Wilsonはピーナッツアレルギーだが、ホテルのコース料理にはピーナッツを使わないため、特別メニューを必要としない。したがって、通常のコース料理を食べる側に含まれるWilsonが該当する。(B)。",
+                },
+                {
+                  qno: 3,
+                  text: "What will the woman do two days before the event?",
+                  choices: {
+                    A: "Make allergy-free meals",
+                    B: "Prepare the food allergy list",
+                    C: "Give the man a phone call",
+                    D: "Tell the man the exact number of the guests",
+                  },
+                  answer: "D",
+                  explain:
+                    "男性が「夕食会の2日前にこちらから電話しますので、その時に正確なお客様の数を教えて」と述べているため、(D)。",
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L8",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L8",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "男性",
+                  en: "Hi, Sharon and Mark. How was Ronald's first concert last week?",
+                  jp: "やあ、SharonとMark。先週のRonaldのデビューコンサートはどうだった？",
+                },
+                {
+                  speaker: "女性",
+                  en: "It was awesome. You know, it was his debut concert, and the stage was not that big, but his performance was just great. I couldn't believe our best friend was singing on stage.",
+                  jp: "とても良かったわ。彼のデビューコンサートで、ステージはそれほど大きくなかったけど、彼の歌は本当に素晴らしかった。私たちの親友がステージで歌ってるなんて、信じられなかったわ。",
+                },
+                {
+                  speaker: "男性2",
+                  en: "Ronald got us first row seats. Our excitement was beyond imagination. You should've come too, Chris.",
+                  jp: "Ronaldが一列目の席を僕たちに用意してくれたんだ。僕たちの興奮といったら、想像を超えるものだったよ。君も来たらよかったのに、Chris。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Lucky you. I couldn't because I had to move that day. Well, I can now organize a house warming party.",
+                  jp: "うらやましいよ。その日は引越ししなければいけなくて、行けなかったんだ。そうだ、引越し祝いのパーティーを企画するよ。",
+                },
+                { speaker: "男性2", en: "Sounds fun.", jp: "楽しそうだね。" },
+                {
+                  speaker: "男性",
+                  en: "And, of course, we'll have to invite Ronald over and ask him to sing.",
+                  jp: "そしてもちろんRonaldを招待して、歌ってもらうようにお願いしなくちゃね。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "What are the speakers talking about?",
+                  choices: {
+                    A: "Their moving plans",
+                    B: "The circus performance",
+                    C: "Their musical performance",
+                    D: "The first concert of their friend",
+                  },
+                  answer: "D",
+                  explain:
+                    "会話の中心はRonaldのデビューコンサートについてなので、(D)。",
+                },
+                {
+                  qno: 2,
+                  text: "What did Ronald do for Sharon and Mark?",
+                  choices: {
+                    A: "Reserved seats in the first row",
+                    B: "Performed a special song",
+                    C: "Introduced the agent",
+                    D: "Recorded his performance",
+                  },
+                  answer: "A",
+                  explain:
+                    "男性2が「Ronald got us first row seats」と述べているため、(A)。",
+                },
+                {
+                  qno: 3,
+                  text: "Why did Chris not show up?",
+                  choices: {
+                    A: "He did not know about the performance.",
+                    B: "He was holding a house warming party.",
+                    C: "He did not have the ticket.",
+                    D: "He was moving.",
+                  },
+                  answer: "D",
+                  explain:
+                    "Chrisは「I couldn't because I had to move that day」と述べているため、(D)。",
+                },
+              ],
+            },
+            {
+              id: "TRN-C1-L9",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L9",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "男性",
+                  en: "The new software has finally been installed in our computers.",
+                  jp: "新しいソフトウェアがようやく我々のパソコンにインストールされたね。",
+                },
+                {
+                  speaker: "女性",
+                  en: "I know. Have you already tried to use it?",
+                  jp: "そうね。もう使ってみた？",
+                },
+                {
+                  speaker: "男性",
+                  en: "Yeah, but I'm not yet used to it. I want to retrieve the list of sales for this month, but I haven't figured out how. Do you know?",
+                  jp: "うん、だけどまだ慣れていないよ。今月の売り上げリストが欲しいんだけど、どうやればいいかわからないんだ。わかる？",
+                },
+                {
+                  speaker: "女性",
+                  en: "That's what I'm struggling with too. It looks like Jason is a master at this software already.",
+                  jp: "それは私もわからなくて困っていることよ。Jasonはもうすでにこのソフトウェアをマスターしているみたいだけどね。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Oh yeah. I knew it. He is really good with new technology. He must know everything about this software by now.",
+                  jp: "ああ、そうだ。そうだろうと思ったよ。彼はいつも新しいテクノロジーを操作するのがうまいよね。彼なら既にこの新しいソフトウェアのことをなんでも知っているはずだ。",
+                },
+                {
+                  speaker: "女性",
+                  en: "You bet. I have a meeting now. Ask Jason, and teach me how to do it later.",
+                  jp: "絶対そうよ。私は今から会議があるから、Jasonに聞いて、後で私にもどうやるか教えてね。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "What kind of trouble do the speakers have?",
+                  choices: {
+                    A: "Obtaining the client information",
+                    B: "Shutting down the computers",
+                    C: "Getting the list of the sales",
+                    D: "Updating the new software",
+                  },
+                  answer: "D",
+                  explain:
+                    "会話では新しいソフトウェアの操作にまだ慣れておらず、使い方がわからないことが問題になっているため、(D)。",
+                },
+                {
+                  qno: 2,
+                  text: 'What does the woman mean when she says, "It looks like Jason is a master at this software already"?',
+                  choices: {
+                    A: "Jason can solve the problem.",
+                    B: "Jason is her boss.",
+                    C: "Jason has uninstalled the software.",
+                    D: "Jason has suggested they have better software.",
+                  },
+                  answer: "A",
+                  explain:
+                    "Jasonは新しいテクノロジーを扱うのが得意で、ソフトウェアについて何でも知っているはずだと話しているため、問題を解決できると考えている。(A)。",
+                },
+                {
+                  qno: 3,
+                  text: "What does the woman ask the man to do after the meeting?",
+                  choices: {
+                    A: "E-mail her using the new software",
+                    B: "Call her regarding the meeting",
+                    C: "Introduce Jason to her",
+                    D: "Teach her how to manage the new software",
+                  },
+                  answer: "D",
+                  explain:
+                    "女性は「Ask Jason, and teach me how to do it later」と述べているため、後で新しいソフトウェアの使い方を教えるよう頼んでいる。(D)。",
+                },
+              ],
+            },
 
-  <div id="statsView" style="display:none;">
-    <div class="stats-summary">
-      <div class="stat-box"><div class="num" id="statTotal">0</div><div class="label">総回答数</div></div>
-      <div class="stat-box"><div class="num" id="statCorrect">0</div><div class="label">正解数</div></div>
-      <div class="stat-box"><div class="num" id="statRate">0%</div><div class="label">全体正答率</div></div>
-      <div class="stat-box"><div class="num" id="statAnswered">0</div><div class="label">回答済み設問数</div></div>
-    </div>
-    <div id="statsTable"></div>
-  </div>
+            {
+              id: "TRN-C1-L10",
+              material: "TRN",
+              materialLabel: "トレーニング TOEIC®test",
+              qcode: "C1-L10",
+              addedDate: "2026-09-14",
+              lines: [
+                {
+                  speaker: "男性",
+                  en: "Hello. This is Matthew speaking. I reserved a table for seven p.m., but would like to change the reservation to eight p.m.",
+                  jp: "もしもし、Matthewです。7時にテーブルを予約していたのですが、8時に変更をお願いしたいのですが。",
+                },
+                {
+                  speaker: "女性",
+                  en: "Thank you for calling. Okay. Let me check now. I'm sorry, but we have full reservations for eight. How about six?",
+                  jp: "お電話ありがとうございます。かしこまりました。確認させてください。すみませんが、8時は満席です。6時はいかがですか。",
+                },
+                {
+                  speaker: "男性",
+                  en: "Well, I might be late for about an hour or more because of my work.",
+                  jp: "そうだな、それだと、仕事で1時間かそれ以上遅れそうなんだ。",
+                },
+                {
+                  speaker: "女性",
+                  en: "I see. It's a little bit late, but how about nine? The last orders are taken at eleven, so you will still have some time.",
+                  jp: "分かりました。それでは少し遅いですが、9時はいかがですか。ラストオーダーは11時なので、時間に余裕はありますよ。",
+                },
+                {
+                  speaker: "男性",
+                  en: "That should be fine. Can you change the reservation to nine then?",
+                  jp: "それで構わないかな。では予約を9時に変更してくれませんか。",
+                },
+                {
+                  speaker: "女性",
+                  en: "Of course. I'll send you a confirmation e-mail about the details of your new reservation.",
+                  jp: "もちろんです。新しい予約の詳細の確認をEメールで送っておきます。",
+                },
+              ],
+              questions: [
+                {
+                  qno: 1,
+                  text: "What is the man's phone call about?",
+                  choices: {
+                    A: "Confirm the number of guests for the reserved table",
+                    B: "Cancel the reservation",
+                    C: "Make a new reservation",
+                    D: "Change the reservation time",
+                  },
+                  answer: "D",
+                  explain:
+                    "男性は7時の予約を8時、最終的には9時へ変更したいと電話しています。したがって、電話の目的は予約時間の変更です。",
+                },
+                {
+                  qno: 2,
+                  text: "Why is six o'clock inconvenient for the man?",
+                  choices: {
+                    A: "He does not like early dinner.",
+                    B: "He wants to avoid a traffic jam.",
+                    C: "He will be visiting his mother.",
+                    D: "He cannot leave his work by then.",
+                  },
+                  answer: "D",
+                  explain:
+                    "男性は仕事のため、6時だと1時間以上遅れるかもしれないと言っています。したがって、6時には仕事を終えて出られません。",
+                },
+                {
+                  qno: 3,
+                  text: "What will the woman most likely do next?",
+                  choices: {
+                    A: "Bring the meal to the man.",
+                    B: "Take the man's order.",
+                    C: "Send an e-mail to the man.",
+                    D: "Call the manager.",
+                  },
+                  answer: "C",
+                  explain:
+                    "女性は最後に、新しい予約の詳細について確認メールを送ると言っています。",
+                },
+              ],
+            },
+          ];
 
-</div>
+          /* ========================= localStorage ========================= */
+          const LS_KEY = "part3_stats_v1";
+          const LS_URL_KEY = "part3_sheet_url";
+          const LS_AUTOSEND_KEY = "part3_autosend";
 
-<script>
-/* ==========================================================
-   データ構造：会話(コンバセーション)ごとに3設問をまとめる
-   教材コード: TRN / BIZ / NTC / DMM / WHL / 730 / DIA / D10 / SEN / NEX / SPD / MOS / OFF
-   ========================================================== */
-const conversations = [
-  {
-    id: "TRN-C1-L1",
-    material: "TRN",
-    materialLabel: "トレーニング TOEIC®test",
-    qcode: "C1-L1",
-    addedDate: "2026-09-07",
-    lines: [
-      { speaker:"女性", en:"We'll have some consultants in next week to discuss the presentation for the competition. I want you to attend the meeting as a project manager. Do you have some time on Tuesday?",
-        jp:"来週、コンペのためのプレゼンテーションについて話し合うためにコンサルタントが来ます。あなたにも、プロジェクトマネージャーとして会議に出席して欲しいのですが、火曜日に時間はありますか。" },
-      { speaker:"男性", en:"Actually, I will be gone on a business trip till Tuesday, but maybe I can have a video conference. Either that, or I'm available on Thursday if they prefer a face-to-face meeting.",
-        jp:"実は火曜日まで出張で出ています。しかし、ビデオ会議はできると思います。もしくは、先方が対面の会議を好むようであれば、木曜日が空いています。" },
-      { speaker:"女性", en:"Okay. I think a face-to-face should be better. They'll stay for five days, and it should be ok to move the meeting to Thursday. I'll call them now, and let you know the fixed schedule by e-mail.",
-        jp:"わかりました。対面の方がいいでしょう。彼らは5日間滞在しますから、木曜日に会議を移しても大丈夫だと思います。今彼らに電話して、あなたには後で決まったスケジュールをEメールで知らせます。" }
-    ],
-    questions: [
-      {
-        qno:1,
-        text:"What are the speakers mainly discussing?",
-        choices:{A:"Holding a competition", B:"Scheduling a meeting", C:"Planning a business trip", D:"Consulting a vacation plan"},
-        answer:"B",
-        explain:"女性が「会議に出席してほしい、火曜日は空いているか」と尋ね、以降ずっと会議の日程調整の話をしているため、正解は(B)。(A)competitionは会話の目的（コンペ対策）であり主題ではない。"
-      },
-      {
-        qno:2,
-        text:"Why cannot the man attend the meeting on Tuesday?",
-        choices:{A:"He will be busy making a presentation.", B:"He will be taking a vacation.", C:"He will be on a business trip.", D:"He will be meeting the consultants."},
-        answer:"C",
-        explain:"男性は\"I will be gone on a business trip till Tuesday\"と発言しているため、正解は(C)。"
-      },
-      {
-        qno:3,
-        text:"How will the woman tell the fixed schedule to the man?",
-        choices:{A:"By a phone call", B:"By e-mail", C:"By a video call", D:"In person"},
-        answer:"B",
-        explain:"女性は最後に\"let you know the fixed schedule by e-mail\"と言っているため、正解は(B)。電話はコンサルタントへの連絡に使うだけで、男性への連絡はメール。"
-      }
-    ]
-  }
-];
+          function loadStats() {
+            try {
+              return JSON.parse(localStorage.getItem(LS_KEY)) || {};
+            } catch (e) {
+              return {};
+            }
+          }
+          function saveStats(s) {
+            localStorage.setItem(LS_KEY, JSON.stringify(s));
+          }
 
-/* ========================= localStorage ========================= */
-const LS_KEY = "part3_stats_v1";
-const LS_URL_KEY = "part3_sheet_url";
-const LS_AUTOSEND_KEY = "part3_autosend";
+          function statKey(convId, qno) {
+            return convId + "-Q" + qno;
+          }
 
-function loadStats(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; }
-}
-function saveStats(s){ localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+          function recordAnswer(convId, qno, correct) {
+            const stats = loadStats();
+            const key = statKey(convId, qno);
+            if (!stats[key]) stats[key] = { attempts: 0, correct: 0, lastDate: "" };
+            stats[key].attempts += 1;
+            if (correct) stats[key].correct += 1;
+            const today = new Date();
+            stats[key].lastDate =
+              today.getFullYear() +
+              "-" +
+              String(today.getMonth() + 1).padStart(2, "0") +
+              "-" +
+              String(today.getDate()).padStart(2, "0");
+            saveStats(stats);
+            return stats[key];
+          }
 
-function statKey(convId, qno){ return convId + "-Q" + qno; }
+          /* ========================= 音声再生（TTS） ========================= */
+          // 性別ごとに異なる声を割り当てる。「男性1」「男性2」のように同性が複数登場する場合は、
+          // その性別の中で別の声を順番に割り当て、声の種類が足りない場合のみピッチを少しずらして区別する。
+          let voices = [];
+          function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+          }
+          loadVoices();
+          if (typeof speechSynthesis !== "undefined") {
+            speechSynthesis.onvoiceschanged = loadVoices;
+          }
 
-function recordAnswer(convId, qno, correct){
-  const stats = loadStats();
-  const key = statKey(convId, qno);
-  if(!stats[key]) stats[key] = { attempts:0, correct:0, lastDate:"" };
-  stats[key].attempts += 1;
-  if(correct) stats[key].correct += 1;
-  const today = new Date();
-  stats[key].lastDate = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
-  saveStats(stats);
-  return stats[key];
-}
+          function getVoicePools() {
+            const enVoices = voices.filter(
+              (v) => v.lang && v.lang.startsWith("en"),
+            );
+            const femaleHints = [
+              "female",
+              "woman",
+              "samantha",
+              "victoria",
+              "zira",
+              "susan",
+              "karen",
+              "tessa",
+              "fiona",
+              "moira",
+              "salli",
+              "joanna",
+              "kimberly",
+              "amy",
+              "emma",
+              "ivy",
+              "kendra",
+              "kate",
+              "serena",
+              "aria",
+              "女性",
+            ];
+            const maleHints = [
+              "male",
+              "man",
+              "daniel",
+              "alex",
+              "fred",
+              "david",
+              "mark",
+              "aaron",
+              "james",
+              "brian",
+              "joey",
+              "justin",
+              "matthew",
+              "guy",
+              "ryan",
+              "eric",
+              "liam",
+              "男性",
+            ];
+            let female = enVoices.filter((v) =>
+              femaleHints.some((h) => v.name.toLowerCase().includes(h)),
+            );
+            let male = enVoices.filter(
+              (v) =>
+                maleHints.some((h) => v.name.toLowerCase().includes(h)) &&
+                !female.includes(v),
+            );
+            if (female.length === 0 && male.length === 0 && enVoices.length > 0) {
+              // 名前から性別を判別できない端末では、せめて声だけは分かれるように交互に割り振る
+              enVoices.forEach((v, i) => {
+                if (i % 2 === 0) female.push(v);
+                else male.push(v);
+              });
+            } else {
+              if (female.length === 0)
+                female = enVoices.filter((v) => !male.includes(v));
+              if (male.length === 0)
+                male = enVoices.filter((v) => !female.includes(v));
+            }
+            if (female.length === 0) female = enVoices;
+            if (male.length === 0) male = enVoices;
+            return { female, male };
+          }
 
-/* ========================= 音声再生（TTS） ========================= */
-// 性別ごとに異なる声を割り当てる。「男性1」「男性2」のように同性が複数登場する場合は、
-// その性別の中で別の声を順番に割り当て、声の種類が足りない場合のみピッチを少しずらして区別する。
-let voices = [];
-function loadVoices(){ voices = window.speechSynthesis.getVoices(); }
-loadVoices();
-if(typeof speechSynthesis !== "undefined"){
-  speechSynthesis.onvoiceschanged = loadVoices;
-}
+          // 会話ごとに、登場する話者ラベル(「女性」「男性1」「男性2」「男性3」など、各性別最大3名まで)に声を割り当てる
+          const FEMALE_PITCH_STEPS = [1.0, 1.18, 0.85];
+          const MALE_PITCH_STEPS = [1.0, 0.82, 1.15];
 
-function getVoicePools(){
-  const enVoices = voices.filter(v => v.lang && v.lang.startsWith("en"));
-  const femaleHints = ["female","woman","samantha","victoria","zira","susan","karen","tessa","fiona","moira","salli","joanna","kimberly","amy","emma","ivy","kendra","kate","serena","aria","女性"];
-  const maleHints = ["male","man","daniel","alex","fred","david","mark","aaron","james","brian","joey","justin","matthew","guy","ryan","eric","liam","男性"];
-  let female = enVoices.filter(v => femaleHints.some(h => v.name.toLowerCase().includes(h)));
-  let male = enVoices.filter(v => maleHints.some(h => v.name.toLowerCase().includes(h)) && !female.includes(v));
-  if(female.length === 0 && male.length === 0 && enVoices.length > 0){
-    // 名前から性別を判別できない端末では、せめて声だけは分かれるように交互に割り振る
-    enVoices.forEach((v,i) => { if(i % 2 === 0) female.push(v); else male.push(v); });
-  } else {
-    if(female.length === 0) female = enVoices.filter(v => !male.includes(v));
-    if(male.length === 0) male = enVoices.filter(v => !female.includes(v));
-  }
-  if(female.length === 0) female = enVoices;
-  if(male.length === 0) male = enVoices;
-  return { female, male };
-}
+          function buildSpeakerVoiceMap(conv) {
+            const pools = getVoicePools();
+            const counters = { female: 0, male: 0 };
+            const map = {};
+            conv.lines.forEach((line) => {
+              const label = line.speaker;
+              if (map[label]) return;
+              const isFemale = label.startsWith("女性");
+              const pool = isFemale ? pools.female : pools.male;
+              const idx = isFemale ? counters.female++ : counters.male++;
+              const voice = pool.length ? pool[idx % pool.length] : null;
+              // 声のバリエーションが足りず同じ声を再利用する場合、性別ごとに最大3段階のピッチで区別する
+              const pitchSteps = isFemale ? FEMALE_PITCH_STEPS : MALE_PITCH_STEPS;
+              const repeatGroup = pool.length ? Math.floor(idx / pool.length) : idx;
+              const pitch = pitchSteps[repeatGroup % pitchSteps.length];
+              map[label] = { voice, pitch };
+            });
+            return map;
+          }
 
-// 会話ごとに、登場する話者ラベル(「女性」「男性1」「男性2」「男性3」など、各性別最大3名まで)に声を割り当てる
-const FEMALE_PITCH_STEPS = [1.0, 1.18, 0.85];
-const MALE_PITCH_STEPS = [1.0, 0.82, 1.15];
+          function speakConversation(conv, speedRate, btns) {
+            if (!("speechSynthesis" in window)) {
+              alert("この端末は音声読み上げに対応していません");
+              return;
+            }
+            window.speechSynthesis.cancel();
+            const { playBtn, pauseBtn, stopBtn } = btns;
+            const voiceMap = buildSpeakerVoiceMap(conv);
+            const items = conv.lines.map((line) => ({
+              text: line.en,
+              ...voiceMap[line.speaker],
+            }));
 
-function buildSpeakerVoiceMap(conv){
-  const pools = getVoicePools();
-  const counters = { female: 0, male: 0 };
-  const map = {};
-  conv.lines.forEach(line => {
-    const label = line.speaker;
-    if(map[label]) return;
-    const isFemale = label.startsWith("女性");
-    const pool = isFemale ? pools.female : pools.male;
-    const idx = isFemale ? counters.female++ : counters.male++;
-    const voice = pool.length ? pool[idx % pool.length] : null;
-    // 声のバリエーションが足りず同じ声を再利用する場合、性別ごとに最大3段階のピッチで区別する
-    const pitchSteps = isFemale ? FEMALE_PITCH_STEPS : MALE_PITCH_STEPS;
-    const repeatGroup = pool.length ? Math.floor(idx / pool.length) : idx;
-    const pitch = pitchSteps[repeatGroup % pitchSteps.length];
-    map[label] = { voice, pitch };
-  });
-  return map;
-}
+            function setPlayingUI() {
+              playBtn.disabled = true;
+              playBtn.classList.add("playing");
+              playBtn.textContent = "🔊 再生中...";
+              pauseBtn.disabled = false;
+              pauseBtn.textContent = "⏸ 一時停止";
+              stopBtn.disabled = false;
+            }
+            function resetUI() {
+              playBtn.disabled = false;
+              playBtn.classList.remove("playing");
+              playBtn.textContent = "▶ 会話を再生";
+              pauseBtn.disabled = true;
+              pauseBtn.textContent = "⏸ 一時停止";
+              stopBtn.disabled = true;
+            }
 
-function speakConversation(conv, speedRate, btns){
-  if(!('speechSynthesis' in window)){
-    alert("この端末は音声読み上げに対応していません");
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const { playBtn, pauseBtn, stopBtn } = btns;
-  const voiceMap = buildSpeakerVoiceMap(conv);
-  const items = conv.lines.map(line => ({ text: line.en, ...voiceMap[line.speaker] }));
+            setPlayingUI();
+            let i = 0;
+            let stopped = false;
 
-  function setPlayingUI(){
-    playBtn.disabled = true;
-    playBtn.classList.add("playing");
-    playBtn.textContent = "🔊 再生中...";
-    pauseBtn.disabled = false;
-    pauseBtn.textContent = "⏸ 一時停止";
-    stopBtn.disabled = false;
-  }
-  function resetUI(){
-    playBtn.disabled = false;
-    playBtn.classList.remove("playing");
-    playBtn.textContent = "▶ 会話を再生";
-    pauseBtn.disabled = true;
-    pauseBtn.textContent = "⏸ 一時停止";
-    stopBtn.disabled = true;
-  }
+            function playNext() {
+              if (stopped) return;
+              if (i >= items.length) {
+                resetUI();
+                return;
+              }
+              const item = items[i];
+              const u = new SpeechSynthesisUtterance(item.text);
+              if (item.voice) u.voice = item.voice;
+              u.lang = "en-US";
+              u.rate = speedRate;
+              u.pitch = item.pitch;
+              u.onend = () => {
+                i++;
+                playNext();
+              };
+              u.onerror = () => {
+                resetUI();
+              };
+              window.speechSynthesis.speak(u);
+            }
+            playNext();
 
-  setPlayingUI();
-  let i = 0;
-  let stopped = false;
+            stopBtn.onclick = () => {
+              stopped = true;
+              window.speechSynthesis.cancel();
+              resetUI();
+            };
+          }
 
-  function playNext(){
-    if(stopped) return;
-    if(i >= items.length){ resetUI(); return; }
-    const item = items[i];
-    const u = new SpeechSynthesisUtterance(item.text);
-    if(item.voice) u.voice = item.voice;
-    u.lang = "en-US";
-    u.rate = speedRate;
-    u.pitch = item.pitch;
-    u.onend = () => { i++; playNext(); };
-    u.onerror = () => { resetUI(); };
-    window.speechSynthesis.speak(u);
-  }
-  playNext();
+          /* ========================= 描画 ========================= */
+          function materialOptions() {
+            const sel = document.getElementById("materialFilter");
+            const codes = [...new Set(conversations.map((c) => c.material))];
+            codes.forEach((code) => {
+              const label = conversations.find(
+                (c) => c.material === code,
+              ).materialLabel;
+              const opt = document.createElement("option");
+              opt.value = code;
+              opt.textContent = code + " " + label;
+              sel.appendChild(opt);
+            });
+          }
 
-  stopBtn.onclick = () => {
-    stopped = true;
-    window.speechSynthesis.cancel();
-    resetUI();
-  };
-}
+          function renderConversation(conv) {
+            const stats = loadStats();
+            const card = document.createElement("div");
+            card.className = "card";
 
-/* ========================= 描画 ========================= */
-function materialOptions(){
-  const sel = document.getElementById("materialFilter");
-  const codes = [...new Set(conversations.map(c => c.material))];
-  codes.forEach(code => {
-    const label = conversations.find(c => c.material === code).materialLabel;
-    const opt = document.createElement("option");
-    opt.value = code;
-    opt.textContent = code + " " + label;
-    sel.appendChild(opt);
-  });
-}
+            const lastDates = conv.questions
+              .map((q) => stats[statKey(conv.id, q.qno)]?.lastDate)
+              .filter(Boolean);
+            const latest = lastDates.sort().slice(-1)[0];
 
-function renderConversation(conv){
-  const stats = loadStats();
-  const card = document.createElement("div");
-  card.className = "card";
+            card.innerHTML = `
+        <div class="badges">
+          <span class="badge">${conv.material} ${conv.materialLabel}</span>
+          <span class="badge orange">${conv.qcode}</span>
+          <span class="badge date">最終回答: ${latest ? latest : "未回答"}</span>
+        </div>
+        <div class="play-row">
+          <button class="play-btn">▶ 会話を再生</button>
+          <button class="pause-btn" disabled>⏸ 一時停止</button>
+          <button class="stop-btn" disabled>⏹ 停止</button>
+          <select class="speed-select">
+            <option value="1">標準(TOEICと同程度)</option>
+            <option value="1.15">やや速め</option>
+            <option value="1.3">速め</option>
+            <option value="1.5">かなり速い</option>
+          </select>
+          <span class="toggle-link script-toggle">スクリプト表示/非表示</span>
+        </div>
+        <div class="script-box"></div>
+        <div class="questions-holder"></div>
+        <div class="grade-row">
+          <button class="grade-btn">採点する</button>
+          <span class="result-summary"></span>
+        </div>
+      `;
 
-  const lastDates = conv.questions.map(q => stats[statKey(conv.id,q.qno)]?.lastDate).filter(Boolean);
-  const latest = lastDates.sort().slice(-1)[0];
+            // スクリプト
+            const scriptBox = card.querySelector(".script-box");
+            conv.lines.forEach((line) => {
+              const div = document.createElement("div");
+              div.className = "script-line";
+              div.innerHTML = `<span class="speaker-tag">${line.speaker}</span><br>
+          <span class="script-en">${line.en}</span><br>
+          <span class="script-jp">${line.jp}</span>`;
+              scriptBox.appendChild(div);
+            });
+            card.querySelector(".script-toggle").onclick = () => {
+              scriptBox.classList.toggle("show");
+            };
 
-  card.innerHTML = `
-    <div class="badges">
-      <span class="badge">${conv.material} ${conv.materialLabel}</span>
-      <span class="badge orange">${conv.qcode}</span>
-      <span class="badge date">最終回答: ${latest ? latest : "未回答"}</span>
-    </div>
-    <div class="play-row">
-      <button class="play-btn">▶ 会話を再生</button>
-      <button class="pause-btn" disabled>⏸ 一時停止</button>
-      <button class="stop-btn" disabled>⏹ 停止</button>
-      <select class="speed-select">
-        <option value="1">標準(TOEICと同程度)</option>
-        <option value="1.15">やや速め</option>
-        <option value="1.3">速め</option>
-        <option value="1.5">かなり速い</option>
-      </select>
-      <span class="toggle-link script-toggle">スクリプト表示/非表示</span>
-    </div>
-    <div class="script-box"></div>
-    <div class="questions-holder"></div>
-    <div class="grade-row">
-      <button class="grade-btn">採点する</button>
-      <span class="result-summary"></span>
-    </div>
-  `;
+            // 再生・一時停止・停止
+            const playBtn = card.querySelector(".play-btn");
+            const pauseBtn = card.querySelector(".pause-btn");
+            const stopBtn = card.querySelector(".stop-btn");
 
-  // スクリプト
-  const scriptBox = card.querySelector(".script-box");
-  conv.lines.forEach(line => {
-    const div = document.createElement("div");
-    div.className = "script-line";
-    div.innerHTML = `<span class="speaker-tag">${line.speaker}</span><br>
-      <span class="script-en">${line.en}</span><br>
-      <span class="script-jp">${line.jp}</span>`;
-    scriptBox.appendChild(div);
-  });
-  card.querySelector(".script-toggle").onclick = () => {
-    scriptBox.classList.toggle("show");
-  };
+            playBtn.onclick = () => {
+              const rate = parseFloat(card.querySelector(".speed-select").value);
+              speakConversation(conv, rate, { playBtn, pauseBtn, stopBtn });
+            };
+            pauseBtn.onclick = () => {
+              if (
+                window.speechSynthesis.speaking &&
+                !window.speechSynthesis.paused
+              ) {
+                window.speechSynthesis.pause();
+                pauseBtn.textContent = "▶ 再開";
+              } else if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+                pauseBtn.textContent = "⏸ 一時停止";
+              }
+            };
 
-  // 再生・一時停止・停止
-  const playBtn = card.querySelector(".play-btn");
-  const pauseBtn = card.querySelector(".pause-btn");
-  const stopBtn = card.querySelector(".stop-btn");
+            // 設問
+            const qHolder = card.querySelector(".questions-holder");
+            conv.questions.forEach((q) => {
+              const qDiv = document.createElement("div");
+              qDiv.className = "question";
+              qDiv.dataset.qno = q.qno;
+              let choicesHtml = "";
+              Object.keys(q.choices).forEach((letter) => {
+                choicesHtml += `
+            <label class="choice" data-letter="${letter}">
+              <input type="radio" name="${conv.id}-q${q.qno}" value="${letter}">
+              <span>(${letter}) ${q.choices[letter]}</span>
+            </label>`;
+              });
+              qDiv.innerHTML = `
+          <div class="qtitle">${q.qno}. ${q.text}</div>
+          ${q.imageUrl ? `<div style="text-align:center;margin:10px 0;"><img src="${q.imageUrl}" style="max-width:260px;width:100%;height:auto;border-radius:6px;border:1px solid var(--border);" alt="Graphic"></div>` : ""}
+          <div class="choices">${choicesHtml}</div>
+          <div class="explain"></div>
+        `;
+              qHolder.appendChild(qDiv);
 
-  playBtn.onclick = () => {
-    const rate = parseFloat(card.querySelector(".speed-select").value);
-    speakConversation(conv, rate, { playBtn, pauseBtn, stopBtn });
-  };
-  pauseBtn.onclick = () => {
-    if(window.speechSynthesis.speaking && !window.speechSynthesis.paused){
-      window.speechSynthesis.pause();
-      pauseBtn.textContent = "▶ 再開";
-    } else if(window.speechSynthesis.paused){
-      window.speechSynthesis.resume();
-      pauseBtn.textContent = "⏸ 一時停止";
-    }
-  };
+              qDiv.querySelectorAll(".choice").forEach((choiceEl) => {
+                choiceEl.addEventListener("click", () => {
+                  qDiv
+                    .querySelectorAll(".choice")
+                    .forEach((c) => c.classList.remove("selected"));
+                  choiceEl.classList.add("selected");
+                });
+              });
+            });
 
-  // 設問
-  const qHolder = card.querySelector(".questions-holder");
-  conv.questions.forEach(q => {
-    const qDiv = document.createElement("div");
-    qDiv.className = "question";
-    qDiv.dataset.qno = q.qno;
-    let choicesHtml = "";
-    Object.keys(q.choices).forEach(letter => {
-      choicesHtml += `
-        <label class="choice" data-letter="${letter}">
-          <input type="radio" name="${conv.id}-q${q.qno}" value="${letter}">
-          <span>(${letter}) ${q.choices[letter]}</span>
-        </label>`;
-    });
-    qDiv.innerHTML = `
-      <div class="qtitle">${q.qno}. ${q.text}</div>
-      <div class="choices">${choicesHtml}</div>
-      <div class="explain"></div>
-    `;
-    qHolder.appendChild(qDiv);
+            // 採点
+            card.querySelector(".grade-btn").onclick = () => {
+              let correctCount = 0;
+              conv.questions.forEach((q) => {
+                const qDiv = qHolder.querySelector(
+                  `.question[data-qno="${q.qno}"]`,
+                );
+                const selected = qDiv.querySelector(".choice.selected");
+                const selectedLetter = selected ? selected.dataset.letter : null;
+                const isCorrect = selectedLetter === q.answer;
+                if (isCorrect) correctCount++;
 
-    qDiv.querySelectorAll(".choice").forEach(choiceEl => {
-      choiceEl.addEventListener("click", () => {
-        qDiv.querySelectorAll(".choice").forEach(c => c.classList.remove("selected"));
-        choiceEl.classList.add("selected");
-      });
-    });
-  });
+                qDiv.querySelectorAll(".choice").forEach((c) => {
+                  if (c.dataset.letter === q.answer) c.classList.add("correct-ans");
+                  else if (c.dataset.letter === selectedLetter && !isCorrect)
+                    c.classList.add("wrong-ans");
+                });
 
-  // 採点
-  card.querySelector(".grade-btn").onclick = () => {
-    let correctCount = 0;
-    conv.questions.forEach(q => {
-      const qDiv = qHolder.querySelector(`.question[data-qno="${q.qno}"]`);
-      const selected = qDiv.querySelector(".choice.selected");
-      const selectedLetter = selected ? selected.dataset.letter : null;
-      const isCorrect = selectedLetter === q.answer;
-      if(isCorrect) correctCount++;
+                const explainEl = qDiv.querySelector(".explain");
+                explainEl.textContent = q.explain;
+                explainEl.classList.add("show");
 
-      qDiv.querySelectorAll(".choice").forEach(c => {
-        if(c.dataset.letter === q.answer) c.classList.add("correct-ans");
-        else if(c.dataset.letter === selectedLetter && !isCorrect) c.classList.add("wrong-ans");
-      });
+                recordAnswer(conv.id, q.qno, isCorrect);
+                sendToSheetIfEnabled(conv, q, isCorrect);
+              });
+              scriptBox.classList.add("show");
+              card.querySelector(".result-summary").textContent =
+                `${correctCount} / ${conv.questions.length} 問正解`;
+              renderConversation.refreshBadge && renderConversation.refreshBadge();
+            };
 
-      const explainEl = qDiv.querySelector(".explain");
-      explainEl.textContent = q.explain;
-      explainEl.classList.add("show");
+            return card;
+          }
 
-      recordAnswer(conv.id, q.qno, isCorrect);
-      sendToSheetIfEnabled(conv, q, isCorrect);
-    });
-    scriptBox.classList.add("show");
-    card.querySelector(".result-summary").textContent = `${correctCount} / ${conv.questions.length} 問正解`;
-    renderConversation.refreshBadge && renderConversation.refreshBadge();
-  };
+          function renderList(list) {
+            const area = document.getElementById("questionsArea");
+            area.innerHTML = "";
+            list.forEach((conv) => area.appendChild(renderConversation(conv)));
+          }
 
-  return card;
-}
+          function applyFilterAndRender() {
+            const material = document.getElementById("materialFilter").value;
+            let list = conversations;
+            if (material) list = list.filter((c) => c.material === material);
+            renderList(list);
+          }
 
-function renderList(list){
-  const area = document.getElementById("questionsArea");
-  area.innerHTML = "";
-  list.forEach(conv => area.appendChild(renderConversation(conv)));
-}
+          document.getElementById("applyFilter").onclick = applyFilterAndRender;
+          document.getElementById("shuffleBtn").onclick = () => {
+            const shuffled = [...conversations].sort(() => Math.random() - 0.5);
+            renderList(shuffled);
+          };
 
-function applyFilterAndRender(){
-  const material = document.getElementById("materialFilter").value;
-  let list = conversations;
-  if(material) list = list.filter(c => c.material === material);
-  renderList(list);
-}
+          /* ========================= ナビ切り替え ========================= */
+          document.getElementById("navList").onclick = () => {
+            document.getElementById("listView").style.display = "block";
+            document.getElementById("statsView").style.display = "none";
+            document.getElementById("navList").classList.add("active");
+            document.getElementById("navStats").classList.remove("active");
+          };
+          document.getElementById("navStats").onclick = () => {
+            document.getElementById("listView").style.display = "none";
+            document.getElementById("statsView").style.display = "block";
+            document.getElementById("navList").classList.remove("active");
+            document.getElementById("navStats").classList.add("active");
+            renderStats();
+          };
 
-document.getElementById("applyFilter").onclick = applyFilterAndRender;
-document.getElementById("shuffleBtn").onclick = () => {
-  const shuffled = [...conversations].sort(() => Math.random() - 0.5);
-  renderList(shuffled);
-};
+          /* ========================= 統計 ========================= */
+          function renderStats() {
+            const stats = loadStats();
+            let total = 0,
+              correct = 0,
+              answered = 0;
+            const rows = [];
+            conversations.forEach((conv) => {
+              conv.questions.forEach((q) => {
+                const key = statKey(conv.id, q.qno);
+                const s = stats[key];
+                if (s) {
+                  total += s.attempts;
+                  correct += s.correct;
+                  answered += 1;
+                  rows.push({
+                    label: `${conv.qcode} Q${q.qno}`,
+                    material: conv.material,
+                    attempts: s.attempts,
+                    correct: s.correct,
+                    rate: Math.round((s.correct / s.attempts) * 100),
+                    lastDate: s.lastDate,
+                  });
+                }
+              });
+            });
+            document.getElementById("statTotal").textContent = total;
+            document.getElementById("statCorrect").textContent = correct;
+            document.getElementById("statRate").textContent =
+              total > 0 ? Math.round((correct / total) * 100) + "%" : "0%";
+            document.getElementById("statAnswered").textContent = answered;
 
-/* ========================= ナビ切り替え ========================= */
-document.getElementById("navList").onclick = () => {
-  document.getElementById("listView").style.display = "block";
-  document.getElementById("statsView").style.display = "none";
-  document.getElementById("navList").classList.add("active");
-  document.getElementById("navStats").classList.remove("active");
-};
-document.getElementById("navStats").onclick = () => {
-  document.getElementById("listView").style.display = "none";
-  document.getElementById("statsView").style.display = "block";
-  document.getElementById("navList").classList.remove("active");
-  document.getElementById("navStats").classList.add("active");
-  renderStats();
-};
+            const tableDiv = document.getElementById("statsTable");
+            if (rows.length === 0) {
+              tableDiv.innerHTML = `<p style="color:var(--muted);font-size:13px;">まだ回答記録がありません。</p>`;
+              return;
+            }
+            rows.sort((a, b) => a.rate - b.rate);
+            let html = `<table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+        <tr style="border-bottom:1px solid var(--border);text-align:left;">
+          <th style="padding:6px;">設問</th><th>教材</th><th>正答率</th><th>回答数</th><th>最終回答</th>
+        </tr>`;
+            rows.forEach((r) => {
+              html += `<tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px;">${r.label}</td>
+          <td>${r.material}</td>
+          <td>${r.rate}%</td>
+          <td>${r.correct}/${r.attempts}</td>
+          <td>${r.lastDate}</td>
+        </tr>`;
+            });
+            html += "</table>";
+            tableDiv.innerHTML = html;
+          }
 
-/* ========================= 統計 ========================= */
-function renderStats(){
-  const stats = loadStats();
-  let total = 0, correct = 0, answered = 0;
-  const rows = [];
-  conversations.forEach(conv => {
-    conv.questions.forEach(q => {
-      const key = statKey(conv.id, q.qno);
-      const s = stats[key];
-      if(s){
-        total += s.attempts;
-        correct += s.correct;
-        answered += 1;
-        rows.push({
-          label: `${conv.qcode} Q${q.qno}`,
-          material: conv.material,
-          attempts: s.attempts,
-          correct: s.correct,
-          rate: Math.round((s.correct / s.attempts) * 100),
-          lastDate: s.lastDate
-        });
-      }
-    });
-  });
-  document.getElementById("statTotal").textContent = total;
-  document.getElementById("statCorrect").textContent = correct;
-  document.getElementById("statRate").textContent = total > 0 ? Math.round((correct/total)*100) + "%" : "0%";
-  document.getElementById("statAnswered").textContent = answered;
+          /* ========================= Googleスプレッドシート連携 ========================= */
+          const DEFAULT_SHEET_URL =
+            "https://script.google.com/macros/s/AKfycbxOa0G0AeOBEzRpmTC8anyEy8-PfVojH14BlIbkRwV9EOJYs2q86tF12A_-YKvXgZh7/exec";
 
-  const tableDiv = document.getElementById("statsTable");
-  if(rows.length === 0){
-    tableDiv.innerHTML = `<p style="color:var(--muted);font-size:13px;">まだ回答記録がありません。</p>`;
-    return;
-  }
-  rows.sort((a,b) => a.rate - b.rate);
-  let html = `<table style="width:100%;border-collapse:collapse;font-size:12.5px;">
-    <tr style="border-bottom:1px solid var(--border);text-align:left;">
-      <th style="padding:6px;">設問</th><th>教材</th><th>正答率</th><th>回答数</th><th>最終回答</th>
-    </tr>`;
-  rows.forEach(r => {
-    html += `<tr style="border-bottom:1px solid var(--border);">
-      <td style="padding:6px;">${r.label}</td>
-      <td>${r.material}</td>
-      <td>${r.rate}%</td>
-      <td>${r.correct}/${r.attempts}</td>
-      <td>${r.lastDate}</td>
-    </tr>`;
-  });
-  html += "</table>";
-  tableDiv.innerHTML = html;
-}
+          function initSheetUI() {
+            const urlInput = document.getElementById("sheetUrl");
+            const savedUrl = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
+            urlInput.value = savedUrl;
+            document.getElementById("autoSendToggle").checked =
+              localStorage.getItem(LS_AUTOSEND_KEY) === "true";
+          }
 
-/* ========================= Googleスプレッドシート連携 ========================= */
-const DEFAULT_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOa0G0AeOBEzRpmTC8anyEy8-PfVojH14BlIbkRwV9EOJYs2q86tF12A_-YKvXgZh7/exec";
+          document.getElementById("saveUrlBtn").onclick = () => {
+            localStorage.setItem(
+              LS_URL_KEY,
+              document.getElementById("sheetUrl").value.trim(),
+            );
+            document.getElementById("sheetStatus").textContent =
+              "URLを保存しました。";
+          };
 
-function initSheetUI(){
-  const urlInput = document.getElementById("sheetUrl");
-  const savedUrl = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
-  urlInput.value = savedUrl;
-  document.getElementById("autoSendToggle").checked = localStorage.getItem(LS_AUTOSEND_KEY) === "true";
-}
+          document.getElementById("autoSendToggle").onchange = (e) => {
+            localStorage.setItem(LS_AUTOSEND_KEY, e.target.checked);
+          };
 
-document.getElementById("saveUrlBtn").onclick = () => {
-  localStorage.setItem(LS_URL_KEY, document.getElementById("sheetUrl").value.trim());
-  document.getElementById("sheetStatus").textContent = "URLを保存しました。";
-};
+          document.getElementById("testSendBtn").onclick = () => {
+            const url = document.getElementById("sheetUrl").value.trim();
+            if (!url) {
+              document.getElementById("sheetStatus").textContent =
+                "URLを入力してください。";
+              return;
+            }
+            const params = new URLSearchParams({
+              sheet: "PART3復習",
+              id: "TEST-Q0",
+              material: "TRN トレーニング TOEIC®test",
+              field: "C1-L1",
+              qno: "0",
+              attempts: "1",
+              correct: "1",
+              rate: "100",
+              lastDate: new Date().toISOString().slice(0, 10),
+            });
+            fetch(url, { method: "POST", body: params })
+              .then(() => {
+                document.getElementById("sheetStatus").textContent =
+                  "テスト送信しました。スプレッドシートを確認してください。";
+              })
+              .catch(() => {
+                document.getElementById("sheetStatus").textContent =
+                  "送信に失敗しました。URLを確認してください。";
+              });
+          };
 
-document.getElementById("autoSendToggle").onchange = (e) => {
-  localStorage.setItem(LS_AUTOSEND_KEY, e.target.checked);
-};
+          function sendToSheetIfEnabled(conv, q, isCorrect) {
+            const enabled = localStorage.getItem(LS_AUTOSEND_KEY) === "true";
+            if (!enabled) return;
+            const url = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
+            if (!url) return;
+            const stats = loadStats();
+            const s = stats[statKey(conv.id, q.qno)];
+            const params = new URLSearchParams({
+              sheet: "PART3復習",
+              id: statKey(conv.id, q.qno),
+              material: `${conv.material} ${conv.materialLabel}`,
+              field: conv.qcode,
+              qno: String(q.qno),
+              attempts: String(s.attempts),
+              correct: String(s.correct),
+              rate: String(Math.round((s.correct / s.attempts) * 100)),
+              lastDate: s.lastDate,
+            });
+            fetch(url, { method: "POST", body: params }).catch(() => {});
+          }
 
-document.getElementById("testSendBtn").onclick = () => {
-  const url = document.getElementById("sheetUrl").value.trim();
-  if(!url){ document.getElementById("sheetStatus").textContent = "URLを入力してください。"; return; }
-  const params = new URLSearchParams({
-    sheet: "PART3復習",
-    id: "TEST-Q0",
-    material: "TRN トレーニング TOEIC®test",
-    field: "C1-L1",
-    qno: "0",
-    attempts: "1",
-    correct: "1",
-    rate: "100",
-    lastDate: new Date().toISOString().slice(0,10)
-  });
-  fetch(url, { method:"POST", body: params })
-    .then(() => { document.getElementById("sheetStatus").textContent = "テスト送信しました。スプレッドシートを確認してください。"; })
-    .catch(() => { document.getElementById("sheetStatus").textContent = "送信に失敗しました。URLを確認してください。"; });
-};
-
-function sendToSheetIfEnabled(conv, q, isCorrect){
-  const enabled = localStorage.getItem(LS_AUTOSEND_KEY) === "true";
-  if(!enabled) return;
-  const url = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
-  if(!url) return;
-  const stats = loadStats();
-  const s = stats[statKey(conv.id, q.qno)];
-  const params = new URLSearchParams({
-    sheet: "PART3復習",
-    id: statKey(conv.id, q.qno),
-    material: `${conv.material} ${conv.materialLabel}`,
-    field: conv.qcode,
-    qno: String(q.qno),
-    attempts: String(s.attempts),
-    correct: String(s.correct),
-    rate: String(Math.round((s.correct/s.attempts)*100)),
-    lastDate: s.lastDate
-  });
-  fetch(url, { method:"POST", body: params }).catch(() => {});
-}
-
-/* ========================= 初期化 ========================= */
-materialOptions();
-initSheetUI();
-renderList(conversations);
-</script>
-</body>
+          /* ========================= 初期化 ========================= */
+          materialOptions();
+          initSheetUI();
+          renderList(conversations);
+    </script>
+  </body>
 </html>
