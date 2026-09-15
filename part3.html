@@ -1482,87 +1482,89 @@
             speechSynthesis.onvoiceschanged = loadVoices;
           }
 
+          function voiceKey(v) {
+            return ((v.name || "") + " " + (v.voiceURI || "")).toLowerCase();
+          }
+
+          const FEMALE_HINTS = [
+            "female",
+            "woman",
+            "#f",
+            "samantha",
+            "victoria",
+            "zira",
+            "susan",
+            "karen",
+            "tessa",
+            "fiona",
+            "moira",
+            "salli",
+            "joanna",
+            "kimberly",
+            "amy",
+            "emma",
+            "ivy",
+            "kendra",
+            "kate",
+            "serena",
+            "aria",
+            "女性",
+          ];
+          const MALE_HINTS = [
+            "male",
+            "man",
+            "#m",
+            "daniel",
+            "alex",
+            "fred",
+            "david",
+            "mark",
+            "aaron",
+            "james",
+            "brian",
+            "joey",
+            "justin",
+            "matthew",
+            "guy",
+            "ryan",
+            "eric",
+            "liam",
+            "arthur",
+            "oliver",
+            "男性",
+          ];
+
           function getVoicePools() {
             const enVoices = voices.filter(
-              (v) => v.lang && v.lang.startsWith("en"),
+              (v) => v.lang && v.lang.toLowerCase().startsWith("en"),
             );
-            const femaleHints = [
-              "female",
-              "woman",
-              "samantha",
-              "victoria",
-              "zira",
-              "susan",
-              "karen",
-              "tessa",
-              "fiona",
-              "moira",
-              "salli",
-              "joanna",
-              "kimberly",
-              "amy",
-              "emma",
-              "ivy",
-              "kendra",
-              "kate",
-              "serena",
-              "aria",
-              "女性",
-            ];
-            const maleHints = [
-              "male",
-              "man",
-              "daniel",
-              "alex",
-              "fred",
-              "david",
-              "mark",
-              "aaron",
-              "james",
-              "brian",
-              "joey",
-              "justin",
-              "matthew",
-              "guy",
-              "ryan",
-              "eric",
-              "liam",
-              "男性",
-            ];
-            let female = enVoices.filter((v) =>
-              femaleHints.some((h) => v.name.toLowerCase().includes(h)),
+            // Androidは voice.name が「English (United States)」のように性別を含まず、
+            // voiceURI 側に "en-us-x-tpc#male_1-local" のような情報が入ることがあるため両方を見る
+            const female = enVoices.filter((v) =>
+              FEMALE_HINTS.some((h) => voiceKey(v).includes(h)),
             );
-            let male = enVoices.filter(
+            const male = enVoices.filter(
               (v) =>
-                maleHints.some((h) => v.name.toLowerCase().includes(h)) &&
-                !female.includes(v),
+                !female.includes(v) &&
+                MALE_HINTS.some((h) => voiceKey(v).includes(h)),
             );
-            if (female.length === 0 && male.length === 0 && enVoices.length > 0) {
-              // 名前から性別を判別できない端末では、せめて声だけは分かれるように交互に割り振る
-              enVoices.forEach((v, i) => {
-                if (i % 2 === 0) female.push(v);
-                else male.push(v);
-              });
-            } else {
-              if (female.length === 0)
-                female = enVoices.filter((v) => !male.includes(v));
-              if (male.length === 0)
-                male = enVoices.filter((v) => !female.includes(v));
-            }
-            if (female.length === 0) female = enVoices;
-            if (male.length === 0) male = enVoices;
-            // スマホ(特にAndroid)では英語の音声が1つしか無いことが多く、
-            // その場合は男女で同じ声になってしまうためピッチで性別を作り分ける
-            const shared = male.some((v) => female.includes(v));
-            return { female, male, shared };
+            // 名前から男女を判別できた場合のみ「声そのもので区別できる」とみなす
+            const confident = female.length > 0 && male.length > 0;
+            return {
+              female: female.length ? female : enVoices,
+              male: male.length ? male : enVoices,
+              confident,
+              all: enVoices,
+            };
           }
 
           // 会話ごとに、登場する話者ラベル(「女性」「男性1」「男性2」「男性3」など、各性別最大3名まで)に声を割り当てる
-          const FEMALE_PITCH_STEPS = [1.0, 1.18, 0.85];
-          const MALE_PITCH_STEPS = [1.0, 0.82, 1.15];
-          // 男女で同じ声しか使えない端末用: はっきり差が出るピッチ/速度
-          const FEMALE_PITCH_STEPS_SHARED = [1.35, 1.55, 1.2];
-          const MALE_PITCH_STEPS_SHARED = [0.6, 0.45, 0.75];
+          // 男女別の声が確実に取れる端末(PC等)ではピッチ差は控えめに、
+          // 取れない端末(Android等、英語音声が実質1種類)ではピッチで男女を作り分ける
+          const FEMALE_PITCH_STEPS = [1.05, 1.2, 0.95];
+          const MALE_PITCH_STEPS = [0.9, 0.78, 1.0];
+          const FEMALE_PITCH_STEPS_FALLBACK = [1.4, 1.6, 1.25];
+          const MALE_PITCH_STEPS_FALLBACK = [0.5, 0.35, 0.65];
 
           function buildSpeakerVoiceMap(conv) {
             loadVoices(); // 端末によっては初回ロード時に空のため再取得する
@@ -1576,22 +1578,46 @@
               const pool = isFemale ? pools.female : pools.male;
               const idx = isFemale ? counters.female++ : counters.male++;
               const voice = pool.length ? pool[idx % pool.length] : null;
-              // 声のバリエーションが足りず同じ声を再利用する場合、性別ごとに最大3段階のピッチで区別する
-              const pitchSteps = pools.shared
+              const steps = pools.confident
                 ? isFemale
-                  ? FEMALE_PITCH_STEPS_SHARED
-                  : MALE_PITCH_STEPS_SHARED
-                : isFemale
                   ? FEMALE_PITCH_STEPS
-                  : MALE_PITCH_STEPS;
+                  : MALE_PITCH_STEPS
+                : isFemale
+                  ? FEMALE_PITCH_STEPS_FALLBACK
+                  : MALE_PITCH_STEPS_FALLBACK;
               const repeatGroup = pool.length ? Math.floor(idx / pool.length) : idx;
-              const pitch = pitchSteps[repeatGroup % pitchSteps.length];
-              // 同じ声を使う場合は速度もわずかに変えて聞き分けやすくする
-              const rateAdjust = pools.shared ? (isFemale ? 1.0 : 0.94) : 1.0;
+              const pitch = steps[repeatGroup % steps.length];
+              // 同じ声を使わざるを得ない場合は速度もわずかに変えて聞き分けやすくする
+              const rateAdjust = pools.confident ? 1.0 : isFemale ? 1.03 : 0.9;
               map[label] = { voice, pitch, rateAdjust };
             });
             return map;
           }
+
+          /* 端末で使える音声を確認するための簡易チェッカー。
+             URLの末尾に ?voices=1 を付けて開くと一覧が表示される。 */
+          function showVoiceDebug() {
+            if (!location.search.includes("voices=1")) return;
+            loadVoices();
+            const pools = getVoicePools();
+            const box = document.createElement("div");
+            box.className = "sheet-panel";
+            box.innerHTML =
+              "<h3>VOICE CHECK 端末の音声一覧</h3>" +
+              "<div style='font-family:var(--font-mono);font-size:11px;line-height:1.6;'>" +
+              "英語音声: " + pools.all.length + "件 / 男女判別: " +
+              (pools.confident ? "可能" : "不可(ピッチで代用)") + "<br>" +
+              pools.all
+                .map(
+                  (v) =>
+                    "・" + v.name + " [" + v.lang + "] " + (v.voiceURI || ""),
+                )
+                .join("<br>") +
+              "</div>";
+            const c = document.querySelector(".container");
+            if (c) c.insertBefore(box, c.firstChild);
+          }
+          setTimeout(showVoiceDebug, 800);
 
           function speakConversation(conv, speedRate, btns) {
             if (!("speechSynthesis" in window)) {
