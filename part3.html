@@ -1551,14 +1551,21 @@
             }
             if (female.length === 0) female = enVoices;
             if (male.length === 0) male = enVoices;
-            return { female, male };
+            // スマホ(特にAndroid)では英語の音声が1つしか無いことが多く、
+            // その場合は男女で同じ声になってしまうためピッチで性別を作り分ける
+            const shared = male.some((v) => female.includes(v));
+            return { female, male, shared };
           }
 
           // 会話ごとに、登場する話者ラベル(「女性」「男性1」「男性2」「男性3」など、各性別最大3名まで)に声を割り当てる
           const FEMALE_PITCH_STEPS = [1.0, 1.18, 0.85];
           const MALE_PITCH_STEPS = [1.0, 0.82, 1.15];
+          // 男女で同じ声しか使えない端末用: はっきり差が出るピッチ/速度
+          const FEMALE_PITCH_STEPS_SHARED = [1.35, 1.55, 1.2];
+          const MALE_PITCH_STEPS_SHARED = [0.6, 0.45, 0.75];
 
           function buildSpeakerVoiceMap(conv) {
+            loadVoices(); // 端末によっては初回ロード時に空のため再取得する
             const pools = getVoicePools();
             const counters = { female: 0, male: 0 };
             const map = {};
@@ -1570,10 +1577,18 @@
               const idx = isFemale ? counters.female++ : counters.male++;
               const voice = pool.length ? pool[idx % pool.length] : null;
               // 声のバリエーションが足りず同じ声を再利用する場合、性別ごとに最大3段階のピッチで区別する
-              const pitchSteps = isFemale ? FEMALE_PITCH_STEPS : MALE_PITCH_STEPS;
+              const pitchSteps = pools.shared
+                ? isFemale
+                  ? FEMALE_PITCH_STEPS_SHARED
+                  : MALE_PITCH_STEPS_SHARED
+                : isFemale
+                  ? FEMALE_PITCH_STEPS
+                  : MALE_PITCH_STEPS;
               const repeatGroup = pool.length ? Math.floor(idx / pool.length) : idx;
               const pitch = pitchSteps[repeatGroup % pitchSteps.length];
-              map[label] = { voice, pitch };
+              // 同じ声を使う場合は速度もわずかに変えて聞き分けやすくする
+              const rateAdjust = pools.shared ? (isFemale ? 1.0 : 0.94) : 1.0;
+              map[label] = { voice, pitch, rateAdjust };
             });
             return map;
           }
@@ -1620,9 +1635,12 @@
               }
               const item = items[i];
               const u = new SpeechSynthesisUtterance(item.text);
+              // 重要: lang を先に、しかも voice と同じ lang に合わせる。
+              // iOS/Androidでは voice の後に lang を上書きすると voice が無視され、
+              // その言語の既定音声(多くは女性)に戻ってしまう。
+              u.lang = item.voice && item.voice.lang ? item.voice.lang : "en-US";
               if (item.voice) u.voice = item.voice;
-              u.lang = "en-US";
-              u.rate = speedRate;
+              u.rate = speedRate * (item.rateAdjust || 1);
               u.pitch = item.pitch;
               u.onend = () => {
                 i++;
