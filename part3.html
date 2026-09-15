@@ -1563,8 +1563,8 @@
           // 取れない端末(Android等、英語音声が実質1種類)ではピッチで男女を作り分ける
           const FEMALE_PITCH_STEPS = [1.05, 1.2, 0.95];
           const MALE_PITCH_STEPS = [0.9, 0.78, 1.0];
-          const FEMALE_PITCH_STEPS_FALLBACK = [1.4, 1.6, 1.25];
-          const MALE_PITCH_STEPS_FALLBACK = [0.5, 0.35, 0.65];
+          const FEMALE_PITCH_STEPS_FALLBACK = [1.12, 1.22, 1.05];
+          const MALE_PITCH_STEPS_FALLBACK = [0.82, 0.72, 0.9];
 
           function buildSpeakerVoiceMap(conv) {
             loadVoices(); // 端末によっては初回ロード時に空のため再取得する
@@ -1588,7 +1588,7 @@
               const repeatGroup = pool.length ? Math.floor(idx / pool.length) : idx;
               const pitch = steps[repeatGroup % steps.length];
               // 同じ声を使わざるを得ない場合は速度もわずかに変えて聞き分けやすくする
-              const rateAdjust = pools.confident ? 1.0 : isFemale ? 1.03 : 0.9;
+              const rateAdjust = pools.confident ? 1.0 : isFemale ? 1.0 : 0.95;
               map[label] = { voice, pitch, rateAdjust };
             });
             return map;
