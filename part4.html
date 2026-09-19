@@ -1,0 +1,1526 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Part4対策 | TOEIC学習サイト</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* ---- Part5と共通のブループリント・テーマ ---- */
+        --blueprint-navy: #16324a;
+        --blueprint-navy-deep: #0f2436;
+        --blueprint-line: #6f95ad;
+        --blueprint-line-faint: rgba(255, 255, 255, 0.1);
+        --paper: #eef2ee;
+        --paper-dim: #c7d3d6;
+        --safety-orange: #e8631c;
+        --safety-orange-dim: #b74e16;
+        --ok-green: #6fae7c;
+        --ng-red: #d16a5f;
+        --font-body: "Noto Sans JP", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+
+        /* ---- 旧変数名は互換のため残してブループリント配色へ再割当 ---- */
+        --navy: var(--paper);
+        --navy-light: rgba(255, 255, 255, 0.14);
+        --orange: var(--safety-orange);
+        --orange-dark: var(--safety-orange-dim);
+        --bg: var(--blueprint-navy);
+        --card: rgba(255, 255, 255, 0.02);
+        --text: var(--paper);
+        --muted: var(--paper-dim);
+        --border: var(--blueprint-line);
+        --correct: var(--ok-green);
+        --wrong: var(--ng-red);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font-body);
+        background-color: var(--blueprint-navy);
+        background-image:
+          linear-gradient(var(--blueprint-line-faint) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            var(--blueprint-line-faint) 1px,
+            transparent 1px
+          );
+        background-size: 28px 28px;
+        color: var(--paper);
+        line-height: 1.7;
+        min-height: 100vh;
+        padding-bottom: 60px;
+      }
+
+      /* ---------- header (Part5と同じ構成) ---------- */
+      header {
+        padding: 48px 24px 32px;
+        border-bottom: 1px dashed var(--blueprint-line);
+        max-width: 960px;
+        margin: 0 auto;
+        background: transparent;
+      }
+      .home-link {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--paper);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--blueprint-line);
+        padding: 6px 12px;
+        border-radius: 2px;
+        text-decoration: none;
+        margin: 0 8px 16px 0;
+      }
+      .home-link:hover {
+        border-color: var(--paper);
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .eyebrow {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        color: var(--safety-orange);
+        text-transform: uppercase;
+      }
+      header h1 {
+        font-size: 30px;
+        margin: 10px 0 6px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: var(--paper);
+      }
+      .sub {
+        color: var(--paper-dim);
+        font-size: 14px;
+        font-family: var(--font-mono);
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+      }
+
+      /* ---------- 共通ボタン ---------- */
+      button.ghost-btn,
+      .navbar button,
+      .filter-bar button,
+      .sheet-row button,
+      .pause-btn,
+      .stop-btn {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--paper-dim);
+        background: transparent;
+        border: 1px solid var(--blueprint-line);
+        padding: 8px 14px;
+        border-radius: 2px;
+        cursor: pointer;
+      }
+      button.ghost-btn:hover,
+      .navbar button:hover,
+      .filter-bar button:hover,
+      .sheet-row button:hover,
+      .pause-btn:hover,
+      .stop-btn:hover {
+        border-color: var(--paper);
+        color: var(--paper);
+      }
+      button.primary-btn,
+      .play-btn,
+      .grade-btn {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--blueprint-navy-deep);
+        background: var(--safety-orange);
+        border: none;
+        padding: 9px 16px;
+        border-radius: 2px;
+        cursor: pointer;
+        letter-spacing: 0.03em;
+      }
+      button.primary-btn:hover,
+      .play-btn:hover,
+      .grade-btn:hover {
+        background: #ff7a33;
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .navbar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .navbar button {
+        flex: 1;
+        color: var(--paper);
+        background: rgba(255, 255, 255, 0.06);
+        font-family: var(--font-body);
+        font-size: 13px;
+        padding: 8px 16px;
+        transition: all 0.2s;
+      }
+      .navbar button.active {
+        background: var(--safety-orange);
+        border-color: var(--safety-orange);
+        color: var(--paper);
+      }
+
+      /* ---------- filter / panel ---------- */
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 24px;
+        align-items: center;
+        border: 1px solid var(--blueprint-line);
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 16px 18px;
+      }
+      .filter-bar select,
+      .filter-bar input {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--blueprint-line);
+        color: var(--paper);
+        padding: 8px 10px;
+        border-radius: 2px;
+        font-family: var(--font-body);
+        font-size: 13px;
+      }
+      .filter-bar option {
+        background: var(--blueprint-navy-deep);
+        color: var(--paper);
+      }
+
+      .sheet-panel {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--blueprint-line);
+        border-radius: 2px;
+        padding: 20px 22px;
+        margin-bottom: 28px;
+        font-size: 12.5px;
+      }
+      .sheet-panel h3 {
+        margin: 0 0 14px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--safety-orange);
+        letter-spacing: 0.08em;
+        font-weight: 700;
+      }
+      .sheet-panel label {
+        display: block;
+        margin-bottom: 8px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--paper-dim);
+        letter-spacing: 0.05em;
+      }
+      .sheet-panel input[type="text"] {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--blueprint-line);
+        color: var(--paper);
+        padding: 8px 10px;
+        border-radius: 2px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        margin-top: 4px;
+      }
+      .sheet-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .toggle-switch {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--paper);
+      }
+      .toggle-switch label {
+        margin-bottom: 0;
+        color: var(--paper);
+        font-size: 12px;
+      }
+      .toggle-switch input {
+        accent-color: var(--safety-orange);
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+      }
+
+      /* ---------- conversation card ---------- */
+      .card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--blueprint-line);
+        border-radius: 2px;
+        padding: 22px 24px 20px;
+        margin-bottom: 22px;
+      }
+      .badges {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .badge {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 9px;
+        border-radius: 2px;
+        letter-spacing: 0.02em;
+        color: var(--blueprint-navy-deep);
+        background: var(--paper);
+      }
+      .badge.orange {
+        background: var(--safety-orange);
+        color: var(--blueprint-navy-deep);
+      }
+      .badge.date {
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid var(--blueprint-line);
+        color: var(--paper);
+      }
+
+      .play-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 14px 0;
+        flex-wrap: wrap;
+      }
+      .play-btn {
+        font-size: 13px;
+        padding: 10px 20px;
+      }
+      .play-btn.playing {
+        background: var(--ok-green);
+      }
+      .speed-select {
+        font-family: var(--font-mono);
+        padding: 7px 8px;
+        border-radius: 2px;
+        border: 1px solid var(--blueprint-line);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--paper);
+        font-size: 12px;
+      }
+      .speed-select option {
+        background: var(--blueprint-navy-deep);
+        color: var(--paper);
+      }
+
+      .script-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed var(--blueprint-line);
+        border-left: 2px solid var(--safety-orange);
+        border-radius: 2px;
+        padding: 14px 16px;
+        margin-top: 10px;
+        display: none;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      .script-box.show {
+        display: block;
+      }
+      .script-line {
+        margin-bottom: 10px;
+      }
+      .speaker-tag {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 11px;
+        color: var(--safety-orange);
+        margin-right: 6px;
+      }
+      .script-en {
+        color: var(--paper);
+      }
+      .script-jp {
+        color: var(--paper-dim);
+        font-size: 13px;
+      }
+      .toggle-link {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--safety-orange);
+        background: transparent;
+        border: 1px dashed var(--safety-orange-dim);
+        padding: 5px 10px;
+        border-radius: 2px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-left: auto;
+      }
+      .toggle-link:hover {
+        border-color: var(--safety-orange);
+      }
+
+      /* ---------- questions ---------- */
+      .question {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px dashed var(--blueprint-line);
+      }
+      .question:first-of-type {
+        border-top: none;
+      }
+      .qtitle {
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 15px;
+      }
+      .choices {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .choice {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border: 1px solid var(--blueprint-line);
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 13.5px;
+        color: var(--paper-dim);
+      }
+      .choice:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--paper);
+      }
+      .choice.selected {
+        border-color: var(--safety-orange);
+        background: rgba(232, 99, 28, 0.15);
+        color: var(--paper);
+      }
+      .choice.correct-ans {
+        border-color: var(--ok-green);
+        background: rgba(111, 174, 124, 0.15);
+        color: var(--ok-green);
+      }
+      .choice.wrong-ans {
+        border-color: var(--ng-red);
+        background: rgba(209, 106, 95, 0.15);
+        color: var(--ng-red);
+      }
+      .choice input {
+        margin: 0;
+        accent-color: var(--safety-orange);
+      }
+      .explain {
+        display: none;
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--paper);
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 2px solid var(--safety-orange);
+        border-radius: 2px;
+        padding: 10px 14px;
+      }
+      .explain.show {
+        display: block;
+      }
+      .grade-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+      }
+      .result-summary {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--paper);
+        font-weight: 700;
+      }
+      .lastdate {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--paper-dim);
+      }
+
+      /* ---------- stats ---------- */
+      .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .stat-box {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px dashed var(--blueprint-line);
+        border-radius: 2px;
+        padding: 16px;
+        text-align: center;
+      }
+      .stat-box .num {
+        font-family: var(--font-mono);
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--safety-orange);
+      }
+      .stat-box .label {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--paper-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 4px;
+      }
+      #statsTable table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--font-body);
+      }
+      #statsTable th {
+        color: var(--safety-orange);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 12px 8px;
+        text-align: left;
+      }
+      #statsTable td {
+        color: var(--paper);
+        padding: 10px 8px;
+      }
+      #statsTable tr:hover {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      #loading {
+        text-align: center;
+        color: var(--paper-dim);
+        font-family: var(--font-mono);
+        padding: 20px;
+        font-size: 13px;
+      }
+
+      /* ===== スマホ表示：文字と余白を縮小して1画面に収まりやすくする ===== */
+      @media (max-width: 480px) {
+        .container {
+          padding: 16px 10px 60px;
+        }
+        header {
+          padding: 24px 14px 20px;
+        }
+        header h1 {
+          font-size: 20px;
+        }
+        .sub {
+          font-size: 12px;
+        }
+        .card {
+          padding: 12px 12px;
+          margin-bottom: 14px;
+        }
+        .sheet-panel,
+        .filter-bar {
+          padding: 12px;
+        }
+        .badge {
+          font-size: 9.5px;
+          padding: 2px 6px;
+        }
+        .play-btn {
+          padding: 9px 16px;
+          font-size: 12px;
+        }
+        .pause-btn,
+        .stop-btn {
+          padding: 8px 12px;
+          font-size: 11px;
+        }
+        .speed-select {
+          font-size: 11px;
+        }
+        .toggle-link {
+          font-size: 10px;
+        }
+        .script-box {
+          padding: 10px;
+          font-size: 12.5px;
+          line-height: 1.55;
+        }
+        .script-jp {
+          font-size: 11px;
+        }
+        .qtitle {
+          font-size: 13px;
+          margin-bottom: 6px;
+        }
+        .choice {
+          font-size: 12px;
+          padding: 7px 8px;
+        }
+        .explain {
+          font-size: 11px;
+          padding: 8px 10px;
+        }
+        .grade-btn {
+          padding: 9px 14px;
+          font-size: 12px;
+        }
+        .result-summary {
+          font-size: 11px;
+        }
+        .stat-box .num {
+          font-size: 18px;
+        }
+        .stat-box {
+          padding: 10px;
+        }
+      }
+      @media (max-width: 360px) {
+        .card {
+          padding: 10px;
+        }
+        .script-box {
+          font-size: 11.5px;
+        }
+        .choice {
+          font-size: 11.5px;
+        }
+        .qtitle {
+          font-size: 12.5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="home-link">&larr; ホームに戻る</a>
+      <a href="grammar.html" class="home-link">&larr; 文法要点</a>
+      <div class="eyebrow">TOEIC / PART 4 &mdash; SHORT TALK DRILL</div>
+      <h1>PART 4 説明文問題対策</h1>
+      <div class="sub">
+        説明文を聞いて3設問に解答し、正答率をスプレッドシートに自動蓄積する<br />
+        Part4 30問/10set &times; 3問　正答率80%目標<br />
+        --------------------------------<br />
+        ・設問先読み(図表問題は図表も確認) → 説明文を聞きながら解答<br />
+        ・採点後にスクリプト・和訳・解説を確認<br />
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="navbar">
+        <button id="navList" class="active">📋 一覧</button>
+        <button id="navStats">📊 統計</button>
+      </div>
+
+      <div id="listView">
+        <div class="filter-bar">
+          <select id="materialFilter">
+            <option value="">教材：すべて</option>
+          </select>
+          <button id="applyFilter">絞り込み</button>
+          <button id="shuffleBtn">🔀 シャッフル</button>
+        </div>
+
+        <div id="sheetToggleArea" class="sheet-panel">
+          <h3>Googleスプレッドシート連携</h3>
+          <label
+            >Apps Script Web App URL
+            <input
+              type="text"
+              id="sheetUrl"
+              placeholder="https://script.google.com/macros/s/xxxx/exec"
+            />
+          </label>
+          <div class="sheet-row">
+            <button id="saveUrlBtn">保存</button>
+            <button id="testSendBtn">テスト送信</button>
+            <div class="toggle-switch">
+              <input type="checkbox" id="autoSendToggle" />
+              <label for="autoSendToggle">採点時に自動送信</label>
+            </div>
+          </div>
+          <div
+            id="sheetStatus"
+            style="margin-top: 6px; color: var(--muted)"
+          ></div>
+        </div>
+
+        <div id="questionsArea"></div>
+      </div>
+
+      <div id="statsView" style="display: none">
+        <div class="stats-summary">
+          <div class="stat-box">
+            <div class="num" id="statTotal">0</div>
+            <div class="label">総回答数</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="statCorrect">0</div>
+            <div class="label">正解数</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="statRate">0%</div>
+            <div class="label">全体正答率</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="statAnswered">0</div>
+            <div class="label">回答済み設問数</div>
+          </div>
+        </div>
+        <div id="statsTable"></div>
+      </div>
+    </div>
+
+    <script>
+          /* ==========================================================
+       データ構造：説明文(トーク)ごとに3設問をまとめる
+       教材コード: TRN / BIZ / NTC / DMM / WHL / 730 / DIA / D10 / SEN / NEX / SPD / MOS / OFF
+       ========================================================== */
+          const talks = [
+  {
+    "id": "TRN-C1-01",
+    "material": "TRN",
+    "materialLabel": "トレーニング TOEIC®test",
+    "qcode": "C1-01",
+    "addedDate": "2026-09-20",
+    "lines": [
+      {
+        "speaker": "男性",
+        "en": "Hello, I'm George from CPS. I tried to deliver your package last week, but you were not home. I left a delivery attempt notice in your mailbox and I wonder if you have seen it already.",
+        "jp": "もしもし、CPSのGeorgeです。先週お宅の荷物を届けに伺いましたが、不在でした。ポストに不在票を入れたのですが、確認していただけているでしょうか。"
+      },
+      {
+        "speaker": "男性",
+        "en": "I'm calling you because it's been a week and we haven't heard from you yet. We need your signature to deliver your package, so I want you to give us a call to schedule a delivery or pick up at our office.",
+        "jp": "1週間経過しましたが、ご連絡がないので、お電話しています。お届けにはあなたのサインが必要なので、再配達のために折り返しの電話を頂くか、事務所まで取りに来てもらいたいと思っています。"
+      },
+      {
+        "speaker": "男性",
+        "en": "We cannot keep it after two weeks, at which point we'll have to get rid of it. Next Thursday is the last day that we can keep your package. We hope you'll contact us by then. Thank you.",
+        "jp": "2週間以上経つと、保管できずに廃棄しなければなりません。次の木曜日が保管の最終日になりますので、それまでにご連絡いただけると幸いです。よろしくお願いします。"
+      }
+    ],
+    "questions": [
+      {
+        "qno": 1,
+        "text": "What is the speaker calling about?",
+        "choices": {
+          "A": "The speaker's signature on the package",
+          "B": "The package that is being held",
+          "C": "The listener's correct address for delivery",
+          "D": "The contents of the package"
+        },
+        "answer": "B",
+        "explain": "冒頭で「先週荷物を届けに行ったが不在だった」「1週間連絡がないので電話している」と述べており、預かり中の荷物についての電話なので、正解は(B)。(A)のサインは必要事項の一つであり、電話の主題ではない。"
+      },
+      {
+        "qno": 2,
+        "text": "What is needed to receive the package?",
+        "choices": {
+          "A": "Signature",
+          "B": "Cash",
+          "C": "ID",
+          "D": "A delivery attempt notice"
+        },
+        "answer": "A",
+        "explain": "\"We need your signature to deliver your package\"と述べているため、正解は(A)。不在票(D)は既にポストに入れたと言っているだけで、受け取りに必要とは述べていない。"
+      },
+      {
+        "qno": 3,
+        "text": "By when does the listener have to take the action?",
+        "choices": {
+          "A": "A week later",
+          "B": "Tomorrow",
+          "C": "Thursday",
+          "D": "Within two weeks"
+        },
+        "answer": "C",
+        "explain": "\"Next Thursday is the last day that we can keep your package. We hope you'll contact us by then.\"と述べているため、正解は(C)。(D)の「2週間」は保管の限度期間の説明であり、連絡すべき期限は「次の木曜日」。"
+      }
+    ]
+  },
+  {
+    "id": "TRN-C1-02",
+    "material": "TRN",
+    "materialLabel": "トレーニング TOEIC®test",
+    "qcode": "C1-02",
+    "addedDate": "2026-09-20",
+    "lines": [
+      {
+        "speaker": "女性",
+        "en": "May I have an attention? I have an announcement about this coming Thursday. We will have a building inspection for the water pipes.",
+        "jp": "注目してもらえますか。この木曜日のことでお知らせがあります。建物の水道管点検があります。"
+      },
+      {
+        "speaker": "女性",
+        "en": "The time differs, depending on the floor. According to this information sheet, it'll start at five p.m. and last for thirty minutes on our floor. We can't use any water, including the bathrooms and office kitchenette, on our floor during this time. However, you can go to the other floors if necessary.",
+        "jp": "時間はフロアによって異なります。このお知らせによると、私たちのフロアでは午後5時に始まって、30分間続きます。この時間帯は、このフロアのトイレや給湯室も含めて、水の使用ができません。しかし、必要があれば、他のフロアに行くことはできます。"
+      },
+      {
+        "speaker": "女性",
+        "en": "I don't expect any serious problems, but I will send you a reminder by e-mail on Thursday morning about this. I will also make an announcement like this when the inspection is over, as it can be earlier or later than what's on the notice.",
+        "jp": "大きな問題があるとは思いませんが、木曜日の朝にこの件に関して、リマインダーをEメールで送ります。また、記されているよりも早く、または遅く終わるかもしれませんから、点検が終わった後、このように私がお知らせします。"
+      }
+    ],
+    "questions": [
+      {
+        "qno": 1,
+        "text": "What kind of inspection will be held?",
+        "choices": {
+          "A": "Computer system",
+          "B": "Electricity",
+          "C": "Gas",
+          "D": "Water"
+        },
+        "answer": "D",
+        "explain": "冒頭で\"a building inspection for the water pipes\"と述べているため、正解は(D)。"
+      },
+      {
+        "qno": 2,
+        "text": "Look at the graphic. Which floor most likely is the speaker's department located?",
+        "imageUrl": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20405%20310%27%20width%3D%27100%25%27%20height%3D%27100%25%27%3E%3Crect%20width%3D%27405%27%20height%3D%27310%27%20fill%3D%27%23ffffff%27%2F%3E%3Ctext%20x%3D%27202%27%20y%3D%2730%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2717%27%20font-weight%3D%27bold%27%20fill%3D%27%23000%27%3EInspection%20on%20Thursday%2C%204th%20Dec.%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%2748%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%2766.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20font-weight%3D%22bold%22%20fill%3D%27%23000%27%3EFloor%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%2748%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%2766.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20font-weight%3D%22bold%22%20fill%3D%27%23000%27%3ETime%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%2774%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%2792.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E1%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%2774%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%2792.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E13%3A00%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%27100%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%27118.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E2%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%27100%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%27118.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E13%3A30%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%27126%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%27144.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E3%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%27126%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%27144.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E14%3A00%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%27152%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%27170.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E4%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%27152%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%27170.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E14%3A30%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%27178%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%27196.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E5%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%27178%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%27196.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E15%3A00%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%27204%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%27222.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E6%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%27204%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%27222.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E15%3A30%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%27230%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%27248.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E7%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%27230%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%27248.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E16%3A00%3C%2Ftext%3E%3Crect%20x%3D%2730%27%20y%3D%27256%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%2760.0%27%20y%3D%27274.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E8%3C%2Ftext%3E%3Crect%20x%3D%2790%27%20y%3D%27256%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27135.0%27%20y%3D%27274.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E16%3A30%3C%2Ftext%3E%3Crect%20x%3D%27225%27%20y%3D%2748%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27255.0%27%20y%3D%2766.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20font-weight%3D%22bold%22%20fill%3D%27%23000%27%3EFloor%3C%2Ftext%3E%3Crect%20x%3D%27285%27%20y%3D%2748%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27330.0%27%20y%3D%2766.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20font-weight%3D%22bold%22%20fill%3D%27%23000%27%3ETime%3C%2Ftext%3E%3Crect%20x%3D%27225%27%20y%3D%2774%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27255.0%27%20y%3D%2792.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E9%3C%2Ftext%3E%3Crect%20x%3D%27285%27%20y%3D%2774%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27330.0%27%20y%3D%2792.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E17%3A00%3C%2Ftext%3E%3Crect%20x%3D%27225%27%20y%3D%27100%27%20width%3D%2760%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27255.0%27%20y%3D%27118.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E10%3C%2Ftext%3E%3Crect%20x%3D%27285%27%20y%3D%27100%27%20width%3D%2790%27%20height%3D%2726%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%2F%3E%3Ctext%20x%3D%27330.0%27%20y%3D%27118.0%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2714%27%20fill%3D%27%23000%27%3E17%3A30%3C%2Ftext%3E%3Crect%20x%3D%27225%27%20y%3D%27132%27%20width%3D%27150%27%20height%3D%27150%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-dasharray%3D%275%203%27%2F%3E%3Ctext%20x%3D%27300%27%20y%3D%27158%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2715%27%20font-weight%3D%27bold%27%20fill%3D%27%23000%27%3E%21%20Attention%3C%2Ftext%3E%3Ctext%20x%3D%27300%27%20y%3D%27184%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712.5%27%20fill%3D%27%23000%27%3EUse%20the%20bathroom%3C%2Ftext%3E%3Ctext%20x%3D%27300%27%20y%3D%27206%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712.5%27%20fill%3D%27%23000%27%3Eand%20the%20kitchenette%3C%2Ftext%3E%3Ctext%20x%3D%27300%27%20y%3D%27228%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712.5%27%20fill%3D%27%23000%27%3Eof%20the%20other%20floors%3C%2Ftext%3E%3Ctext%20x%3D%27300%27%20y%3D%27250%27%20text-anchor%3D%27middle%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712.5%27%20fill%3D%27%23000%27%3Eduring%20the%20inspection.%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "choices": {
+          "A": "9F",
+          "B": "10F",
+          "C": "5F",
+          "D": "6F"
+        },
+        "answer": "A",
+        "explain": "話し手は「私たちのフロアでは午後5時(five p.m.)に始まる」と述べている。表で17:00に対応するのは9階なので、正解は(A)。10階は17:30開始。"
+      },
+      {
+        "qno": 3,
+        "text": "What will the woman do after the inspection?",
+        "choices": {
+          "A": "Go to the 7th floor",
+          "B": "Report to her supervisor",
+          "C": "Make another announcement",
+          "D": "Leave the office immediately"
+        },
+        "answer": "C",
+        "explain": "最後に\"I will also make an announcement like this when the inspection is over\"と述べているため、正解は(C)。"
+      }
+    ]
+  },
+  {
+    "id": "TRN-C1-03",
+    "material": "TRN",
+    "materialLabel": "トレーニング TOEIC®test",
+    "qcode": "C1-03",
+    "addedDate": "2026-09-20",
+    "lines": [
+      {
+        "speaker": "男性",
+        "en": "Hello. I'm Trevor Abbot. For the past ten years, I've provided thousands of private training sessions in gyms all across the nation. Now I'm happy to announce that I'm opening Trevor's Gym, my very own gym, right here in this town.",
+        "jp": "こんにちは。私はTrevor Abbotです。過去10年間、私は国内のあちこちのジムで、何千回もの個人トレーニングセッションを提供してきました。今、まさにこの町に私自身のジムであるTrevorジムをオープンすることを喜んでお伝えしています。"
+      },
+      {
+        "speaker": "男性",
+        "en": "I'm here today at the local radio station to spread this wonderful news with a wonderful offer. Mention this radio commercial at the registration counter, and you'll receive a free one-week training session, including one dietary counseling session. Yes, it's free.",
+        "jp": "今日は、この素晴らしいお知らせを素晴らしい特別サービスとともに広めるために、この地元ラジオ局に来ています。登録の際に、このラジオコマーシャルを聞いたと言ってください。そうすれば、食事指導を含む無料の1週間トレーニングセッションを受け取れます。そう、無料です。"
+      },
+      {
+        "speaker": "男性",
+        "en": "My training gym is different from others in that we customize your private lessons according to your needs. Whether you want to reduce your weight or you want to exercise for your health, visit us now.",
+        "jp": "私のトレーニングジムは、お客様の目的に応じてカスタマイズされたプライベートレッスンを受けられるという点で、他のジムとは違います。減量したいにせよ、健康のための運動がしたいにせよ、今すぐ私たちを訪ねてください。"
+      }
+    ],
+    "questions": [
+      {
+        "qno": 1,
+        "text": "Who most likely is Trevor Abbot?",
+        "choices": {
+          "A": "A radio show host",
+          "B": "A gym owner",
+          "C": "A counselor",
+          "D": "A dietitian"
+        },
+        "answer": "B",
+        "explain": "\"I'm opening Trevor's Gym, my very own gym\"と述べており、自分のジムを開くトレーナー＝ジムのオーナーなので、正解は(B)。ラジオ局にはCMのために来ているだけで、番組の司会者ではない。"
+      },
+      {
+        "qno": 2,
+        "text": "What is the special offer for listeners?",
+        "choices": {
+          "A": "A recipe book for weight loss",
+          "B": "A waiver for the membership fee",
+          "C": "An invitation to view the show",
+          "D": "Free one-week training sessions"
+        },
+        "answer": "D",
+        "explain": "\"you'll receive a free one-week training session\"と述べているため、正解は(D)。会費免除(B)やレシピ本(A)には言及がない。"
+      },
+      {
+        "qno": 3,
+        "text": "What is unique about the facility?",
+        "choices": {
+          "A": "A customized program is provided.",
+          "B": "You can experience a live DJ.",
+          "C": "Dietary meals are offered.",
+          "D": "You can have voice training."
+        },
+        "answer": "A",
+        "explain": "\"we customize your private lessons according to your needs\"が「他のジムと違う点」として述べられているため、正解は(A)。"
+      }
+    ]
+  },
+  {
+    "id": "TRN-C1-04",
+    "material": "TRN",
+    "materialLabel": "トレーニング TOEIC®test",
+    "qcode": "C1-04",
+    "addedDate": "2026-09-20",
+    "lines": [
+      {
+        "speaker": "女性",
+        "en": "Attention passengers. We are sorry to announce that the North East airlines Flight 325 to Los Angeles has been delayed due to mechanical problems.",
+        "jp": "ご搭乗のお客様にご案内申し上げます。誠に申し訳ございませんが、ロサンゼルス行き、North East航空325便は機械トラブルのため出発が遅れております。"
+      },
+      {
+        "speaker": "女性",
+        "en": "The estimated departure time is now three o'clock, two and a half hours later than the original departure time. If you have a tight connection at Los Angeles, please come see us at the counter to arrange your flight.",
+        "jp": "現在、出発予定時刻は当初の2時間半遅れの午後3時となります。ロサンゼルスにてすぐの乗り継ぎをご予定されているお客様は、フライト調整のため、カウンターの私どもにお知らせください。"
+      },
+      {
+        "speaker": "女性",
+        "en": "We have also changed the boarding gate due to this delay from E23 to E31. So please go to the right gate. We apologize for your inconvenience. Thank you.",
+        "jp": "またこの遅延により、搭乗口をE23からE31に変更いたしました。正しい搭乗口にお越しください。ご不便をおかけして申し訳ありません。ありがとうございます。"
+      }
+    ],
+    "questions": [
+      {
+        "qno": 1,
+        "text": "Where is the announcement most likely to be made?",
+        "choices": {
+          "A": "At the baggage claim",
+          "B": "At the arriving lobby",
+          "C": "At the terminal station",
+          "D": "At the boarding gate"
+        },
+        "answer": "D",
+        "explain": "出発便の遅延・搭乗口の変更・乗り継ぎ相談カウンターの案内であり、これから搭乗する乗客に向けた放送。(A)手荷物受取所と(B)到着ロビーは到着側、(C)は駅の話なので不適切。搭乗ゲート付近での放送と考えられ、正解は(D)。"
+      },
+      {
+        "qno": 2,
+        "text": "What is the original departing time?",
+        "choices": {
+          "A": "2:30",
+          "B": "12:30",
+          "C": "1:30",
+          "D": "Noon"
+        },
+        "answer": "B",
+        "explain": "現在の出発予定は3時で、「当初より2時間半遅れ」と述べている。3:00 − 2:30 = 12:30 なので、正解は(B)。"
+      },
+      {
+        "qno": 3,
+        "text": "Where is the new gate?",
+        "choices": {
+          "A": "E23",
+          "B": "E31",
+          "C": "E25",
+          "D": "E32"
+        },
+        "answer": "B",
+        "explain": "\"changed the boarding gate ... from E23 to E31\"と述べているため、新しい搭乗口はE31で、正解は(B)。E23は変更前の搭乗口。"
+      }
+    ]
+  }
+];
+
+          /* ========================= localStorage ========================= */
+          const LS_KEY = "part4_stats_v1";
+          const LS_URL_KEY = "part4_sheet_url";
+          const LS_AUTOSEND_KEY = "part4_autosend";
+
+          function loadStats() {
+            try {
+              return JSON.parse(localStorage.getItem(LS_KEY)) || {};
+            } catch (e) {
+              return {};
+            }
+          }
+          function saveStats(s) {
+            localStorage.setItem(LS_KEY, JSON.stringify(s));
+          }
+
+          function statKey(convId, qno) {
+            return convId + "-Q" + qno;
+          }
+
+          function recordAnswer(convId, qno, correct) {
+            const stats = loadStats();
+            const key = statKey(convId, qno);
+            if (!stats[key]) stats[key] = { attempts: 0, correct: 0, lastDate: "" };
+            stats[key].attempts += 1;
+            if (correct) stats[key].correct += 1;
+            const today = new Date();
+            stats[key].lastDate =
+              today.getFullYear() +
+              "-" +
+              String(today.getMonth() + 1).padStart(2, "0") +
+              "-" +
+              String(today.getDate()).padStart(2, "0");
+            saveStats(stats);
+            return stats[key];
+          }
+
+          /* ========================= 音声再生（TTS） ========================= */
+          // 性別ごとに異なる声を割り当てる。「男性1」「男性2」のように同性が複数登場する場合は、
+          // その性別の中で別の声を順番に割り当て、声の種類が足りない場合のみピッチを少しずらして区別する。
+          let voices = [];
+          function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+          }
+          loadVoices();
+          if (typeof speechSynthesis !== "undefined") {
+            speechSynthesis.onvoiceschanged = loadVoices;
+          }
+
+          function voiceKey(v) {
+            return ((v.name || "") + " " + (v.voiceURI || "")).toLowerCase();
+          }
+
+          const FEMALE_HINTS = [
+            "female",
+            "woman",
+            "#f",
+            "samantha",
+            "victoria",
+            "zira",
+            "susan",
+            "karen",
+            "tessa",
+            "fiona",
+            "moira",
+            "salli",
+            "joanna",
+            "kimberly",
+            "amy",
+            "emma",
+            "ivy",
+            "kendra",
+            "kate",
+            "serena",
+            "aria",
+            "女性",
+          ];
+          const MALE_HINTS = [
+            "male",
+            "man",
+            "#m",
+            "daniel",
+            "alex",
+            "fred",
+            "david",
+            "mark",
+            "aaron",
+            "james",
+            "brian",
+            "joey",
+            "justin",
+            "matthew",
+            "guy",
+            "ryan",
+            "eric",
+            "liam",
+            "arthur",
+            "oliver",
+            "男性",
+          ];
+
+          function getVoicePools() {
+            const enVoices = voices.filter(
+              (v) => v.lang && v.lang.toLowerCase().startsWith("en"),
+            );
+            // Androidは voice.name が「English (United States)」のように性別を含まず、
+            // voiceURI 側に "en-us-x-tpc#male_1-local" のような情報が入ることがあるため両方を見る
+            const female = enVoices.filter((v) =>
+              FEMALE_HINTS.some((h) => voiceKey(v).includes(h)),
+            );
+            const male = enVoices.filter(
+              (v) =>
+                !female.includes(v) &&
+                MALE_HINTS.some((h) => voiceKey(v).includes(h)),
+            );
+            // 名前から男女を判別できた場合のみ「声そのもので区別できる」とみなす
+            const confident = female.length > 0 && male.length > 0;
+            return {
+              female: female.length ? female : enVoices,
+              male: male.length ? male : enVoices,
+              confident,
+              all: enVoices,
+            };
+          }
+
+          // 会話ごとに、登場する話者ラベル(「女性」「男性1」「男性2」「男性3」など、各性別最大3名まで)に声を割り当てる
+          // 男女別の声が確実に取れる端末(PC等)ではピッチ差は控えめに、
+          // 取れない端末(Android等、英語音声が実質1種類)ではピッチで男女を作り分ける
+          const FEMALE_PITCH_STEPS = [1.05, 1.2, 0.95];
+          const MALE_PITCH_STEPS = [0.9, 0.78, 1.0];
+          const FEMALE_PITCH_STEPS_FALLBACK = [1.12, 1.22, 1.05];
+          const MALE_PITCH_STEPS_FALLBACK = [0.82, 0.72, 0.9];
+
+          function buildSpeakerVoiceMap(conv) {
+            loadVoices(); // 端末によっては初回ロード時に空のため再取得する
+            const pools = getVoicePools();
+            const counters = { female: 0, male: 0 };
+            const map = {};
+            conv.lines.forEach((line) => {
+              const label = line.speaker;
+              if (map[label]) return;
+              const isFemale = label.startsWith("女性");
+              const pool = isFemale ? pools.female : pools.male;
+              const idx = isFemale ? counters.female++ : counters.male++;
+              const voice = pool.length ? pool[idx % pool.length] : null;
+              const steps = pools.confident
+                ? isFemale
+                  ? FEMALE_PITCH_STEPS
+                  : MALE_PITCH_STEPS
+                : isFemale
+                  ? FEMALE_PITCH_STEPS_FALLBACK
+                  : MALE_PITCH_STEPS_FALLBACK;
+              const repeatGroup = pool.length ? Math.floor(idx / pool.length) : idx;
+              const pitch = steps[repeatGroup % steps.length];
+              // 同じ声を使わざるを得ない場合は速度もわずかに変えて聞き分けやすくする
+              const rateAdjust = pools.confident ? 1.0 : isFemale ? 1.0 : 0.95;
+              map[label] = { voice, pitch, rateAdjust };
+            });
+            return map;
+          }
+
+          /* 端末で使える音声を確認するための簡易チェッカー。
+             URLの末尾に ?voices=1 を付けて開くと一覧が表示される。 */
+          function showVoiceDebug() {
+            if (!location.search.includes("voices=1")) return;
+            loadVoices();
+            const pools = getVoicePools();
+            const box = document.createElement("div");
+            box.className = "sheet-panel";
+            box.innerHTML =
+              "<h3>VOICE CHECK 端末の音声一覧</h3>" +
+              "<div style='font-family:var(--font-mono);font-size:11px;line-height:1.6;'>" +
+              "英語音声: " + pools.all.length + "件 / 男女判別: " +
+              (pools.confident ? "可能" : "不可(ピッチで代用)") + "<br>" +
+              pools.all
+                .map(
+                  (v) =>
+                    "・" + v.name + " [" + v.lang + "] " + (v.voiceURI || ""),
+                )
+                .join("<br>") +
+              "</div>";
+            const c = document.querySelector(".container");
+            if (c) c.insertBefore(box, c.firstChild);
+          }
+          setTimeout(showVoiceDebug, 800);
+
+          function speakTalk(conv, speedRate, btns) {
+            if (!("speechSynthesis" in window)) {
+              alert("この端末は音声読み上げに対応していません");
+              return;
+            }
+            window.speechSynthesis.cancel();
+            const { playBtn, pauseBtn, stopBtn } = btns;
+            const voiceMap = buildSpeakerVoiceMap(conv);
+            const items = conv.lines.map((line) => ({
+              text: line.en,
+              ...voiceMap[line.speaker],
+            }));
+
+            function setPlayingUI() {
+              playBtn.disabled = true;
+              playBtn.classList.add("playing");
+              playBtn.textContent = "🔊 再生中...";
+              pauseBtn.disabled = false;
+              pauseBtn.textContent = "⏸ 一時停止";
+              stopBtn.disabled = false;
+            }
+            function resetUI() {
+              playBtn.disabled = false;
+              playBtn.classList.remove("playing");
+              playBtn.textContent = "▶ 説明文を再生";
+              pauseBtn.disabled = true;
+              pauseBtn.textContent = "⏸ 一時停止";
+              stopBtn.disabled = true;
+            }
+
+            setPlayingUI();
+            let i = 0;
+            let stopped = false;
+
+            function playNext() {
+              if (stopped) return;
+              if (i >= items.length) {
+                resetUI();
+                return;
+              }
+              const item = items[i];
+              const u = new SpeechSynthesisUtterance(item.text);
+              // 重要: lang を先に、しかも voice と同じ lang に合わせる。
+              // iOS/Androidでは voice の後に lang を上書きすると voice が無視され、
+              // その言語の既定音声(多くは女性)に戻ってしまう。
+              u.lang = item.voice && item.voice.lang ? item.voice.lang : "en-US";
+              if (item.voice) u.voice = item.voice;
+              u.rate = speedRate * (item.rateAdjust || 1);
+              u.pitch = item.pitch;
+              u.onend = () => {
+                i++;
+                playNext();
+              };
+              u.onerror = () => {
+                resetUI();
+              };
+              window.speechSynthesis.speak(u);
+            }
+            playNext();
+
+            stopBtn.onclick = () => {
+              stopped = true;
+              window.speechSynthesis.cancel();
+              resetUI();
+            };
+          }
+
+          /* ========================= 描画 ========================= */
+          function materialOptions() {
+            const sel = document.getElementById("materialFilter");
+            const codes = [...new Set(talks.map((c) => c.material))];
+            codes.forEach((code) => {
+              const label = talks.find(
+                (c) => c.material === code,
+              ).materialLabel;
+              const opt = document.createElement("option");
+              opt.value = code;
+              opt.textContent = code + " " + label;
+              sel.appendChild(opt);
+            });
+          }
+
+          function renderTalk(conv) {
+            const stats = loadStats();
+            const card = document.createElement("div");
+            card.className = "card";
+
+            const lastDates = conv.questions
+              .map((q) => stats[statKey(conv.id, q.qno)]?.lastDate)
+              .filter(Boolean);
+            const latest = lastDates.sort().slice(-1)[0];
+
+            card.innerHTML = `
+        <div class="badges">
+          <span class="badge">${conv.material} ${conv.materialLabel}</span>
+          <span class="badge orange">${conv.qcode}</span>
+          <span class="badge date">最終回答: ${latest ? latest : "未回答"}</span>
+        </div>
+        <div class="play-row">
+          <button class="play-btn">▶ 説明文を再生</button>
+          <button class="pause-btn" disabled>⏸ 一時停止</button>
+          <button class="stop-btn" disabled>⏹ 停止</button>
+          <select class="speed-select">
+            <option value="1">標準(TOEICと同程度)</option>
+            <option value="1.15">やや速め</option>
+            <option value="1.3">速め</option>
+            <option value="1.5">かなり速い</option>
+          </select>
+          <span class="toggle-link script-toggle">スクリプト表示/非表示</span>
+        </div>
+        <div class="script-box"></div>
+        <div class="questions-holder"></div>
+        <div class="grade-row">
+          <button class="grade-btn">採点する</button>
+          <span class="result-summary"></span>
+        </div>
+      `;
+
+            // スクリプト
+            const scriptBox = card.querySelector(".script-box");
+            conv.lines.forEach((line, idx) => {
+              const div = document.createElement("div");
+              div.className = "script-line";
+              const showTag = idx === 0 || conv.lines[idx - 1].speaker !== line.speaker;
+              div.innerHTML = `${showTag ? `<span class="speaker-tag">${line.speaker}</span><br>` : ""}<span class="script-en">${line.en}</span><br>
+          <span class="script-jp">${line.jp}</span>`;
+              scriptBox.appendChild(div);
+            });
+            card.querySelector(".script-toggle").onclick = () => {
+              scriptBox.classList.toggle("show");
+            };
+
+            // 再生・一時停止・停止
+            const playBtn = card.querySelector(".play-btn");
+            const pauseBtn = card.querySelector(".pause-btn");
+            const stopBtn = card.querySelector(".stop-btn");
+
+            playBtn.onclick = () => {
+              const rate = parseFloat(card.querySelector(".speed-select").value);
+              speakTalk(conv, rate, { playBtn, pauseBtn, stopBtn });
+            };
+            pauseBtn.onclick = () => {
+              if (
+                window.speechSynthesis.speaking &&
+                !window.speechSynthesis.paused
+              ) {
+                window.speechSynthesis.pause();
+                pauseBtn.textContent = "▶ 再開";
+              } else if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+                pauseBtn.textContent = "⏸ 一時停止";
+              }
+            };
+
+            // 設問
+            const qHolder = card.querySelector(".questions-holder");
+            conv.questions.forEach((q) => {
+              const qDiv = document.createElement("div");
+              qDiv.className = "question";
+              qDiv.dataset.qno = q.qno;
+              let choicesHtml = "";
+              Object.keys(q.choices).forEach((letter) => {
+                choicesHtml += `
+            <label class="choice" data-letter="${letter}">
+              <input type="radio" name="${conv.id}-q${q.qno}" value="${letter}">
+              <span>(${letter}) ${q.choices[letter]}</span>
+            </label>`;
+              });
+              qDiv.innerHTML = `
+          <div class="qtitle">${q.qno}. ${q.text}</div>
+          ${q.imageUrl ? `<div style="text-align:center;margin:10px 0;"><img src="${q.imageUrl}" style="max-width:340px;width:100%;height:auto;border-radius:6px;border:1px solid var(--border);" alt="Graphic"></div>` : ""}
+          <div class="choices">${choicesHtml}</div>
+          <div class="explain"></div>
+        `;
+              qHolder.appendChild(qDiv);
+
+              qDiv.querySelectorAll(".choice").forEach((choiceEl) => {
+                choiceEl.addEventListener("click", () => {
+                  qDiv
+                    .querySelectorAll(".choice")
+                    .forEach((c) => c.classList.remove("selected"));
+                  choiceEl.classList.add("selected");
+                });
+              });
+            });
+
+            // 採点
+            card.querySelector(".grade-btn").onclick = () => {
+              let correctCount = 0;
+              conv.questions.forEach((q) => {
+                const qDiv = qHolder.querySelector(
+                  `.question[data-qno="${q.qno}"]`,
+                );
+                const selected = qDiv.querySelector(".choice.selected");
+                const selectedLetter = selected ? selected.dataset.letter : null;
+                const isCorrect = selectedLetter === q.answer;
+                if (isCorrect) correctCount++;
+
+                qDiv.querySelectorAll(".choice").forEach((c) => {
+                  if (c.dataset.letter === q.answer) c.classList.add("correct-ans");
+                  else if (c.dataset.letter === selectedLetter && !isCorrect)
+                    c.classList.add("wrong-ans");
+                });
+
+                const explainEl = qDiv.querySelector(".explain");
+                explainEl.textContent = q.explain;
+                explainEl.classList.add("show");
+
+                recordAnswer(conv.id, q.qno, isCorrect);
+                sendToSheetIfEnabled(conv, q, isCorrect);
+              });
+              scriptBox.classList.add("show");
+              card.querySelector(".result-summary").textContent =
+                `${correctCount} / ${conv.questions.length} 問正解`;
+              renderTalk.refreshBadge && renderTalk.refreshBadge();
+            };
+
+            return card;
+          }
+
+          function renderList(list) {
+            const area = document.getElementById("questionsArea");
+            area.innerHTML = "";
+            list.forEach((conv) => area.appendChild(renderTalk(conv)));
+          }
+
+          function applyFilterAndRender() {
+            const material = document.getElementById("materialFilter").value;
+            let list = talks;
+            if (material) list = list.filter((c) => c.material === material);
+            renderList(list);
+          }
+
+          document.getElementById("applyFilter").onclick = applyFilterAndRender;
+          document.getElementById("shuffleBtn").onclick = () => {
+            const shuffled = [...talks].sort(() => Math.random() - 0.5);
+            renderList(shuffled);
+          };
+
+          /* ========================= ナビ切り替え ========================= */
+          document.getElementById("navList").onclick = () => {
+            document.getElementById("listView").style.display = "block";
+            document.getElementById("statsView").style.display = "none";
+            document.getElementById("navList").classList.add("active");
+            document.getElementById("navStats").classList.remove("active");
+          };
+          document.getElementById("navStats").onclick = () => {
+            document.getElementById("listView").style.display = "none";
+            document.getElementById("statsView").style.display = "block";
+            document.getElementById("navList").classList.remove("active");
+            document.getElementById("navStats").classList.add("active");
+            renderStats();
+          };
+
+          /* ========================= 統計 ========================= */
+          function renderStats() {
+            const stats = loadStats();
+            let total = 0,
+              correct = 0,
+              answered = 0;
+            const rows = [];
+            talks.forEach((conv) => {
+              conv.questions.forEach((q) => {
+                const key = statKey(conv.id, q.qno);
+                const s = stats[key];
+                if (s) {
+                  total += s.attempts;
+                  correct += s.correct;
+                  answered += 1;
+                  rows.push({
+                    label: `${conv.qcode} Q${q.qno}`,
+                    material: conv.material,
+                    attempts: s.attempts,
+                    correct: s.correct,
+                    rate: Math.round((s.correct / s.attempts) * 100),
+                    lastDate: s.lastDate,
+                  });
+                }
+              });
+            });
+            document.getElementById("statTotal").textContent = total;
+            document.getElementById("statCorrect").textContent = correct;
+            document.getElementById("statRate").textContent =
+              total > 0 ? Math.round((correct / total) * 100) + "%" : "0%";
+            document.getElementById("statAnswered").textContent = answered;
+
+            const tableDiv = document.getElementById("statsTable");
+            if (rows.length === 0) {
+              tableDiv.innerHTML = `<p style="color:var(--muted);font-size:13px;">まだ回答記録がありません。</p>`;
+              return;
+            }
+            rows.sort((a, b) => a.rate - b.rate);
+            let html = `<table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+        <tr style="border-bottom:1px solid var(--border);text-align:left;">
+          <th style="padding:6px;">設問</th><th>教材</th><th>正答率</th><th>回答数</th><th>最終回答</th>
+        </tr>`;
+            rows.forEach((r) => {
+              html += `<tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px;">${r.label}</td>
+          <td>${r.material}</td>
+          <td>${r.rate}%</td>
+          <td>${r.correct}/${r.attempts}</td>
+          <td>${r.lastDate}</td>
+        </tr>`;
+            });
+            html += "</table>";
+            tableDiv.innerHTML = html;
+          }
+
+          /* ========================= Googleスプレッドシート連携 ========================= */
+          const DEFAULT_SHEET_URL =
+            "https://script.google.com/macros/s/AKfycbxOa0G0AeOBEzRpmTC8anyEy8-PfVojH14BlIbkRwV9EOJYs2q86tF12A_-YKvXgZh7/exec";
+
+          function initSheetUI() {
+            const urlInput = document.getElementById("sheetUrl");
+            const savedUrl = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
+            urlInput.value = savedUrl;
+            document.getElementById("autoSendToggle").checked =
+              localStorage.getItem(LS_AUTOSEND_KEY) === "true";
+          }
+
+          document.getElementById("saveUrlBtn").onclick = () => {
+            localStorage.setItem(
+              LS_URL_KEY,
+              document.getElementById("sheetUrl").value.trim(),
+            );
+            document.getElementById("sheetStatus").textContent =
+              "URLを保存しました。";
+          };
+
+          document.getElementById("autoSendToggle").onchange = (e) => {
+            localStorage.setItem(LS_AUTOSEND_KEY, e.target.checked);
+          };
+
+          document.getElementById("testSendBtn").onclick = () => {
+            const url = document.getElementById("sheetUrl").value.trim();
+            if (!url) {
+              document.getElementById("sheetStatus").textContent =
+                "URLを入力してください。";
+              return;
+            }
+            const params = new URLSearchParams({
+              sheet: "PART4復習",
+              id: "TEST-Q0",
+              material: "TRN トレーニング TOEIC®test",
+              field: "C1-01",
+              qno: "0",
+              attempts: "1",
+              correct: "1",
+              rate: "100",
+              lastDate: new Date().toISOString().slice(0, 10),
+            });
+            fetch(url, { method: "POST", body: params })
+              .then(() => {
+                document.getElementById("sheetStatus").textContent =
+                  "テスト送信しました。スプレッドシートを確認してください。";
+              })
+              .catch(() => {
+                document.getElementById("sheetStatus").textContent =
+                  "送信に失敗しました。URLを確認してください。";
+              });
+          };
+
+          function sendToSheetIfEnabled(conv, q, isCorrect) {
+            const enabled = localStorage.getItem(LS_AUTOSEND_KEY) === "true";
+            if (!enabled) return;
+            const url = localStorage.getItem(LS_URL_KEY) || DEFAULT_SHEET_URL;
+            if (!url) return;
+            const stats = loadStats();
+            const s = stats[statKey(conv.id, q.qno)];
+            const params = new URLSearchParams({
+              sheet: "PART4復習",
+              id: statKey(conv.id, q.qno),
+              material: `${conv.material} ${conv.materialLabel}`,
+              field: conv.qcode,
+              qno: String(q.qno),
+              attempts: String(s.attempts),
+              correct: String(s.correct),
+              rate: String(Math.round((s.correct / s.attempts) * 100)),
+              lastDate: s.lastDate,
+            });
+            fetch(url, { method: "POST", body: params }).catch(() => {});
+          }
+
+          /* ========================= 初期化 ========================= */
+          materialOptions();
+          initSheetUI();
+          renderList(talks);
+    </script>
+  </body>
+</html>
